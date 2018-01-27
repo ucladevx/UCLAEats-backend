@@ -1,19 +1,30 @@
-module.exports = {
+var express = require('express');
+var app = express();
+let router = express.Router();
+var menu = require('menu-scraper');
 
-}
-'use strict';
+var port = process.env.PORT || 8080;
 
-const express = require('express');
+//for use with POST
+/*
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+*/
 
-// Constants
-const PORT = 8080;
-const HOST = '0.0.0.0';
-
-// App
-const app = express();
-app.get('/', (req, res) => {
-  res.send('Hello world\n');
+app.get('handle-fe', (req, res) => {
+    res.sendfile(/*JSON*/);
 });
 
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+//LISTENER
+var listener = app.listen(port, function(){
+    console.log('Express server listening on port');
+});
+
+//ERROR HANDLING
+app.use((err, req, res, next) => {
+   res.status(500).send('Something broke!');
+})
+
+
+
