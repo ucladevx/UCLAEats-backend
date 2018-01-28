@@ -1,5 +1,5 @@
 module.exports = {
     // db: require('./db'),
-    menu-api: require('./menu-api'),
-
+    api: require('./api'),
+    db: require('./db'),
 };
