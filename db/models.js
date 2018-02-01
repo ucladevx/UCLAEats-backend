@@ -10,6 +10,6 @@ db.once("open", function(callback){
     /* Once the database connection has succeeded, the code in db.once is executed. */
 });
 
-const Menu = mongoose.model("Menu", MenuSchemas.MenuSchema);
+const Menu = mongoose.model("Menu", MenuSchemas.MenuSchema, "menus");
 
 module.exports.Menu = Menu;

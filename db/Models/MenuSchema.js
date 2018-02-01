@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.set('debug', true);
 
 const Schema = mongoose.Schema;
 
@@ -13,8 +14,7 @@ MenuSchema.methods.Create = function Create(callback) {
     this.save(callback);
 };
 
-MenuSchema.methods.FindByName = function FindByName(name, callback) {
-    return this.find({name: name}, callback);
+MenuSchema.methods.FindByName = function FindByName(menu_name, callback) {
+    this.model('Menu').find({name: menu_name}, callback);
 };
-
 module.exports.MenuSchema = MenuSchema;

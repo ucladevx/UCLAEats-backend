@@ -1,37 +1,33 @@
 const Models = require("./models");
 
+let Menu = Models.Menu;
 
-function NewMenu(name, menu_obj) {
-    let now = Date.now();
-    let Menu = new Models.Menu({
-        name: name,
-        created_at: now,
-        updated_at: now,
-        menu: menu_obj,
-    });
-    return Menu;
-}
-
-// Testing code for MenuSchema
-menu_obj = {
-    test1: "Five",
-    test2: [1,2,3,"Four"],
+json_obj = {
+    test1: "value1",
+    test2: "value2"
 };
-
-let Menu = NewMenu("Menu", menu_obj);
-Menu.Create(function(error) {
-    console.log("Menu Saved.");
-    if (error) {
-        console.error(error);
-    }
+let new_menu = new Menu({
+    name: "Awesome_Menu",
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    menu: json_obj,
 });
 
-
-Menu.FindByName(Menu.name, function(error, menus) {
-    if (error) {
-        console.error(error);
+new_menu.Create(function(err) {
+    if (err) {
+        console.error(err);
     }
-    menus.forEach(function (value) {
-        console.log(value);
+    new_menu.Create( function(err) {
+        if (err) {
+            console.error(err);
+        }
+        new_menu.FindByName("Awesome_Menu", function(err, menus) {
+            if (err) {
+                console.error(err);
+            }
+            menus.forEach(function(menu) {
+                console.log(menu);
+            });
+        });
     });
 });
