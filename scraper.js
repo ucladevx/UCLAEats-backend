@@ -238,10 +238,7 @@ function getActivityLevel() {
         else {
             activity_level[name] = "-1%";
         }
-
-        console.log(name);
-        console.log(activity_level[name]);
-
+        
         currElem = currElem.next();
     }
 
