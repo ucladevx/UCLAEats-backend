@@ -217,6 +217,37 @@ app.get('/cafe/hedrickstudy', function (req,res) {
 //     res.send('TODO');
 // })
 
+app.get('/testing', function(req,res) {
+    var obj = getActivityLevel();
+    res.send(obj);
+})
+
+function getActivityLevel() {
+    var activity_level = {};
+    var url = 'http://menu.dining.ucla.edu/Menus/';
+
+    var $ = cheerio.load(sync_request('GET',url).getBody());
+
+    var currElem = $(".meal-detail-link").first().next();
+    while(currElem.hasClass('menu-block')) {
+        var name = currElem.find("h3[class='col-header']").text().trim();
+        var act = currElem.find(".activity-level-wrapper");
+        if (act.length == 1) {
+            activity_level[name] = act.parent().text().trim().replace(' ','').split(":").slice(-1)[0].trim();
+        }
+        else {
+            activity_level[name] = "-1%";
+        }
+
+        console.log(name);
+        console.log(activity_level[name]);
+
+        currElem = currElem.next();
+    }
+
+    return activity_level;
+}
+
 function parseOverviewPage(res, body) {
     var obj = {}
 
