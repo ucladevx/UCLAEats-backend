@@ -1,6 +1,6 @@
 var express = require('express');
 var routes = express.Router();
-var mongo0p = require("../db/models.js");
+var mongo0p = require("../db/index.js");
 
 //use routes.route if want to use POST as well (cuts redundancy)
 routes.get('/menu', (req, res) => {
