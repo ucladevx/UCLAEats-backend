@@ -5,7 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.16.2",
-    "mongoose": "^5.0.1"
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.32.6",
+    "winston": "^2.4.0"
   },
   "devDependencies": {},
   "scripts": {
