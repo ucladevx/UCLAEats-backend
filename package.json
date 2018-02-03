@@ -1,0 +1,34 @@
+{
+  "name": "dea-backend",
+  "version": "0.0.1",
+  "description": "Backend for Don't Eat Alone App",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^5.0.1",
+    "apicache": "^1.1.0",
+    "body-parser": "^1.15.0",
+    "cheerio": "^0.22.0",
+    "request": "^2.72.0",
+    "tabletojson": "^0.4.0",
+    "underscore": "^1.8.3",
+    "util": "^0.10.3",
+    "sync-request": "4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ucladevx/dea-backend.git"
+  },
+  "author": "Terrence Ho",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ucladevx/dea-backend/issues"
+  },
+  "homepage": "https://github.com/ucladevx/dea-backend#readme",
+  "keywords": []
+}
