@@ -31,6 +31,14 @@ let RendezvousUrl = 'http://menu.dining.ucla.edu/Menus/Rendezvous';
 let DeNeveGrabNGoUrl = 'http://menu.dining.ucla.edu/Menus/DeNeveGrabNGo';
 let HedrickStudyUrl = 'http://menu.dining.ucla.edu/Menus/HedrickStudy';
 
+let cafes_url = {
+    'bcafe': BCafeUrl,
+    'cafe1919': Cafe1919Url,
+    'rendezvous': RendezvousUrl,
+    'deneve_grab_n_go': DeNeveGrabNGoUrl,
+    'hedricks_study': HedrickStudyUrl
+};
+
 
 // URLs to test during summer development when websites are change
 // const bcafeUrl = 'http://web.archive.org/web/20170416221050/http://menu.dining.ucla.edu/Menus/BruinCafe';
@@ -79,127 +87,127 @@ app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
 
-// this is useless for our app
-// app.get('/',function(req,res){
-//   res.sendFile(path.join(__dirname+'/index.html'));
-//   //__dirname : It will resolve to your project folder.
+// // this is useless for our app
+// // app.get('/',function(req,res){
+// //   res.sendFile(path.join(__dirname+'/index.html'));
+// //   //__dirname : It will resolve to your project folder.
+// // });
+//
+// // gives back the json for overview for each dinning hall
+// /* Parameters:
+//     Date (optional)
+// */
+// // to get the overview, call API like /overview?date=2018-01-28
+// app.get('/hall/overview', function (req, res) {
+//     var dateString = getDate(req, res)
+//
+//     var url = util.format(overviewUrl, dateString)
+//     request(url, function(error, response, body) {
+//         if (error) {
+//             sendError(res, error)
+//         } else {
+//             parseOverviewPage(res, body)
+//         }
+//     })
+// })
+//
+// // to get the detail page, call API like: /datail/Dinner?date=2018-01-28
+// app.get('/hall/detail/:meal', function (req, res) {
+//     var dateString = getDate(req, res)
+//     var meal = req.params.meal.trim();
+//
+//     var url = util.format(overviewUrl, dateString) + '/' + meal;
+//     request(url, function(error, response, body) {
+//         if (error) {
+//             sendError(res, error)
+//         } else {
+//             parseDetailPage(res, body)
+//         }
+//     });
+//
+//
 // });
-
-// gives back the json for overview for each dinning hall
-/* Parameters:
-    Date (optional)
-*/
-// to get the overview, call API like /overview?date=2018-01-28
-app.get('/hall/overview', function (req, res) {
-    var dateString = getDate(req, res)
-
-    var url = util.format(overviewUrl, dateString)
-    request(url, function(error, response, body) {
-        if (error) {
-            sendError(res, error)
-        } else {
-            parseOverviewPage(res, body)
-        }
-    })
-})
-
-// to get the detail page, call API like: /datail/Dinner?date=2018-01-28
-app.get('/hall/detail/:meal', function (req, res) {
-    var dateString = getDate(req, res)
-    var meal = req.params.meal.trim();
-
-    var url = util.format(overviewUrl, dateString) + '/' + meal;
-    request(url, function(error, response, body) {
-        if (error) {
-            sendError(res, error)
-        } else {
-            parseDetailPage(res, body)
-        }
-    });
-
-
-});
-
-/* Parameters:
-    Date (optional)
-*/
-// to get the hours, call API like: /hours?date=2018-01-28
-app.get('/hours', function (req, res) {
-    var dateString = getDate(req, res)
-    var url = util.format(hoursUrl, dateString)
-    request(url, function(error, response, body) {
-        if (error) {
-            sendError(res, error)
-        } else {
-            parseHours(res, body)
-        }
-    })
-})
-
-app.get('/cafe/bcafe', function (req,res) {
-    var url = BCafeUrl;
-
-    request(url, function (error, response, body) {
-        if(error) {
-            sendError(res,error);
-        }
-        else {
-            parseCafe(res, body);
-        }
-    });
-});
-
-app.get('/cafe/cafe1919', function (req,res) {
-    var url = Cafe1919Url;
-
-    request(url, function (error, response, body) {
-        if(error) {
-            sendError(res,error);
-        }
-        else {
-            parseCafe(res, body);
-        }
-    });
-});
-
-app.get('/cafe/rendezvous', function (req,res) {
-    var url = RendezvousUrl;
-
-    request(url, function (error, response, body) {
-        if(error) {
-            sendError(res,error);
-        }
-        else {
-            parseCafe(res, body);
-        }
-    });
-});
-
-app.get('/cafe/denevegrabngo', function (req,res) {
-    var url = DeNeveGrabNGoUrl;
-
-    request(url, function (error, response, body) {
-        if(error) {
-            sendError(res,error);
-        }
-        else {
-            parseCafe(res, body);
-        }
-    });
-});
-
-app.get('/cafe/hedrickstudy', function (req,res) {
-    var url = HedrickStudyUrl;
-
-    request(url, function (error, response, body) {
-        if(error) {
-            sendError(res,error);
-        }
-        else {
-            parseCafe(res, body);
-        }
-    });
-});
+//
+// /* Parameters:
+//     Date (optional)
+// */
+// // to get the hours, call API like: /hours?date=2018-01-28
+// app.get('/hours', function (req, res) {
+//     var dateString = getDate(req, res)
+//     var url = util.format(hoursUrl, dateString)
+//     request(url, function(error, response, body) {
+//         if (error) {
+//             sendError(res, error)
+//         } else {
+//             parseHours(res, body)
+//         }
+//     })
+// })
+//
+// app.get('/cafe/bcafe', function (req,res) {
+//     var url = BCafeUrl;
+//
+//     request(url, function (error, response, body) {
+//         if(error) {
+//             sendError(res,error);
+//         }
+//         else {
+//             parseCafe(res, body);
+//         }
+//     });
+// });
+//
+// app.get('/cafe/cafe1919', function (req,res) {
+//     var url = Cafe1919Url;
+//
+//     request(url, function (error, response, body) {
+//         if(error) {
+//             sendError(res,error);
+//         }
+//         else {
+//             parseCafe(res, body);
+//         }
+//     });
+// });
+//
+// app.get('/cafe/rendezvous', function (req,res) {
+//     var url = RendezvousUrl;
+//
+//     request(url, function (error, response, body) {
+//         if(error) {
+//             sendError(res,error);
+//         }
+//         else {
+//             parseCafe(res, body);
+//         }
+//     });
+// });
+//
+// app.get('/cafe/denevegrabngo', function (req,res) {
+//     var url = DeNeveGrabNGoUrl;
+//
+//     request(url, function (error, response, body) {
+//         if(error) {
+//             sendError(res,error);
+//         }
+//         else {
+//             parseCafe(res, body);
+//         }
+//     });
+// });
+//
+// app.get('/cafe/hedrickstudy', function (req,res) {
+//     var url = HedrickStudyUrl;
+//
+//     request(url, function (error, response, body) {
+//         if(error) {
+//             sendError(res,error);
+//         }
+//         else {
+//             parseCafe(res, body);
+//         }
+//     });
+// });
 
 // app.get('/calendarYear', function(req, res){
 //     // TODO: get the calendar years for several
@@ -218,7 +226,7 @@ app.get('/cafe/hedrickstudy', function (req,res) {
 // })
 
 app.get('/testing', function(req,res) {
-    var obj = getActivityLevel();
+    var obj = getCafe('bcafe');
     res.send(obj);
 })
 
@@ -243,6 +251,52 @@ function getActivityLevel() {
     }
 
     return JSON.stringify(activity_level);
+}
+
+function getOverviewPage(date) {
+    var obj = {};
+    var url = util.format(overviewUrl,date);
+
+    var body = sync_request('GET',url).getBody();
+
+    obj['breakfast'] = parseMealPeriod(body, 0);
+    obj['brunch'] = parseMealPeriod(body,1);
+    obj['lunch'] = parseMealPeriod(body, 2);
+    obj['dinner'] = parseMealPeriod(body, 3);
+
+    return JSON.stringify(obj);
+}
+
+function getDetailPage(date,meal) {
+    var obj = {};
+    var url = util.format(overviewUrl, date) + '/' + meal;
+
+    var body = sync_request('GET',url).getBody();
+
+    obj['breakfast'] = parseDetail(body, 0);
+    obj['brunch'] = parseDetail(body,1);
+    obj['lunch'] = parseDetail(body, 2);
+    obj['dinner'] = parseDetail(body, 3);
+
+    return JSON.stringify(obj);
+}
+
+function getHours(date) {
+    var obj = {};
+    var url = util.format(hoursUrl,date);
+
+    var body = sync_request('GET',url).getBody();
+
+    return parseHour(body);
+}
+
+function getCafe(cafe_name) {
+    var obj = {};
+    var url = cafes_url[cafe_name];
+
+    var body = sync_request('GET',url).getBody();
+
+    return parseCafe(body);
 }
 
 function parseOverviewPage(res, body) {
@@ -540,7 +594,8 @@ function parseMealPeriod(body, mealNumber) {
     return result
 }
 
-function parseHours(res, body) {
+// this is used for function getHours
+function parseHour(body) {
     var response = []
     var obj = {}
 
@@ -568,12 +623,43 @@ function parseHours(res, body) {
 
     response.push(obj)
 
-    response = JSON.stringify(response);
-
-    res.send(response)
+    return JSON.stringify(response);
 }
 
-function parseCafe(res, body) {
+// function parseHours(res, body) {
+//     var response = []
+//     var obj = {}
+//
+//     var $ = cheerio.load(body)
+//     $('.hours-location, .hours-range, .hours-closed, .hours-closed-allday').each(function(index, element){
+//         var text = $(this).text().trim()
+//         if (hallTitlesHours.indexOf(text) != -1){
+//             if (!_.isEmpty(obj)){
+//                 response.push(obj)
+//             }
+//             obj = {}
+//             obj['hall_name'] = text
+//             return
+//         }
+//         if (dinner_key in obj) {
+//             obj[late_night_key] = text
+//         } else if (lunch_key in obj) {
+//             obj[dinner_key] = text
+//         } else if (breakfast_key in obj) {
+//             obj[lunch_key] = text
+//         } else {
+//             obj[breakfast_key] = text
+//         }
+//     })
+//
+//     response.push(obj)
+//
+//     response = JSON.stringify(response);
+//
+//     res.send(response)
+// }
+
+function parseCafe(body) {
     var response = {};
     var $ = cheerio.load(body);
 
@@ -626,10 +712,66 @@ function parseCafe(res, body) {
         response[Object.keys(response)[index]] = arr;
     });
 
-    response = JSON.stringify(response);
-
-    return res.send(response);
+    return JSON.stringify(response);
 }
+
+// function parseCafe(res, body) {
+//     var response = {};
+//     var $ = cheerio.load(body);
+//
+//     // get the name of navigation button
+//     $('.page-nav-button').each(function(index, element) {
+//         response[$(this).text()] = [];
+//     });
+//
+//     // each swiper slide is the content for a navigation bar
+//     $('.swiper-slide').each(function(index, element) {
+//         var arr = [];
+//         var items = $(this).find('.menu-item');
+//         for (var i = 0; i < items.length; i++) {
+//             var itemInfo = {};
+//             if (items.eq(i).find('.recipelink').length == 0)
+//                 continue;
+//             // name
+//             itemInfo['name'] = items.eq(i).find('.recipelink').text().trim();
+//             // recipelink
+//             itemInfo['recipelink'] = items.eq(i).find('.recipelink').attr('href');
+//             var itemRecipe = itemInfo['recipelink'];
+//             // description
+//             var itemDescript = items.eq(i).find('.menu-item-description').text().trim();
+//             if (itemDescript != '')
+//                 itemInfo['itemDescription'] = itemDescript;
+//             else
+//                 itemInfo['itemDescription'] = "No description provided";
+//             // web-code
+//             var itemCodesArr = []
+//             var itemCodes = items.eq(i).find('.webcode');
+//             for (var j = 0; j < itemCodes.length; j++){
+//                 itemCodesArr[j] = itemCodes.eq(j).attr('alt');
+//             }
+//             itemInfo['itemCodes'] = itemCodesArr;
+//             // cost
+//             var itemCost = items.eq(i).find('.menu-item-price').text().trim();
+//             if (itemCost != '')
+//                 itemInfo['itemCost'] = itemCost;
+//             else
+//                 itemInfo['itemCost'] = "No cost provided";
+//
+//             //scrape nutrition
+//             var nutritions = {};
+//             parseNutrition(itemRecipe, nutritions);
+//
+//             itemInfo['nutrition'] = nutritions;
+//             arr.push(itemInfo);
+//         }
+//
+//         response[Object.keys(response)[index]] = arr;
+//     });
+//
+//     response = JSON.stringify(response);
+//
+//     return res.send(response);
+// }
 
 //
 // app.get('/cafes', function (req, res){
