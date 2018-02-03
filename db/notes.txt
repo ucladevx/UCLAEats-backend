@@ -1,0 +1,13 @@
+MenuService
+    - Create
+        - model.save
+    - Update
+        - model.save
+    - Delete
+        - ?
+    - FindByID
+        - FindById
+    - FindByName
+        - find(name: name)
+    - FindByDate
+        - find(date: date)
