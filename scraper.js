@@ -83,9 +83,9 @@ app.use(express.static(__dirname + '/images'));
 // Cache all routes. By default, the cache TTL is one hour
 app.use(cache())
 // Spin up the server
-app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
-})
+// app.listen(app.get('port'), function() {
+//     console.log('running on port', app.get('port'))
+// })
 
 // // this is useless for our app
 // // app.get('/',function(req,res){
@@ -436,8 +436,8 @@ function parseNutrition(nutrition_url, nutritions) {
     // get the calory
     var currNur = $nutrition('.nfbox').find('.nfcal');
     var cal_arr = currNur.text().trim().split(' ');
-    nutritions[cal_arr[0]] = parseInt(cal_arr[1]);
-    nutritions[cal_arr[2]+'_'+cal_arr[3]] = parseInt(cal_arr[4]);
+    nutritions[cal_arr[0]] = cal_arr[1];
+    nutritions[cal_arr[2]+'_'+cal_arr[3]] = cal_arr[4];
 
     // get all nutrition category
     var child = $nutrition(".nfbox p[class='nfnutrient']");
@@ -818,3 +818,10 @@ function minTwoDigits(n) {
 
 // TODO: Have a job that runs every hour that refreshes all the menus
 // TODO: Store about a week's worth of menu info
+
+module.exports = {
+        getActivityLevel,
+        getOverviewPage,
+        getDetailPage,
+        getHours
+};
