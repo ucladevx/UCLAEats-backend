@@ -307,13 +307,13 @@ function parseDetail(body, mealNumber) {
             var sectionNames = currElem.find('.sect-item')
 
             //scrape activity level
-            var act = currElem.find(".activity-level-wrapper");
-            if (act.length == 1) {
-                sections['activity_level'] = act.parent().text().trim().replace(' ','').split(":").slice(-1)[0].trim();
-            }
-            else {
-                sections['activity_level'] = "-1%";
-            }
+            // var act = currElem.find(".activity-level-wrapper");
+            // if (act.length == 1) {
+            //     sections['activity_level'] = act.parent().text().trim().replace(' ','').split(":").slice(-1)[0].trim();
+            // }
+            // else {
+            //     sections['activity_level'] = "-1%";
+            // }
 
             for (var h = 0; h < sectionNames.length; h++){
                 // extract every subsections's name in each dinning hall
@@ -471,13 +471,13 @@ function parseMealPeriod(body, mealNumber) {
             var sectionNames = currElem.find('.sect-item')
 
             //scrape activity level
-            var act = currElem.find(".activity-level-wrapper");
-            if (act.length == 1) {
-                sections['activity_level'] = act.parent().text().trim().replace(' ','').split(":").slice(-1)[0].trim();
-            }
-            else {
-                sections['activity_level'] = "-1%";
-            }
+            // var act = currElem.find(".activity-level-wrapper");
+            // if (act.length == 1) {
+            //     sections['activity_level'] = act.parent().text().trim().replace(' ','').split(":").slice(-1)[0].trim();
+            // }
+            // else {
+            //     sections['activity_level'] = "-1%";
+            // }
 
             for (var h = 0; h < sectionNames.length; h++){
                 // This is the text of div of a subsection
