@@ -1,11 +1,21 @@
 var express = require('express');
-var app = 
 var routes = express.Router();
+var mongo0p = require("../db/models.js");
 
-var file = require('../json-file-here.json');
-
+//use routes.route if want to use POST as well (cuts redundancy)
 routes.get('/menu', (req, res) => {
-    res.send(file);
+    var response = {};
+    mongo0p.find({}, function(err, data){
+	if(err){
+	    response = {"error" : true,
+			"message" : "Error fetching data"};
+	}
+	else{
+	    response = {"error" : false,
+			"message" : data};
+	}
+	res.json(response);
+    });
 });
 
 module.exports = routes;
