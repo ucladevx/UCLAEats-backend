@@ -238,11 +238,11 @@ function getActivityLevel() {
         else {
             activity_level[name] = "-1%";
         }
-        
+
         currElem = currElem.next();
     }
 
-    return activity_level;
+    return JSON.stringify(activity_level);
 }
 
 function parseOverviewPage(res, body) {
@@ -252,6 +252,9 @@ function parseOverviewPage(res, body) {
     obj['brunch'] = parseMealPeriod(body,1);
     obj['lunch'] = parseMealPeriod(body, 2);
     obj['dinner'] = parseMealPeriod(body, 3);
+
+    obj = JSON.stringify(obj);
+
     res.send(obj)
 }
 
@@ -262,6 +265,9 @@ function parseDetailPage(res, body) {
     obj['brunch'] = parseDetail(body,1);
     obj['lunch'] = parseDetail(body, 2);
     obj['dinner'] = parseDetail(body, 3);
+
+    obj = JSON.stringify(obj);
+
     res.send(obj);
 }
 
@@ -561,6 +567,9 @@ function parseHours(res, body) {
     })
 
     response.push(obj)
+
+    response = JSON.stringify(response);
+
     res.send(response)
 }
 
@@ -616,6 +625,8 @@ function parseCafe(res, body) {
 
         response[Object.keys(response)[index]] = arr;
     });
+
+    response = JSON.stringify(response);
 
     return res.send(response);
 }
