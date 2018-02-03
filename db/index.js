@@ -15,7 +15,7 @@ const db = new Sequelize(
     }
 );
 
-const Menu = require('./MenuService.js')
+const Menu = require('./MenuService') (Sequelize, db);
 
 /**
  * Handles database errors (separate from the general error handler and the 404 error handler)
