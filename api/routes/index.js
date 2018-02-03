@@ -1,7 +1,16 @@
 var express = require('express');
 var routes = express.Router();
-var mongo0p = require("../db/index.js");
+//var mongo0p = require("../../db/index.js");
+const {Menu} = require('../../db');
+      
+var file = require('../ ');
+routes.get('/menu', (req, res) => {
+    res.send(file);
+}
 
+	 
+	   
+/*
 //use routes.route if want to use POST as well (cuts redundancy)
 routes.get('/menu', (req, res) => {
     var response = {};
@@ -17,5 +26,6 @@ routes.get('/menu', (req, res) => {
 	res.json(response);
     });
 });
+*/
 
 module.exports = routes;
