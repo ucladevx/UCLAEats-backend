@@ -2,12 +2,6 @@ const _ = require('underscore');
 
 module.exports = (Sequelize, db) => {
     const Menu = db.define('menu', {
-        // id: {
-        //     type: Sequelize.INTEGER,
-        //     autoIncrement: true,
-        //     primaryKey: true,
-        // },
-
         // name: {
         //     type: Sequelize.STRING,
         //     allowNull: false,
@@ -30,8 +24,9 @@ module.exports = (Sequelize, db) => {
         },
     });
 
-    Menu.findByID = function(id) {
-        return this.findOne({where: {id} });
-    };
-}
+    // Menu.findByID = function(id) {
+    //     return this.findOne({where: {id} });
+    // };
+    return Menu
+};
 
