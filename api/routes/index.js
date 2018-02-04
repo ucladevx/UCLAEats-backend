@@ -1,12 +1,22 @@
-var express = require('express');
-var routes = express.Router();
+const express = require('express');
+const routes = express.Router();
 //var mongo0p = require("../../db/index.js");
-const {Menu} = require('../../db');
+const Menu = require('../../db');
       
-var file = require('../ ');
 routes.get('/menu', (req, res) => {
     res.send(file);
-}
+});
+
+routes.get('/test', (req, res) => {
+    json_obj = {
+        "test1": "Hello World",
+        "test2": "Hi",
+    };
+    console.log(Menu);
+    Menu.create({menu: json_obj}).then(new_menu => {
+        console.log(new_menu);
+    });
+});
 
 	 
 	   
