@@ -1,2 +1,4 @@
 Sequelize - https://gist.github.com/JoeKarlsson/ebb1c714466ae3de88ae565fa9ba4779
 
+
+To set test environment, use export NODE_ENV=test

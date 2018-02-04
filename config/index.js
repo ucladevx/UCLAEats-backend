@@ -7,7 +7,7 @@ module.exports = {
     isStaging: (config.env == "staging"),
     isDevelopment: (config.env == "development"),
 
-    host: process.env.HOST,
+    host: config.host,
     port: config.port,
 
     numCPUs: process.env.NUM_WORKERS || require("os").cpus().length,
