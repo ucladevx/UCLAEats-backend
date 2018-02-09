@@ -67,5 +67,7 @@ typings/
 # ---- Project Specific Files ----
 
 config/.config.json
+scraper/config.json
+*config.json
 
 # End of https://www.gitignore.io/api/node
