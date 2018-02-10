@@ -36,4 +36,4 @@ const errorHandler = (err, req, res, next) => {
     return next(new error.HTTPError(err.name, 500, err.message));
 };
 
-module.exports = { db, OverviewMenu, errorHandler };
+module.exports = { db, DetailedMenu, OverviewMenu, errorHandler };
