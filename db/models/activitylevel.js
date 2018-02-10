@@ -1,7 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var ActivityLevel = sequelize.define('ActivityLevel', {
-    level: DataTypes.JSON
+    level: DataTypes.JSON,
+    deletedAt: DataTypes.DATE,
   }, {
     classMethods: {
       associate: function(models) {
