@@ -21,6 +21,7 @@ const OverviewMenu = require('./models/overview_menu') (db, Sequelize);
 const DetailedMenu = require('./models/detailedmenu') (db, Sequelize);
 const ActLevel = require('./models/activitylevel') (db, Sequelize);
 
+
 /**
  * Handles database errors (separate from the general error handler and the 404 error handler)
  *
@@ -37,4 +38,4 @@ const errorHandler = (err, req, res, next) => {
     return next(new error.HTTPError(err.name, 500, err.message));
 };
 
-module.exports = { db, OverviewMenu, errorHandler, ActLevel };
+module.exports = { db, DetailedMenu, OverviewMenu, ActLevel, errorHandler };

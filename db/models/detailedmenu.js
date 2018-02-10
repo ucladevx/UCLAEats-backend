@@ -17,8 +17,20 @@ module.exports = (sequelize, DataTypes) => {
         return this.findOne({ where :{ id } });
     }
 
+    OverviewMenu.findAllByDate = function(date) {
+        let startDate = moment(date).startOf('day').toDate();
+        let endDate = moment(date).endOf('day').subtract(1, 'second').toDate();
+        return this.findAll({
+            where: {
+                updatedAt: { 
+                    $between: [startDate, endDate],
+                }
+            }
+        });
+    }
+
     // find all DetailedMenus Within a date range
-    DetailedMenu.findByDateRange = function(startDate, endDate) {
+    DetailedMenu.findByAllDateRange = function(startDate, endDate) {
         return this.findAll({
             where: {
                 updatedAt: {
