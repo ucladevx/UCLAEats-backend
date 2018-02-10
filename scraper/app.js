@@ -11,7 +11,7 @@ const ActLevel = require('../db').ActLevel;
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
 let activityLevel = new CronJob({
-    cronTime: "00 00-59/5 5-22 * * *",
+    cronTime: "00-59/5 * 5-22 * * *",
     onTick: function() {
         // the object containig activity level
         let obj = scraper.getActivityLevel();

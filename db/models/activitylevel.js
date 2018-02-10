@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
       }
     },
-    paranoid: true
+    paranoid: false
   });
 
   ActivityLevel.prototype.getActivityLevel = function () {
