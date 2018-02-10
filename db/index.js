@@ -17,7 +17,7 @@ const db = new Sequelize(
 
 // detailed_menu, overview_menu, activity level, hours
 
-const OverviewMenu = require('./models/overview_menu') (db, Sequelize);
+const OverviewMenu = require('./models/overviewmenu') (db, Sequelize);
 const DetailedMenu = require('./models/detailedmenu') (db, Sequelize);
 const ActLevel = require('./models/activitylevel') (db, Sequelize);
 

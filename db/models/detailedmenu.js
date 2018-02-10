@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
     var DetailedMenu = sequelize.define('DetailedMenu', {
         detailedMenu: DataTypes.JSON,
-        deletedAt: DataTypes.DATE
+        deletedAt: DataTypes.DATE,
+        menuDate: DataTypes.DATEONLY,
     }, {
         classMethods: {
             associate: function(models) {
@@ -17,14 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         return this.findOne({ where :{ id } });
     }
 
-    OverviewMenu.findAllByDate = function(date) {
-        let startDate = moment(date).startOf('day').toDate();
-        let endDate = moment(date).endOf('day').subtract(1, 'second').toDate();
+    DetailedMenu.findAllByDate = function(date) {
         return this.findAll({
             where: {
-                updatedAt: { 
-                    $between: [startDate, endDate],
-                }
+                menuDate: date
             }
         });
     }

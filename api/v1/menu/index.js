@@ -8,11 +8,14 @@ const Hours = require('../../../db').Hours;
 
 // Get overview menu from today til the next 7 days
 router.get('/OverviewMenu', (req, res) => {
-    let startDate = moment().startOf('day').toDate();
-    let endDate = moment().startOf('day').add(7, 'days').toDate();
+    let startDate = moment().format("YYYY-MM-DD");
+    let endDate = moment().add(7, 'days').format("YYYY-MM-DD");
     OverviewMenu.findAllByDateRange(startDate,endDate).then(menus => {
         res.json({ menus });
     });
+    // OverviewMenu.findAllByDate(endDate).then(menus => {
+    //     res.json({menus});
+    // });
 });
 
 router.get('/DetailedMenu', (req, res) => {
@@ -37,13 +40,14 @@ router.get('/ActivityLevels', (req, res) => {
 
 // Test functions, for functionality
 router.get('/test', (req, res) => {
-    json_obj = {
+    let json_obj = {
         "test1": "Hello World",
         "test2": "Hi",
     };
-    // OverviewMenu.create({overviewMenu: json_obj}).then(new_menu => {
-    //     console.log(new_menu.getOverviewMenu());
-    // });
+    let date = moment().add(7, 'days').format("YYYY-MM-DD");
+    OverviewMenu.create({overviewMenu: json_obj, menuDate:date}).then(new_menu => {
+        console.log(new_menu.getOverviewMenu());
+    });
     // Menu.findByID(4).then((menu) => {
     //     console.log(menu.getMenu());
     // });
