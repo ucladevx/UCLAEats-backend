@@ -3,7 +3,7 @@ let scraper = require('./scraper');
 let CronJob = require('cron').CronJob;
 let tz = "America/Los_Angeles";
 let moment = require('moment');
-//const Menu = require('../db').Menu;
+const Menu = require('../db').Menu;
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
 let activityLevel = new CronJob({
@@ -12,7 +12,7 @@ let activityLevel = new CronJob({
         // the object containig activity level
         let obj = scraper.getActivityLevel();
         // TODO: stringify and send it to database
-        console.log(obj);
+        // console.log(obj);
 
     },
     start: false,
@@ -29,7 +29,10 @@ let overViewPage = new CronJob({
         // TODO: Add 7 days in advacne to scrape
         let dateString = moment().add(7,'days').format("YYYY-MM-DD");
         let obj = scraper.getOverviewPage(dateString);
-        obj["date"] = dateString;
+        // obj["date"] = dateString;
+        Menu.create({menu:obj}).then(new_menu => {
+            console.log(new_menu.getDate());
+        });
         // TODO: stringify and send it to database;
 
     },
