@@ -18,6 +18,8 @@ const db = new Sequelize(
 // detailed_menu, overview_menu, activity level, hours
 
 const OverviewMenu = require('./models/overview_menu') (db, Sequelize);
+const DetailedMenu = require('./models/detailedmenu') (db, Sequelize);
+const ActLevel = require('./models/activitylevel') (db, Sequelize);
 
 /**
  * Handles database errors (separate from the general error handler and the 404 error handler)

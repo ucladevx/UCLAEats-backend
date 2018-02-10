@@ -1,9 +1,13 @@
 'use strict';
-let scraper = require('./scraper');
-let CronJob = require('cron').CronJob;
-let tz = "America/Los_Angeles";
-let moment = require('moment');
-const Menu = require('../db').Menu;
+const scraper = require('./scraper');
+const CronJob = require('cron').CronJob;
+const tz = "America/Los_Angeles";
+const moment = require('moment');
+const OverviewMenu = require('../db').OverviewMenu;
+const DetailedMenu = require('../db').DetailedMenu;
+const ActLevel = require('../db').ActLevel;
+// TODO: detailedMenu and ActLevel
+// TODO: Add error handling in all scraper functions
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
 let activityLevel = new CronJob({
@@ -11,9 +15,9 @@ let activityLevel = new CronJob({
     onTick: function() {
         // the object containig activity level
         let obj = scraper.getActivityLevel();
-        // TODO: stringify and send it to database
-        // console.log(obj);
-
+        ActLevel.create({level: obj}).then(err => {
+            console.log(err);
+        });
     },
     start: false,
     timeZone: tz
@@ -30,9 +34,10 @@ let overViewPage = new CronJob({
         let dateString = moment().add(7,'days').format("YYYY-MM-DD");
         let obj = scraper.getOverviewPage(dateString);
         // obj["date"] = dateString;
-        Menu.create({menu:obj}).then(new_menu => {
-            console.log(new_menu.getDate());
-        });
+        /*
+        OverviewMenu.create({menu: obj}).then(err => {
+            console.log(err);
+        })*/
         // TODO: stringify and send it to database;
 
     },
@@ -54,6 +59,11 @@ let detailPage = new CronJob({
         obj["dinner"] = scraper.getDetailPage(dateString, "Dinner")["dinner"];
         obj["date"] = dateString;
         // TODO: stringify and send it to database
+        /*
+        DetailedMenu.create({menu: obj}).then(err => {
+            console.log(err);
+        });
+        */
 
     },
     start: false,
