@@ -1,4 +1,5 @@
 'use strict';
+const moment = require('moment');
 module.exports = (Sequelize, DataTypes) => {
     const OverviewMenu = Sequelize.define('OverviewMenu', {
         overviewMenu: DataTypes.JSON,
@@ -20,8 +21,20 @@ module.exports = (Sequelize, DataTypes) => {
         return this.findOne({ where :{ id } });
     }
 
+    OverviewMenu.findAllByDate = function(date) {
+        let startDate = moment(date).startOf('day').toDate();
+        let endDate = moment(date).endOf('day').subtract(1, 'second').toDate();
+        return this.findAll({
+            where: {
+                updatedAt: { 
+                    $between: [startDate, endDate],
+                }
+            }
+        });
+    }
+
     // find all OverviewMenus Within a date range
-    OverviewMenu.findByDateRange = function(startDate, endDate) {
+    OverviewMenu.findAllByDateRange = function(startDate, endDate) {
         return this.findAll({
             where: {
                 updatedAt: {
