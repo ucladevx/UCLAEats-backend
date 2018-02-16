@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         return this.findOne({ where :{ id } });
     }
 
+    // date is a string with format YYYY-MM-DD
     DetailedMenu.findAllByDate = function(date) {
         return this.findAll({
             where: {
@@ -50,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     DetailedMenu.prototype.getDetailedMenu = function () {
-        return this.getDataValue('DetailedMenu');
+        return this.getDataValue('detailedMenu');
     }
 
     DetailedMenu.prototype.getDate = function () {
