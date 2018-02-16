@@ -4,20 +4,25 @@ const logger = require('../logger');
 const error = require('../error');
 const config = require('../config');
 
-const db = new Sequelize(
-    config.database.name, 
-    config.database.user, 
-    config.database.password, 
-    {
-        dialect: config.database.dialect,
-        host: config.database.host,
-        logging: config.isDevelopment ? logger.debug : false,
-    }
-);
+// const db = new Sequelize(
+//     config.database.name, 
+//     config.database.user, 
+//     config.database.password, 
+//     {
+//         dialect: config.database.dialect,
+//         host: config.database.host,
+//         // logging: config.isDevelopment ? logger.debug : false,
+//     }
+// );
+
+const db = new Sequelize(config.database_url);
 
 // detailed_menu, overview_menu, activity level, hours
 
-const OverviewMenu = require('./models/overview_menu') (db, Sequelize);
+const OverviewMenu = require('./models/overviewmenu') (db, Sequelize);
+const DetailedMenu = require('./models/detailedmenu') (db, Sequelize);
+const ActLevel = require('./models/activitylevel') (db, Sequelize);
+
 
 /**
  * Handles database errors (separate from the general error handler and the 404 error handler)
@@ -35,4 +40,4 @@ const errorHandler = (err, req, res, next) => {
     return next(new error.HTTPError(err.name, 500, err.message));
 };
 
-module.exports = { db, OverviewMenu, errorHandler };
+module.exports = { db, DetailedMenu, OverviewMenu, ActLevel, errorHandler };

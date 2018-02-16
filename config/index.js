@@ -13,6 +13,8 @@ module.exports = {
     numCPUs: process.env.NUM_WORKERS || require("os").cpus().length,
 
     database: config.database,
+    database_url: process.env.DATABASE_URL,
+
     pepper: config.pepper,
     logging: config.logging,
 }

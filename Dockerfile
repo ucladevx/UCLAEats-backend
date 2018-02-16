@@ -1,17 +1,19 @@
-# Use an official Python rutime as a parent image
-FROM node:carbon
+FROM node:9.5.0-alpine
 
-# Set the working directory to /app
-WORKDIR /app
+RUN apk add -U python make gcc g++ bash
 
-# Copy the current direcotry contents into the container at /app
-ADD . /app
+# create the working directory
+RUN mkdir -p /app/dea-backend
 
-# Install any needed packages specified in requirements.txt
+COPY *.json /app/dea-backend/
 
-EXPOSE 80
+RUN cd /app/dea-backend && \
+    npm install --only=production 
 
-# Define Environment Variable
-ENV NAME World
+WORKDIR /app/dea-backend
+COPY . /app/dea-backend/
 
+EXPOSE 5000
+CMD ["npm", "migrate"]
+CMD ["npm", "start"]
 
