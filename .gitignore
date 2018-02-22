@@ -69,5 +69,6 @@ typings/
 config/.config.json
 scraper/config.json
 *config.json
+*.env
 
 # End of https://www.gitignore.io/api/node
