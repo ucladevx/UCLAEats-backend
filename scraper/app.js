@@ -6,7 +6,7 @@ const moment = require('moment');
 const OverviewMenu = require('../db').OverviewMenu;
 const DetailedMenu = require('../db').DetailedMenu;
 const ActLevel = require('../db').ActLevel;
-// TODO: detailedMenu and ActLevel
+const Hour = require('../db').Hours;
 // TODO: Add error handling in all scraper functions
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
@@ -43,7 +43,7 @@ overViewPage.start();
 let detailPage = new CronJob({
     cronTime: "00 07 00 * * *",
     onTick: function() {
-        for(var i = 0; i <= 1; i++) {
+        for(var i = 0; i <= 7; i++) {
             insertDetailMenu(moment().add(i,'days').format("YYYY-MM-DD"));
         }
     },
@@ -54,27 +54,34 @@ let detailPage = new CronJob({
 detailPage.start();
 
 
-// hours runs everyday at 0:07 am
-// let hours = new CronJob({
-//     cronTime: "00 07 00 * * *",
-//     onTick: function() {
-//         // the object containig activity level
-//         let dateString = moment().add(7,'days').format("YYYY-MM-DD");
-//         let obj = scraper.getHours(dateString);
-//         obj["date"] = dateString;
-//         // TODO: stringify and send it to database
-//         console.log(obj);
+// hours runs everyday at 0:09 am
+let hours = new CronJob({
+    cronTime: "00 09 00 * * *",
+    onTick: function() {
+        for(var i = 0; i <= 7; i++) {
+            insertHours(moment().add(i,'days').format("YYYY-MM-DD"));
+        }
+    },
+    start: false,
+    timeZone: tz
+});
 
-//     },
-//     start: false,
-//     timeZone: tz
-// });
+hours.start();
 
-// hours.start();
-
-// TODO: Finish this when hour model is ready
 function insertHours(queryDate) {
     console.log(queryDate);
+
+    Hour.findAllByDate(queryDate).then( hour => {
+        if(hour.length == 0) {
+            let obj = JSON.stringify(scraper.getHours(queryDate));
+            Hour.create({hours: obj, hourDate: queryDate}).then( err => {
+                if(!err)
+                    console.log(queryDate.concat(" finished insertion"));
+                else
+                    console.log(err);
+            });
+        }
+    });
     
 }
 
