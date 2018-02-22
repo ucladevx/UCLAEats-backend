@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   var Hours = sequelize.define('Hours', {
     hours: DataTypes.JSON,
-    deletedAt: DataTypes.DATE
+    deletedAt: DataTypes.DATE,
+    hourDate: DataTypes.DATEONLY,
   }, {
     classMethods: {
       associate: function(models) {
@@ -13,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
     
-    // find a DetailedMenu by id
-   Hours.DetailedMenu.findByID = function (id) {
+    // find a hour by id
+   Hours.findByID = function (id) {
         return this.findOne({ where :{ id } });
     }
 
@@ -23,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     Hours.findAllByDate = function(date) {
         return this.findAll({
             where: {
-                updatedAt: date,
+                hourDate: date,
             }
         });
     }
@@ -32,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     Hours.findByAllDateRange = function(startDate, endDate) {
         return this.findAll({
             where: {
-                updatedAt: {
+                hourDate: {
                     $between: [startDate, endDate],
                 }
             }
@@ -51,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         return this.getDataValue('id');
     }
 
-    Hours.prototype.getDetailedMenu = function () {
+    Hours.prototype.getHours = function () {
         return this.getDataValue('hours');
     }
 
@@ -61,10 +62,10 @@ module.exports = (sequelize, DataTypes) => {
 
 
     Hours.findLast = function() {
-	return this.findAll({
-	    limit: 1,
-	    order: [[ 'createdAt', 'DESC' ]]
-	});
+	    return this.findAll({
+	        limit: 1,
+    	    order: [[ 'createdAt', 'DESC' ]]
+	    });
     }
     
   return Hours;
