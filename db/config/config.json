@@ -3,7 +3,7 @@
     "username": "devx_dev",
     "password": "devx_dev",
     "database": "dea_dev",
-    "host": "127.0.0.1",
+    "host": "postgres",
     "dialect": "postgres"
   },
   "test": {

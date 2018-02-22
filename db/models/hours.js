@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   var Hours = sequelize.define('Hours', {
     hours: DataTypes.JSON,
-    deletedAt: DataTypes.DATE
+    deletedAt: DataTypes.DATE,
+    hoursDate: DataTypes.DATEONLY
   }, {
     classMethods: {
       associate: function(models) {
@@ -14,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     
     // find a DetailedMenu by id
-   Hours.DetailedMenu.findByID = function (id) {
+   Hours.findByID = function (id) {
         return this.findOne({ where :{ id } });
     }
 

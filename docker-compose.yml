@@ -1,25 +1,23 @@
 version: "3"
 services:
     web:
-        # replace username/repo:tag with your name and image details
-        image: terrenceho/dea-backend:latest
-        # deploy:
-        #     restart_policy:
-        #         condition: on-failure
+        build: .
         ports:
             - "5000:5000"
         depends_on:
             - postgres
+        env_file:
+            - node.env
         networks:
             - webnet
-        environment:
-            DATABASE_URL: postgres://devx_dev@postgres/dea_dev
     postgres:
         image: postgres:10.2-alpine
         ports:
             - "5432:5432"
-        environment:
-            POSTGRES_USER: devx_dev
-            POSTGRES_DB: dea_dev
+        restart: always
+        env_file:
+            - postgres.env
+        networks:
+            - webnet
 networks:
     webnet:

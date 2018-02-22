@@ -58,9 +58,6 @@ router.get('/test', (req, res) => {
     // OverviewMenu.findByDateRange(predate.toDate(), moment().toDate()).then(menus => {
     //     console.log(menus);
     // });
-    OverviewMenu.findAllByDate(moment().startOf('day').toDate()).then(menus => {
-        console.log(menus.length);
-    });
 });
 
 module.exports = { router };

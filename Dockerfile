@@ -8,12 +8,12 @@ RUN mkdir -p /app/dea-backend
 COPY *.json /app/dea-backend/
 
 RUN cd /app/dea-backend && \
-    npm install --only=production 
+    npm install 
 
 WORKDIR /app/dea-backend
 COPY . /app/dea-backend/
+# Entrypoint script
 
 EXPOSE 5000
-CMD ["npm", "migrate"]
-CMD ["npm", "start"]
 
+CMD ["npm", "start"]
