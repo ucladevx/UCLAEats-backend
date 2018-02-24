@@ -1,6 +1,10 @@
 default: build run
 
-build: 
+build-image: 
+	docker build -t terrenceho/dea-backend:latest .
+	docker push terrenceho/dea-backend:latest
+
+build: build-image
 	docker-compose build
 
 run:

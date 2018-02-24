@@ -40,24 +40,21 @@ router.get('/ActivityLevels', (req, res) => {
 
 // Test functions, for functionality
 router.get('/test', (req, res) => {
-    let json_obj = {
-        "test1": "Hello World",
-        "test2": "Hi",
-    };
-    let date = moment().add(7, 'days').format("YYYY-MM-DD");
-    OverviewMenu.create({overviewMenu: json_obj, menuDate:date}).then(new_menu => {
-        console.log(new_menu.getOverviewMenu());
-    });
-    // Menu.findByID(4).then((menu) => {
-    //     console.log(menu.getMenu());
+    // let json_obj = {
+    //     "test1": "Hello World",
+    //     "test2": "Hi",
+    // };
+    // let date = moment().add(7, 'days').format("YYYY-MM-DD");
+    // OverviewMenu.create({overviewMenu: json_obj, menuDate:date}).then(new_menu => {
+    //     console.log(new_menu.getOverviewMenu());
     // });
-    // Menu.Delete(16).then(deleted_menu => {
-    //     console.log(deleted_menu);
-   // });
     // let predate = moment().subtract(1,'hours');
-    // OverviewMenu.findByDateRange(predate.toDate(), moment().toDate()).then(menus => {
+    // OverviewMenu.findAllByDateRange(predate.toDate(), moment().toDate()).then(menus => {
     //     console.log(menus);
     // });
+    OverviewMenu.findByID(1).then(new_menu => {
+        console.log(new_menu.getOverviewMenu());
+    });
 });
 
 module.exports = { router };
