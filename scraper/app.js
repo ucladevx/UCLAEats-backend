@@ -1,5 +1,5 @@
 'use strict';
-const scraper = require('./scraper');
+const scraper = require('scraper');
 const CronJob = require('cron').CronJob;
 const tz = "America/Los_Angeles";
 const moment = require('moment');

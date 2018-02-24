@@ -5,6 +5,8 @@ const log = require('./logger');
 const db = require('./db');
 const router = express('router');
 const api = require('./api');
+const scraper = require('./scraper');
+scraper.startAll();
 
 const app = express();
 // Constants
