@@ -11,24 +11,23 @@ const Hour = require('../db').Hours;
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
 let activityLevel = new CronJob({
-    cronTime: "00 00 14 * * *",
+    cronTime: "00 00-59/5 5-22 * * *",
     onTick: function() {
         // the object containig activity level
+        console.log("inside activityLevel function");
         let obj = scraper.getActivityLevel();
         ActLevel.create({level: obj}).then(err => {
-            console.log(err);
+            if(!err)
+                console.log("finished activity level");
+            else {
+                console.log("error in activirtLevel function");
+                console.log(err);
+            }
         });
     },
     start: false,
     timeZone: tz
 });
-
-function startAll() {
-    activityLevel.start();
-    overViewPage.start();
-    detailPage.start();
-    hours.start();
-}
 
 // overviewPage runs everyday at 0:05 am
 let overViewPage = new CronJob({
@@ -56,7 +55,7 @@ let detailPage = new CronJob({
 
 // hours runs everyday at 0:09 am
 let hours = new CronJob({
-    cronTime: "00 09 14 * * *",
+    cronTime: "00 10 00 * * *",
     onTick: function() {
         for(var i = 0; i <= 7; i++) {
             insertHours(moment().add(i,'days').format("YYYY-MM-DD"));
@@ -67,16 +66,19 @@ let hours = new CronJob({
 });
 
 function insertHours(queryDate) {
-    console.log(queryDate);
+    console.log("Inside insertHours function for " + queryDate);
 
     Hour.findAllByDate(queryDate).then( hour => {
         if(hour.length == 0) {
+            console.log("no hours data for " + queryDate);
             let obj = JSON.stringify(scraper.getHours(queryDate));
             Hour.create({hours: obj, hourDate: queryDate}).then( err => {
                 if(!err)
-                    console.log(queryDate.concat(" finished insertion"));
-                else
+                    console.log("finished insertion hour for " + queryDate);
+                else {
+                    console.log("error in insertHours function for date " + queryDate);
                     console.log(err);
+                }
             });
         }
     });
@@ -84,21 +86,25 @@ function insertHours(queryDate) {
 }
 
 function insertOverviewMenu(queryDate) {
-    console.log(queryDate);
+    console.log("Inside insertOverviewMenu function for " + queryDate);
+
     OverviewMenu.findAllByDate(queryDate).then(menu => {
         if(menu.length == 0) {
             let obj = JSON.stringify(scraper.getOverviewPage(queryDate));
             OverviewMenu.create({overviewMenu:obj, menuDate: queryDate}).then(err => {
                 if(!err)
-                    console.log(queryDate.concat(" finished insertion"));
-                else
+                    console.log("finished insertion overViewMenu for " + queryDate);
+                else {
+                    console.log("error in insertOverViewMenu function for date " + queryDate);
                     console.log(err);
+                }
             });
         }
     });
 }
 function insertDetailMenu(queryDate) {
-    console.log(queryDate);
+    console.log("Inside insertDetailMenu function for " + queryDate);
+
     DetailedMenu.findAllByDate(queryDate).then(menu => {
         if(menu.length == 0) {
             let obj = {};
@@ -108,14 +114,22 @@ function insertDetailMenu(queryDate) {
             obj = JSON.stringify(obj);
             DetailedMenu.create({detailedMenu:obj, menuDate: queryDate}).then(err => {
                 if(!err)
-                    console.log(queryDate.concat(" finished insertion"));
-                else
+                    console.log("finished insertion detailedMenu for " + queryDate);
+                else {
+                    console.log("error in insertDetail function for date " + queryDate);
                     console.log(err);
+                }
             });
         }
     });
 }
 
+function startAll() {
+    activityLevel.start();
+    overViewPage.start();
+    detailPage.start();
+    hours.start();
+}
 
 module.exports = {
     startAll
