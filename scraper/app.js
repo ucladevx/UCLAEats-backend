@@ -11,7 +11,7 @@ const Hour = require('../db').Hours;
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
 let activityLevel = new CronJob({
-    cronTime: "00-59/5 * 5-22 * * *",
+    cronTime: "00 00 14 * * *",
     onTick: function() {
         // the object containig activity level
         let obj = scraper.getActivityLevel();
@@ -56,7 +56,7 @@ let detailPage = new CronJob({
 
 // hours runs everyday at 0:09 am
 let hours = new CronJob({
-    cronTime: "00 45 13 * * *",
+    cronTime: "00 09 14 * * *",
     onTick: function() {
         for(var i = 0; i <= 7; i++) {
             insertHours(moment().add(i,'days').format("YYYY-MM-DD"));

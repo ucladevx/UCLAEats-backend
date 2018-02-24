@@ -32,11 +32,11 @@ router.get('/ActivityLevels', (req, res) => {
     });
 });
 
-// router.get('/Hours', (req, res) => {
-//     ActLevel.findLast().then(hours => {
-//         res.json({ hours });
-//     });
-// });
+router.get('/Hours', (req, res) => {
+    Hours.findLast().then(hours => {
+        res.json({ hours });
+    });
+});
 
 // Test functions, for functionality
 router.get('/test', (req, res) => {

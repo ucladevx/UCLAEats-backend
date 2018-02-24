@@ -5,7 +5,7 @@ const log = require('./logger');
 const db = require('./db');
 const router = express('router');
 const api = require('./api');
-const scraper = require('./scraper');
+const scraper = require('./scraper/app');
 scraper.startAll();
 
 const app = express();
