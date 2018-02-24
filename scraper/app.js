@@ -1,5 +1,5 @@
 'use strict';
-const scraper = require('scraper');
+const scraper = require('./scraper');
 const CronJob = require('cron').CronJob;
 const tz = "America/Los_Angeles";
 const moment = require('moment');
@@ -23,7 +23,12 @@ let activityLevel = new CronJob({
     timeZone: tz
 });
 
-activityLevel.start();
+function startAll() {
+    activityLevel.start();
+    overViewPage.start();
+    detailPage.start();
+    hours.start();
+}
 
 // overviewPage runs everyday at 0:05 am
 let overViewPage = new CronJob({
@@ -37,8 +42,6 @@ let overViewPage = new CronJob({
     timeZone: tz
 });
 
-overViewPage.start();
-
 // detail page runs everyday at 0:07 am
 let detailPage = new CronJob({
     cronTime: "00 07 00 * * *",
@@ -51,12 +54,9 @@ let detailPage = new CronJob({
     timeZone: tz
 });
 
-detailPage.start();
-
-
 // hours runs everyday at 0:09 am
 let hours = new CronJob({
-    cronTime: "00 09 00 * * *",
+    cronTime: "00 45 13 * * *",
     onTick: function() {
         for(var i = 0; i <= 7; i++) {
             insertHours(moment().add(i,'days').format("YYYY-MM-DD"));
@@ -65,8 +65,6 @@ let hours = new CronJob({
     start: false,
     timeZone: tz
 });
-
-hours.start();
 
 function insertHours(queryDate) {
     console.log(queryDate);
@@ -118,3 +116,7 @@ function insertDetailMenu(queryDate) {
     });
 }
 
+
+module.exports = {
+    startAll
+};  
