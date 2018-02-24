@@ -1,6 +1,6 @@
 const fs = require('fs');
 const env = process.env.NODE_ENV || "development";
-const config = require('./.config.json');
+//const config = require('./.config.json');
 
 module.exports = {
   isProduction: env === 'production',
