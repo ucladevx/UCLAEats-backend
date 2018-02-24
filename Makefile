@@ -4,7 +4,7 @@ build-image:
 	docker build -t terrenceho/dea-backend:latest .
 	docker push terrenceho/dea-backend:latest
 
-build: build-image
+build: 
 	docker-compose build
 
 run:
