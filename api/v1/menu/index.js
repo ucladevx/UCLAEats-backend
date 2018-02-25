@@ -33,8 +33,11 @@ router.get('/ActivityLevels', (req, res) => {
 });
 
 router.get('/Hours', (req, res) => {
-    Hours.findLast().then(hours => {
-        res.json({ hours });
+    let startDate = moment().startOf('day').toDate();
+    let endDate = moment().startOf('day').add(7, 'days').toDate();
+
+    Hours.findAllByDateRange(startDate,endDate).then(hours => {
+        res.json({hours});
     });
 });
 
