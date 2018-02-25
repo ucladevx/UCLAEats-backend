@@ -36,7 +36,7 @@ router.get('/Hours', (req, res) => {
     let startDate = moment().startOf('day').toDate();
     let endDate = moment().startOf('day').add(7, 'days').toDate();
 
-    Hours.findAllByDateRange(startDate,endDate).then(hours => {
+    Hours.findByAllDateRange(startDate,endDate).then(hours => {
         res.json({hours});
     });
 });
