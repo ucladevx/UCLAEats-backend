@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     DetailedMenu.findByAllDateRange = function(startDate, endDate) {
         return this.findAll({
             where: {
-                updatedAt: {
+                menuDate: {
                     $between: [startDate, endDate],
                 }
             }
