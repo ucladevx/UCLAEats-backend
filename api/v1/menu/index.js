@@ -21,7 +21,7 @@ router.get('/OverviewMenu', (req, res) => {
 router.get('/DetailedMenu', (req, res) => {
     let startDate = moment().startOf('day').toDate();
     let endDate = moment().startOf('day').add(7, 'days').toDate();
-    OverviewMenu.findAllByDateRange(startDate,endDate).then(menus => {
+    DetailedMenu.findAllByDateRange(startDate,endDate).then(menus => {
         res.json({ menus });
     });
 });
