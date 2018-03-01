@@ -6,6 +6,10 @@ const DetailedMenu = require('../../../db').DetailedMenu;
 const ActLevel = require('../../../db').ActLevel;
 const Hours = require('../../../db').Hours;
 
+router.get('/nutritionfacts', (req, res) => {
+    res.render('nutritionfacts.html');
+});
+
 // Get overview menu from today til the next 7 days
 router.get('/OverviewMenu', (req, res) => {
     let startDate = moment().format("YYYY-MM-DD");
