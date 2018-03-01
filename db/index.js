@@ -27,6 +27,7 @@ const OverviewMenu = require('./models/overviewmenu') (db, Sequelize);
 const DetailedMenu = require('./models/detailedmenu') (db, Sequelize);
 const ActLevel = require('./models/activitylevel') (db, Sequelize);
 const Hours = require('./models/hours') (db, Sequelize);
+const Recipe = require('./models/recipe') (db, Sequelize);
 
 // Setup function
 const setup = (force) => {
@@ -53,4 +54,4 @@ const errorHandler = (err, req, res, next) => {
 };
 
 module.exports = { db, setup, errorHandler, 
-    DetailedMenu, OverviewMenu, ActLevel, Hours, };
+    DetailedMenu, OverviewMenu, ActLevel, Hours, Recipe, };

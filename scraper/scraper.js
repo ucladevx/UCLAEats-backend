@@ -278,11 +278,16 @@ function getDetailPage(date,meal) {
 
     var body = sync_request('GET',url).getBody();
 
-    obj['breakfast'] = parseDetail(body, 0);
-    obj['lunch'] = parseDetail(body, 1);
-    obj['dinner'] = parseDetail(body, 2);
+    var arr1 = parseDetail(body, 0);
+    obj['breakfast'] = arr1[0];
+    var arr2 = parseDetail(body, 1);
+    obj['lunch'] = arr2[0];
+    var arr3 = parseDetail(body, 2);
+    obj['dinner'] = arr3[0];
 
-    return obj;
+    var recipe_dict = Object.assign({},arr1[1],arr2[1],arr3[1]); 
+
+    return [obj,recipe_dict];
 }
 
 function getHours(date) {
@@ -331,7 +336,8 @@ function parseDetail(body, mealNumber) {
     var result = {}
 
     // load the html body
-    var $ = cheerio.load(body)
+    var $ = cheerio.load(body);
+    var recipe_dict = {};
 
     // this is for breakfast, lunch and dinner
     $("h2[id='page-header']").each(function(index, element){
@@ -411,7 +417,14 @@ function parseDetail(body, mealNumber) {
                     parseNutrition(itemRecipe,nutritions);
 
                     itemNames['nutrition'] = nutritions;
-                    items[i] = itemNames
+                    items[i] = itemNames;
+
+                    // add nutrion according to recipe_link
+                    //for recipe link like http://menu.dining.ucla.edu/Recipes/075000/1,
+                    // extract 075000/1
+                    var recipe_arr = itemRecipe.split("Recipes/");
+                    if(recipe_arr.length == 2)
+                        recipe_dict[recipe_arr[1]] = nutritions;
                 }
 
                 // assign menu to each subsection
@@ -423,13 +436,15 @@ function parseDetail(body, mealNumber) {
             currElem = currElem.next()
         }
     })
-    return result
+    return [result,recipe_dict];
 }
 
 function parseNutrition(nutrition_url, nutritions) {
     //scrape nutrition
     var $nutrition = cheerio.load(sync_request('GET',nutrition_url).getBody());
-
+    // get serving size
+    var servering_size = $nutrition('.nfbox').find('.nfserv').text().trim();
+    nutritions["serving_size"] = servering_size;
     // get the calory
     var currNur = $nutrition('.nfbox').find('.nfcal');
     var cal_arr = currNur.text().trim().split(' ');

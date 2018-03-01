@@ -6,6 +6,7 @@ const OverviewMenu = require('../../../db').OverviewMenu;
 const DetailedMenu = require('../../../db').DetailedMenu;
 const ActLevel = require('../../../db').ActLevel;
 const Hours = require('../../../db').Hours;
+const Recipe = require('../../../db').Recipe;
 
 const path = require("path");
 
@@ -13,6 +14,14 @@ router.use(express.static(__dirname + '/public'));
 
 router.get('/nutritionfacts', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/nutritionfacts.html'));
+});
+
+// to query nutrition, for recipe link like http://menu.dining.ucla.edu/Recipes/075000/1,
+// extract 075000/1 and then do /nutrition?recipe_link=075000/1
+router.get('/nutrition', (req, res) => {
+    Recipe.findAllByRecipeLink(req.query.recipe_link).then(recipes => {
+        res.json({recipes});
+    })
 });
 
 // Get overview menu from today til the next 7 days
