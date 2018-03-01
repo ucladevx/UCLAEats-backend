@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     // find all DetailedMenus Within a date range
-    DetailedMenu.findByAllDateRange = function(startDate, endDate) {
+    DetailedMenu.findAllByDateRange = function(startDate, endDate) {
         return this.findAll({
             where: {
-                updatedAt: {
+                menuDate: {
                     $between: [startDate, endDate],
                 }
             }

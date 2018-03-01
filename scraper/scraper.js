@@ -74,14 +74,14 @@ let dinner_key = 'dinner'
 let late_night_key = 'late_night'
 let limited_key = 'limited_menu'
 
-app.set('port', (process.env.PORT || 5000))
+// app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
-app.use(express.static('website'))
-app.use(express.static(__dirname + '/images'));
+// app.use(express.static('website'))
+// app.use(express.static(__dirname + '/images'));
 
 // Cache all routes. By default, the cache TTL is one hour
-app.use(cache())
+// app.use(cache())
 // Spin up the server
 // app.listen(app.get('port'), function() {
 //     console.log('running on port', app.get('port'))
@@ -225,16 +225,17 @@ app.use(cache())
 //     res.send('TODO');
 // })
 
-app.get('/testing', function(req,res) {
-    var obj = getOverviewPage("2018-02-08");
-    res.send(obj);
-})
+// app.get('/testing', function(req,res) {
+//     var obj = getActivityLevel();
+//     res.send(obj);
+// })
 
 function getActivityLevel() {
     var activity_level = {};
     var url = 'http://menu.dining.ucla.edu/Menus/';
 
     var $ = cheerio.load(sync_request('GET',url).getBody());
+    var halls = ["Covel", "De Neve","FEAST at Rieber","Bruin Plate"];
 
     var currElem = $(".meal-detail-link").first().next();
     while(currElem.hasClass('menu-block')) {
@@ -248,6 +249,11 @@ function getActivityLevel() {
         }
 
         currElem = currElem.next();
+    }
+
+    for(var i = 0; i < halls.length; i++) {
+        if(!(halls[i].trim() in activity_level))
+            activity_level[halls[i].trim()] = "-1%";
     }
 
     return activity_level;
