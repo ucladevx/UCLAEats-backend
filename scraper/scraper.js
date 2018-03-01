@@ -442,7 +442,9 @@ function parseDetail(body, mealNumber) {
 function parseNutrition(nutrition_url, nutritions) {
     //scrape nutrition
     var $nutrition = cheerio.load(sync_request('GET',nutrition_url).getBody());
-
+    // get serving size
+    var servering_size = $nutrition('.nfbox').find('.nfserv').text().trim();
+    nutritions["serving_size"] = servering_size;
     // get the calory
     var currNur = $nutrition('.nfbox').find('.nfcal');
     var cal_arr = currNur.text().trim().split(' ');
