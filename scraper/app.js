@@ -7,6 +7,7 @@ const OverviewMenu = require('../db').OverviewMenu;
 const DetailedMenu = require('../db').DetailedMenu;
 const ActLevel = require('../db').ActLevel;
 const Hour = require('../db').Hours;
+const Recipe = require('../db').Recipe;
 // TODO: Add error handling in all scraper functions
 
 // activity level runs every 5 minutes from 5:00am to 10:00pm everyday
@@ -43,7 +44,7 @@ let overViewPage = new CronJob({
 
 // detail page runs everyday at 0:07 am
 let detailPage = new CronJob({
-    cronTime: "00 07 00 * * *",
+    cronTime: "00 00 01 * * *",
     onTick: function() {
         for(var i = 0; i <= 7; i++) {
             insertDetailMenu(moment().add(i,'days').format("YYYY-MM-DD"));
@@ -108,11 +109,29 @@ function insertDetailMenu(queryDate) {
     DetailedMenu.findAllByDate(queryDate).then(menu => {
         if(menu.length == 0) {
             let obj = {};
-            obj["breakfast"] = scraper.getDetailPage(queryDate, "Breakfast")["breakfast"];
-            obj["lunch"] = scraper.getDetailPage(queryDate, "Lunch")["lunch"];
-            obj["dinner"] = scraper.getDetailPage(queryDate, "Dinner")["dinner"];
+            var returned_arr1 = scraper.getDetailPage(queryDate, "Breakfast"); 
+            obj["breakfast"] = returned_arr1[0]["breakfast"];
+            var returned_arr2 = scraper.getDetailPage(queryDate, "Lunch");
+            obj["lunch"] = returned_arr2[0]["lunch"];
+            var returned_arr3 = scraper.getDetailPage(queryDate, "Dinner");
+            obj["dinner"] = returned_arr3[0]["dinner"];
             obj = JSON.stringify(obj);
+            var recipe_nutrition_dict = Object.assign({},returned_arr1[1],returned_arr2[1],returned_arr3[1]);
             DetailedMenu.create({detailedMenu:obj, menuDate: queryDate}).then(err => {
+                Object.keys(recipe_nutrition_link).forEach(function(key){
+                    Recipe.findAllByRecipeLink(key).then(recipe => {
+                        if(recipe.length == 0) {
+                            Recipe.create({recipe_link:key, nutrition: recipe_nutrition_dict[key]}).then(err=> {
+                                if(!err) 
+                                    console.log("finished insertion recipe for " + key);
+                                else {
+                                    console.log("error in insertDetail function for recipe " + key);
+                                    console.log(err); 
+                                }
+                            })
+                        }
+                    })
+                });
                 if(!err)
                     console.log("finished insertion detailedMenu for " + queryDate);
                 else {

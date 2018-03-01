@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: false
   });
 
-  Recipe.findByRecipeLink = function(link) {
+  Recipe.findAllByRecipeLink = function(link) {
     return this.findAll({
         where: { 
             recipe_link : link,
