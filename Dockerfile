@@ -1,6 +1,6 @@
 FROM node:9.5.0-alpine
 
-RUN apk add -U python make gcc g++ bash
+RUN apk add -U python make gcc g++ bash tzdata
 
 # create the working directory
 RUN mkdir -p /app/dea-backend

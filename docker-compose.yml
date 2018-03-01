@@ -20,5 +20,6 @@ services:
             - postgres.env
         networks:
             - webnet
+
 networks:
     webnet:

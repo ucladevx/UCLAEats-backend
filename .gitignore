@@ -70,5 +70,7 @@ config/.config.json
 scraper/config.json
 *config.json
 *.env
+*.pem
+TODO
 
 # End of https://www.gitignore.io/api/node

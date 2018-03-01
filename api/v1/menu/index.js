@@ -1,10 +1,19 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 const moment = require('moment');
 const OverviewMenu = require('../../../db').OverviewMenu;
 const DetailedMenu = require('../../../db').DetailedMenu;
 const ActLevel = require('../../../db').ActLevel;
 const Hours = require('../../../db').Hours;
+
+const path = require("path");
+
+router.use(express.static(__dirname + '/public'));
+
+router.get('/nutritionfacts', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/nutritionfacts.html'));
+});
 
 // Get overview menu from today til the next 7 days
 router.get('/OverviewMenu', (req, res) => {
