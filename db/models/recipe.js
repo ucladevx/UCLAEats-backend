@@ -3,17 +3,17 @@ module.exports = (sequelize, DataTypes) => {
   var Recipe = sequelize.define('Recipe', {
     recipe_link: DataTypes.STRING,
     nutrition: DataTypes.JSON,
-    deletedAt: DataTypes.DATE,
+    deletedAt: DataTypes.DATE
   }, {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
       }
     },
-    paranoid: false
+    paranoid: true,
   });
-
-  Recipe.findByRecipeLink = function(link) {
+  
+  Recipe.findAllByRecipeLink = function(link) {
     return this.findAll({
         where: { 
             recipe_link : link,
@@ -28,6 +28,5 @@ module.exports = (sequelize, DataTypes) => {
   Recipe.prototype.getNutrition = function () {
     return this.getDataValue('nutrition');
   }
-
   return Recipe;
 };
