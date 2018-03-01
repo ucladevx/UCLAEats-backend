@@ -2,7 +2,11 @@
 	NUTRTITION LABEL
 ::::::::::::::::::::::::::::::::::::::::::::::::::: */
 
-div.nfbox
+div.scaled{
+	transform: scale(3.8) translateX(36.1%) translateY(36.4%);
+}
+
+.nfbox
 {
 	background-color: #FFFFFF;
 	border: 1px solid #000000;
