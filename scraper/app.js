@@ -44,7 +44,7 @@ let overViewPage = new CronJob({
 
 // detail page runs everyday at 0:07 am
 let detailPage = new CronJob({
-    cronTime: "00 00 01 * * *",
+    cronTime: "00 07 00 * * *",
     onTick: function() {
         for(var i = 0; i <= 7; i++) {
             insertDetailMenu(moment().add(i,'days').format("YYYY-MM-DD"));
@@ -118,7 +118,7 @@ function insertDetailMenu(queryDate) {
             obj = JSON.stringify(obj);
             var recipe_nutrition_dict = Object.assign({},returned_arr1[1],returned_arr2[1],returned_arr3[1]);
             DetailedMenu.create({detailedMenu:obj, menuDate: queryDate}).then(err => {
-                Object.keys(recipe_nutrition_link).forEach(function(key){
+                Object.keys(recipe_nutrition_dict).forEach(function(key){
                     Recipe.findAllByRecipeLink(key).then(recipe => {
                         if(recipe.length == 0) {
                             Recipe.create({recipe_link:key, nutrition: recipe_nutrition_dict[key]}).then(err=> {

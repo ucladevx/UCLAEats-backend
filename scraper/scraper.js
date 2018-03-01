@@ -419,7 +419,12 @@ function parseDetail(body, mealNumber) {
                     itemNames['nutrition'] = nutritions;
                     items[i] = itemNames;
 
-                    recipe_dict[itemRecipe] = nutritions;
+                    // add nutrion according to recipe_link
+                    //for recipe link like http://menu.dining.ucla.edu/Recipes/075000/1,
+                    // extract 075000/1
+                    var recipe_arr = itemRecipe.split("Recipes/");
+                    if(recipe_arr.length == 2)
+                        recipe_dict[recipe_arr[1]] = nutritions;
                 }
 
                 // assign menu to each subsection
