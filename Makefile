@@ -9,7 +9,7 @@ run-dev:
 
 
 # Prod commands
-prod: build up
+prod: prod-build prod-up
 
 prod-build: 
 	docker-compose build 

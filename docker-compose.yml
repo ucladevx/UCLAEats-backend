@@ -32,9 +32,9 @@ services:
             - "443:443"
         networks:
             - webnet
-		volumes:
-		    # - ./.caddy:/root/.caddy
-		  	- ./Caddyfile:/etc/Caddyfile
+        volumes:
+            - ./.caddy:/root/.caddy
+            - ./Caddyfile:/etc/Caddyfile
 
 
 networks:
