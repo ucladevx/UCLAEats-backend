@@ -8,7 +8,7 @@ services:
         depends_on:
             - postgres
         env_file:
-            - node.env
+            - node.dev.env
         networks:
             - webnet
 
@@ -18,24 +18,10 @@ services:
             - "5432:5432"
         restart: always
         env_file:
-            - postgres.env
+            - postgres.dev.env
         networks:
             - webnet
-
-    caddy:
-        image: abisoft/caddy
-        restart: always
-        depends_on:
-            - api
-        ports:
-            - "80:80"
-            - "443:443"
-        networks:
-            - webnet
-		volumes:
-		    # - ./.caddy:/root/.caddy
-		  	- ./Caddyfile:/etc/Caddyfile
-
 
 networks:
     webnet:
+
