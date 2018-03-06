@@ -444,7 +444,8 @@ function parseNutrition(nutrition_url, nutritions) {
     var $nutrition = cheerio.load(sync_request('GET',nutrition_url).getBody());
     // get serving size
     var servering_size = $nutrition('.nfbox').find('.nfserv').text().trim();
-    nutritions["serving_size"] = servering_size;
+    if(servering_size.length > 0)
+        nutritions["serving_size"] = servering_size;
     // get the calory
     var currNur = $nutrition('.nfbox').find('.nfcal');
     var cal_arr = currNur.text().trim().split(' ');
@@ -507,11 +508,13 @@ function parseNutrition(nutrition_url, nutritions) {
 
     // get ingredients
     child = $nutrition('.ingred_allergen p');
-    if(child.length >= 1) {
+    if(child.length >= 2) {
         nutritions['ingredients'] = child.eq(0).text().trim().split(":").slice(-1)[0].trim();
+        nutritions['allergens'] = child.eq(1).text().trim().split(":").slice(-1)[0].trim();
     }
-    else {
-        nutritions['ingredients'] = '';
+    else if (child.length == 1){
+        nutritions['ingredients'] = child.eq(0).text().trim().split(":").slice(-1)[0].trim();
+        nutritions['allergens'] = "";
     }
 }
 

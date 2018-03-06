@@ -21,6 +21,19 @@ router.get('/nutritionfacts', (req, res) => {
 router.get('/nutrition', (req, res) => {
     Recipe.findAllByRecipeLink(req.query.recipe_link).then(recipes => {
         res.json({recipes});
+
+        if (recipes.length >= 1) {
+            var recipe = recipes[0];
+            if (!("nutrition" in Object.keys(recipe)) || (Object.keys(recipe["nutrition"].length == 0)))
+                res.render("<h1>Item does not have nutrition information</h1>");
+            else {
+                var context = {};
+                populate_context(recipe,context);
+                res.render(path.join(__dirname + '/public/nutritionfacts.html'),context);
+            }
+        }
+        else
+            res.render("<h1>Item not found</h1>");
     })
 });
 
@@ -77,5 +90,130 @@ router.get('/test', (req, res) => {
         console.log(new_menu.getOverviewMenu());
     });
 });
+
+function populate_context(recipe, context) {
+    var recipe_keys = Object.keys(recipe);
+
+    if("serving_size" in recipe_keys)
+        context["serving_size"] = recipe["serving_size"];
+    else
+        context["serving_size"] = "--";
+    
+    if("Calories" in recipe_keys)
+        context["Calories"] = recipe["Calories"];
+    else
+        context["Calories"] = "--";
+
+    if("Fat_Cal." in recipe_keys)
+        context["Fat_Cal."] = recipe["Fat_Cal."];
+    else
+        context["Fat_Cal."] = "--";
+
+    if("Total_Fat" in recipe_keys) {
+        context["Total_Fat_g"] = (recipe["Total_Fat"][0][0] == "-" ? "--" : recipe["Total_Fat"][0]);
+        context["Total_Fat_p"] = (recipe["Total_Fat"][1][0] == "-" ? "--" : recipe["Total_Fat"][1]);
+    }
+    else {
+        context["Total_Fat_g"] = "--";
+        context["Total_Fat_p"] = "--";
+    }
+
+    if("Saturated_Fat" in recipe_keys) {
+        context["Saturated_Fat_g"] = (recipe["Saturated_Fat"][0][0] == "-" ? "--" : recipe["Saturated_Fat"][0]);
+        context["Saturated_Fat_p"] = (recipe["Saturated_Fat"][1][0] == "-" ? "--" : recipe["Saturated_Fat"][1]);
+    }
+    else {
+        context["Saturated_Fat_g"] = "--";
+        context["Saturated_Fat_p"] = "--";
+    }
+
+    if("Trans_Fat" in recipe_keys) {
+        context["Trans_Fat_g"] = (recipe["Trans_Fat"][0][0] == "-" ? "--" : recipe["Trans_Fat"][0]);
+    }
+    else {
+        context["Trans_Fat_g"] = "--";
+    }
+
+    if("Cholesterol" in recipe_keys) {
+        context["Cholesterol_g"] = (recipe["Cholesterol"][0][0] == "-" ? "--" : recipe["Cholesterol"][0]);
+        context["Cholesterol_p"] = (recipe["Cholesterol"][1][0] == "-" ? "--" : recipe["Cholesterol"][1]);
+    }
+    else {
+        context["Cholesterol_g"] = "--";
+        context["Cholesterol_p"] = "--";
+    }
+
+    if("Sodium" in recipe_keys) {
+        context["Sodium_g"] = (recipe["Sodium"][0][0] == "-" ? "--" : recipe["Sodium"][0]);
+        context["Sodium_p"] = (recipe["Sodium"][1][0] == "-" ? "--" : recipe["Sodium"][1]);
+    }
+    else {
+        context["Sodium_g"] = "--";
+        context["Sodium_p"] = "--";
+    }
+
+    if("Total_Carbohydrate" in recipe_keys) {
+        context["Total_Carbohydrate_g"] = (recipe["Total_Carbohydrate"][0][0] == "-" ? "--" : recipe["Total_Carbohydrate"][0]);
+        context["Total_Carbohydrate_p"] = (recipe["Total_Carbohydrate"][1][0] == "-" ? "--" : recipe["Total_Carbohydrate"][1]);
+    }
+    else {
+        context["Total_Carbohydrate_g"] = "--";
+        context["Total_Carbohydrate_p"] = "--";
+    }
+
+    if("Dietary_Fiber" in recipe_keys) {
+        context["Dietary_Fiber_g"] = (recipe["Dietary_Fiber"][0][0] == "-" ? "--" : recipe["Dietary_Fiber"][0]);
+        context["Dietary_Fiber_p"] = (recipe["Dietary_Fiber"][1][0] == "-" ? "--" : recipe["Dietary_Fiber"][1]);
+    }
+    else {
+        context["Dietary_Fiber_g"] = "--";
+        context["Dietary_Fiber_p"] = "--";
+    }
+
+    if("Sugars" in recipe_keys) {
+        context["Sugars_g"] = (recipe["Sugars"][0][0] == "-" ? "--" : recipe["Sugars"][0]);
+    }
+    else {
+        context["Sugars_g"] = "--";
+    }
+
+    if("Protein" in recipe_keys) {
+        context["Protein_g"] = (recipe["Protein"][0][0] == "-" ? "--" : recipe["Protein"][0]);
+    }
+    else {
+        context["Protein_g"] = "--";
+    }
+
+    if("Vitamin A" in recipe_keys)
+        context["VA_p"] = (recipe["Vitamin A"][0] == "-" ? "--" : recipe["Vitamin A"]);
+    else
+        context["VA_p"] = "--";
+
+    if("Vitamin C" in recipe_keys)
+        context["VC_p"] = (recipe["Vitamin C"][0] == "-" ? "--" : recipe["Vitamin C"]);
+    else
+        context["VC_p"] = "--";
+
+    if("Calcium" in recipe_keys)
+        context["Cal_p"] = (recipe["Calcium"][0] == "-" ? "--" : recipe["Calcium"]);
+    else
+        context["Cal_p"] = "--";
+
+    if("Iron" in recipe_keys)
+        context["Iron"] = (recipe["Iron"][0] == "-" ? "--" : recipe["Iron"]);
+    else
+        context["Iron"] = "--";
+
+    if("ingredients" in recipe_keys)
+        context["ingredients"] = recipe["ingredients"].trim();
+    else
+        context["ingredients"] = "--";
+
+    if("allergens" in recipe_keys)
+        context["allergens"] = recipe["allergens"].trim();
+    else
+        context["allergens"] = "--";
+
+}
 
 module.exports = { router };

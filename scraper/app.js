@@ -44,9 +44,9 @@ let overViewPage = new CronJob({
 
 // detail page runs everyday at 0:07 am
 let detailPage = new CronJob({
-    cronTime: "00 07 00 * * *",
+    cronTime: "00 14 15 * * *",
     onTick: function() {
-        for(var i = 0; i <= 7; i++) {
+        for(var i = 0; i <= 0; i++) {
             insertDetailMenu(moment().add(i,'days').format("YYYY-MM-DD"));
         }
     },
@@ -144,10 +144,10 @@ function insertDetailMenu(queryDate) {
 }
 
 function startAll() {
-    activityLevel.start();
-    overViewPage.start();
+    //activityLevel.start();
+    //overViewPage.start();
     detailPage.start();
-    hours.start();
+    //hours.start();
 }
 
 module.exports = {
