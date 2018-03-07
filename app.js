@@ -6,12 +6,16 @@ const db = require('./db');
 const router = express('router');
 const api = require('./api');
 const scraper = require('./scraper/app');
+const exphbs  = require('express-handlebars');
 scraper.startAll();
 
 const app = express();
 // Constants
 const PORT = config.port;
 const HOST = config.host;
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 app.use('/api', api.router);
 

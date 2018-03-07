@@ -1,0 +1,54 @@
+
+    <div class="nfbox">
+        <h3 class="nftitle">Nutrition Facts</h3>							
+        <p class="nfserv">{{ serving_size }}</p>
+        <p class="nfamt">Amount Per Serving</p>
+        <p class="nfcal"><span class="nfcaltxt">Calories</span> {{ Calories }} <span class="nffatcal">Fat Cal {{ Fat_Cal }}</span></p>
+                    
+        <p class="nfdvhdr">% Daily Value*</p>
+        <p class="nfnutrient"><span class="nfmajornutrient">Total Fat</span> {{ Total_Fat_g }} <span class="nfdvval"><span class="nfdvvalnum">{{ Total_Fat_p }}</span></span></p>
+        <div class="nfindent">
+            <p class="nfnutrient">Saturated Fat {{ Saturated_Fat_g }} <span class="nfdvval"><span class="nfdvvalnum">{{ Saturated_Fat_p }}</span></span></p>
+            <p class="nfnutrient">Trans Fat {{ Trans_Fat_g }} </p>
+        </div>
+        <p class="nfnutrient"><span class="nfmajornutrient">Cholesterol</span> {{ Cholesterol_g }} <span class="nfdvval"><span class="nfdvvalnum">{{ Cholesterol_p }}</span></span></p>
+        <p class="nfnutrient"><span class="nfmajornutrient">Sodium</span> {{ Sodium_g }} <span class="nfdvval"><span class="nfdvvalnum">{{ Sodium_p }}</span></span></p>
+        <p class="nfnutrient"><span class="nfmajornutrient">Total Carbohydrate</span> {{ Total_Carbohydrate_g }} <span class="nfdvval"><span class="nfdvvalnum">{{ Total_Carbohydrate_p }}</span></span></p>
+        <div class="nfindent">
+            <p class="nfnutrient">Dietary Fiber {{ Dietary_Fiber_g }} <span class="nfdvval"><span class="nfdvvalnum">{{ Dietary_Fiber_p }}</span></span></p>
+            <p class="nfnutrient">Sugars {{ Sugars_g }} </p>
+        </div>
+        <p class="nfnutrient"><span class="nfmajornutrient">Protein</span> {{ Protein_g }} </p>
+
+        <div class="nfvitbar"></div>
+            <div class="nfvit">
+                <span class="nfvitleft">
+                    <span class="nfvitname">Vitamin A</span>
+                    <span class="nfvitpct">{{ VA_p }}</span>
+                </span>
+    -                
+                <span class="nfvitright">
+                    <span class="nfvitname">Vitamin C</span>
+                    <span class="nfvitpct">{{ VC_p }}</span>
+                </span>
+            </div>
+                
+            <div class="nfvit">
+                <span class="nfvitleft">
+                    <span class="nfvitname">Calcium</span>
+                    <span class="nfvitpct">{{ Cal_p }}</span>
+                </span>
+    -                
+                <span class="nfvitright">
+                    <span class="nfvitname">Iron</span>
+                    <span class="nfvitpct">{{ Iron_p }}</span>
+                </span>
+
+            </div>
+            <div class="nfdisclaimer">*Percent Daily Values (DV) are based on a 2,000 calorie diet.</div>
+    </div>
+
+    <div class="ingred_allergen">
+        <p><strong>INGREDIENTS:</strong> {{ ingredients }}</p>
+        <p><strong>ALLERGENS:</strong> {{ allergens }}</p>
+    </div>
