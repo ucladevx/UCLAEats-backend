@@ -1,0 +1,6 @@
+api.dea-backend.com {
+    gzip
+    proxy / api:5000 {
+        transparent
+    }
+}

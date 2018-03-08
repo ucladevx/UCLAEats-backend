@@ -14,8 +14,8 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "devx_dev",
-    "password": "devx_dev",
+    "username": "devx_prod",
+    "password": "devx_prod",
     "database": "dea_prod",
     "host": "127.0.0.1",
     "dialect": "postgres"
