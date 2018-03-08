@@ -20,10 +20,18 @@ router.get('/nutritionfacts', (req, res) => {
 // extract 075000/1 and then do /nutrition?recipe_link=075000/1
 router.get('/nutrition', (req, res) => {
     Recipe.findAllByRecipeLink(req.query.recipe_link).then(recipes => {
+        res.json({recipes});    
+    });
+});
+
+// to query nutrition and nutrition box, for recipe link like http://menu.dining.ucla.edu/Recipes/075000/1,
+// extract 075000/1 and then do /nutritionbox?recipe_link=075000/1
+router.get('/nutritionbox', (req, res) => {
+    Recipe.findAllByRecipeLink(req.query.recipe_link).then(recipes => {
         if (recipes.length >= 1) {
             var nutrition= recipes[0].getNutrition();
             if (Object.keys(nutrition).length == 0) {
-                res.render("item_no_nutrition");
+                res.render("not_found");
             }
             else {
                 var context = {};
@@ -32,7 +40,7 @@ router.get('/nutrition', (req, res) => {
             }
         }
         else
-            res.render("item_not_found");
+            res.render("not_found");
     })
 });
 
