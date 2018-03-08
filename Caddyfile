@@ -1,4 +1,4 @@
-api.dea-backend.com {
+18.144.66.21 {
     gzip
     proxy / api:5000 {
         transparent
