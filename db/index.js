@@ -11,6 +11,7 @@ const db = new Sequelize(
     {
         dialect: config.database.dialect,
         host: config.database.host,
+        timezone: '+08:00'
         // logging: config.isDevelopment ? logger.debug : false,
     }
 );

@@ -22,4 +22,4 @@ prod-down:
 
 clean:
 	docker-compose rm postgres
-	docker-compose rm web
+	docker-compose rm api

@@ -23,7 +23,7 @@ services:
             - webnet
 
     caddy:
-        image: abisoft/caddy
+        image: abiosoft/caddy
         restart: always
         depends_on:
             - api
