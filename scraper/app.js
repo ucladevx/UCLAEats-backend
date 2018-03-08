@@ -44,9 +44,9 @@ let overViewPage = new CronJob({
 
 // detail page runs everyday at 0:07 am
 let detailPage = new CronJob({
-    cronTime: "00 00 07 * * *",
+    cronTime: "00 07 00 * * *",
     onTick: function() {
-        for(var i = 0; i <= 0; i++) {
+        for(var i = 0; i <= 7; i++) {
             insertDetailMenu(moment().add(i,'days').format("YYYY-MM-DD"));
         }
     },
