@@ -47,7 +47,7 @@ router.get('/nutritionbox', (req, res) => {
 // Get overview menu from today til the next 7 days
 router.get('/OverviewMenu', (req, res) => {
     let startDate = moment().format("YYYY-MM-DD");
-    let endDate = moment().add(7, 'days').format("YYYY-MM-DD");
+    let endDate = moment().add(6, 'days').format("YYYY-MM-DD");
     OverviewMenu.findAllByDateRange(startDate,endDate).then(menus => {
         res.json({ menus });
     });
@@ -58,7 +58,7 @@ router.get('/OverviewMenu', (req, res) => {
 
 router.get('/DetailedMenu', (req, res) => {
     let startDate = moment().startOf('day').toDate();
-    let endDate = moment().startOf('day').add(7, 'days').toDate();
+    let endDate = moment().startOf('day').add(6, 'days').toDate();
     DetailedMenu.findAllByDateRange(startDate,endDate).then(menus => {
         res.json({ menus });
     });
@@ -72,7 +72,7 @@ router.get('/ActivityLevels', (req, res) => {
 
 router.get('/Hours', (req, res) => {
     let startDate = moment().startOf('day').toDate();
-    let endDate = moment().startOf('day').add(7, 'days').toDate();
+    let endDate = moment().startOf('day').add(6, 'days').toDate();
 
     Hours.findByAllDateRange(startDate,endDate).then(hours => {
         res.json({hours});
