@@ -1,17 +1,25 @@
-default: build run
+# Dev commands
+default: build-dev run-dev
 
-build: 
-	docker-compose build web
+build-dev:
+	docker-compose -f docker-compose.dev.yml build
 
-run:
-	docker-compose up 
+run-dev:
+	docker-compose -f docker-compose.dev.yml up
 
-stop:
-	docker-compose down
 
-run-prod:
+# Prod commands
+prod: prod-build prod-up
+
+prod-build: 
+	docker-compose build 
+
+prod-up:
 	docker-compose up -d
+
+prod-down:
+	docker-compose stop
 
 clean:
 	docker-compose rm postgres
-	docker-compose rm web
+	docker-compose rm api
