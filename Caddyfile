@@ -1,5 +1,8 @@
-api.dea-backend.com {
+api.ucla-eats.com {
     gzip
+    log stdout
+    errors stderr
+    tls terrenceho.books@gmail.com
     proxy / api:5000 {
         transparent
     }

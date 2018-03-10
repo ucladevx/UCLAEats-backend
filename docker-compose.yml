@@ -27,6 +27,7 @@ services:
         restart: always
         depends_on:
             - api
+            - postgres
         ports:
             - "80:80"
             - "443:443"

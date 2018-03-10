@@ -30,11 +30,11 @@ let activityLevel = new CronJob({
     timeZone: tz
 });
 
-// overviewPage runs everyday at 0:02 am
+// overviewPage runs everyday at 11:00 pm
 let overViewPage = new CronJob({
-    cronTime: "00 02 00 * * *",
+    cronTime: "00 00 23 * * *",
     onTick: function() {
-        for(var i = 0; i <= 6; i++) {
+        for(var i = 1; i <= 7; i++) {
             insertOverviewMenu(moment().add(i,'days').format("YYYY-MM-DD"));
         }
     },
@@ -42,11 +42,11 @@ let overViewPage = new CronJob({
     timeZone: tz
 });
 
-// detail page runs everyday at 0:04 am
+// detail page runs everyday at 11:10 pm
 let detailPage = new CronJob({
-    cronTime: "00 04 00 * * *",
+    cronTime: "00 10 23 * * *",
     onTick: function() {
-        for(var i = 0; i <= 6; i++) {
+        for(var i = 1; i <= 7; i++) {
             insertDetailMenu(moment().add(i,'days').format("YYYY-MM-DD"));
         }
     },
@@ -54,11 +54,11 @@ let detailPage = new CronJob({
     timeZone: tz
 });
 
-// hours runs everyday at 0:06 am
+// hours runs everyday at 11:20 pm
 let hours = new CronJob({
-    cronTime: "00 06 00 * * *",
+    cronTime: "00 20 23 * * *",
     onTick: function() {
-        for(var i = 0; i <= 6; i++) {
+        for(var i = 1; i <= 7; i++) {
             insertHours(moment().add(i,'days').format("YYYY-MM-DD"));
         }
     },

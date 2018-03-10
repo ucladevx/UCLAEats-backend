@@ -1,6 +1,6 @@
 DEVELOPMENT
 - make: by default will build the development containers defined in
-docker-compose.dev.yml, and then calls docker-compose up on those containers
+  docker-compose.dev.yml, and then calls docker-compose up on those containers
 - make build-dev: Builds containers defined in docker-compose.dev.yml
 - make run-dev:  Calls docker-compose up on containers.
 
@@ -11,8 +11,12 @@ PRODUCTION
   (docker-compose.yml)
 - prod-down: Stops containers definedin docker-compose.yml
 
-INSTALLING DOCKER ON REMOTE
+INSTALLING DOCKER AND DOCKER-COMPOSE ON REMOTE
 - sudo yum update -y # update
 - sudo yum install docker -y # install docker
 - sudo service docker start # start docker as a service in the background
 - sudo usermod a -G ec2-user # add ec2-user to docker group, to use docker w/o sudo.
+- sudo curl -L
+  https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname
+  -s`-`uname -m` -o /usr/local/bin/docker-compose
+- sudo chmod +x /usr/local/bin/docker-compose
