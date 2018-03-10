@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     return this.findAll({
         where: { 
             recipe_link : link,
-        }
+        },
+        order: [[ 'createdAt', 'ASC' ]]
     });
   }
 

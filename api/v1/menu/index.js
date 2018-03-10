@@ -19,8 +19,18 @@ router.get('/nutritionfacts', (req, res) => {
 // to query nutrition, for recipe link like http://menu.dining.ucla.edu/Recipes/075000/1,
 // extract 075000/1 and then do /nutrition?recipe_link=075000/1
 router.get('/nutrition', (req, res) => {
-    Recipe.findAllByRecipeLink(req.query.recipe_link).then(recipes => {
-        res.json({recipes});    
+    Recipe.findAllByRecipeLink(req.query.recipe_link).then(returned_recipes => {
+        if (returned_recipes.length >= 1) {
+            var recipes = [];
+            var target_recipe = returned_recipes[returned_recipes.length-1].getNutrition();
+            recipes.push({nutrition: target_recipe});
+
+            res.json({recipes});    
+        }
+        else {
+            var recipes = returned_recipes;
+            res.json({recipes});
+        }
     });
 });
 
@@ -48,32 +58,32 @@ router.get('/nutritionbox', (req, res) => {
 router.get('/OverviewMenu', (req, res) => {
     let startDate = moment().format("YYYY-MM-DD");
     let endDate = moment().add(6, 'days').format("YYYY-MM-DD");
-    OverviewMenu.findAllByDateRange(startDate,endDate).then(menus => {
-        var menu = [];
+    OverviewMenu.findAllByDateRange(startDate,endDate).then(returned_menus => {
+        var menus = [];
         
-        menus.forEach(function(element) {
+        returned_menus.forEach(function(element) {
             var overview_menu = element.getOverviewMenu();
             var menu_date = element.getMenuDate();
-            menu.push({ date: menu_date, overviewMenu: overview_menu });
+            menus.push({ menuDate: menu_date, overviewMenu: overview_menu });
         });
 
-        res.json({ menu });
+        res.json({ menus });
     });
 });
 
 router.get('/DetailedMenu', (req, res) => {
     let startDate = moment().startOf('day').toDate();
     let endDate = moment().startOf('day').add(6, 'days').toDate();
-    DetailedMenu.findAllByDateRange(startDate,endDate).then(menus => {
-        var menu = [];
+    DetailedMenu.findAllByDateRange(startDate,endDate).then(returned_menus => {
+        var menus = [];
         
-        menus.forEach(function(element) {
+        returned_menus.forEach(function(element) {
             var detailed_menu = element.getDetailedMenu();
             var menu_date = element.getMenuDate();
-            menu.push({ date: menu_date, detailedMenu: detailed_menu });
+            menus.push({ menuDate: menu_date, detailedMenu: detailed_menu });
         });
 
-        res.json({ menu });
+        res.json({ menus });
     });
 });
 
@@ -94,16 +104,16 @@ router.get('/Hours', (req, res) => {
     let startDate = moment().startOf('day').toDate();
     let endDate = moment().startOf('day').add(6, 'days').toDate();
 
-    Hours.findByAllDateRange(startDate,endDate).then(hours => {
-        var hour = [];
+    Hours.findByAllDateRange(startDate,endDate).then(returned_hours => {
+        var hours = [];
         
-        hours.forEach(function(element) {
+        returned_hours.forEach(function(element) {
             var dining_hours = element.getHours();
             var hour_date = element.getHourDate();
-            hour.push({ date: hour_date, diningHours: dining_hours });
+            hours.push({ hourDate: hour_date, hours: dining_hours });
         });
 
-        res.json({ hour });
+        res.json({ hours });
     });
 });
 
