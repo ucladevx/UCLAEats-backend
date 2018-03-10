@@ -40,7 +40,8 @@ module.exports = (Sequelize, DataTypes) => {
                 menuDate: {
                     $between: [startDate, endDate],
                 }
-            }
+            },
+            order: [[ 'menuDate', 'ASC' ]]
         });
     }
 
@@ -62,6 +63,10 @@ module.exports = (Sequelize, DataTypes) => {
 
     OverviewMenu.prototype.getDate = function () {
         return this.getDataValue('updatedAt');
+    }
+
+    OverviewMenu.prototype.getMenuDate = function () {
+        return this.getDataValue('menuDate');
     }
 
     return OverviewMenu;
