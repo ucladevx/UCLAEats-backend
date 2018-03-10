@@ -60,6 +60,10 @@ module.exports = (sequelize, DataTypes) => {
         return this.getDataValue('updatedAt');
     }
 
+    Hours.prototype.getHourDate = function () {
+        return this.getDataValue('hourDate');
+    }
+
 
     Hours.findLast = function() {
 	    return this.findAll({

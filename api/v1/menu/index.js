@@ -49,24 +49,44 @@ router.get('/OverviewMenu', (req, res) => {
     let startDate = moment().format("YYYY-MM-DD");
     let endDate = moment().add(6, 'days').format("YYYY-MM-DD");
     OverviewMenu.findAllByDateRange(startDate,endDate).then(menus => {
-        res.json({ menus });
+        var menu = [];
+        
+        menus.forEach(function(element) {
+            var overview_menu = element.getOverviewMenu();
+            var menu_date = element.getMenuDate();
+            menu.push({overviewMenu: overview_menu, menuDate: menu_date});
+        });
+
+        res.json({ menu });
     });
-    // OverviewMenu.findAllByDate(endDate).then(menus => {
-    //     res.json({menus});
-    // });
 });
 
 router.get('/DetailedMenu', (req, res) => {
     let startDate = moment().startOf('day').toDate();
     let endDate = moment().startOf('day').add(6, 'days').toDate();
     DetailedMenu.findAllByDateRange(startDate,endDate).then(menus => {
-        res.json({ menus });
+        var menu = [];
+        
+        menus.forEach(function(element) {
+            var detailed_menu = element.getDetailedMenu();
+            var menu_date = element.getMenuDate();
+            menu.push({detailedMenu: detailed_menu, menuDate: menu_date});
+        });
+
+        res.json({ menu });
     });
 });
 
 router.get('/ActivityLevels', (req, res) => {
-    ActLevel.findLast().then(level => {
-        res.json({ level });
+    ActLevel.findLast().then(levels => {
+        if (levels.length > 0) {
+            var level = levels[levels.length-1].getActivityLevel();
+            res.json({ level });
+        }
+        else  {
+            var level = levels;
+            res.json({level});
+        }
     });
 });
 
@@ -75,7 +95,15 @@ router.get('/Hours', (req, res) => {
     let endDate = moment().startOf('day').add(6, 'days').toDate();
 
     Hours.findByAllDateRange(startDate,endDate).then(hours => {
-        res.json({hours});
+        var hour = [];
+        
+        hours.forEach(function(element) {
+            var dining_hours = element.getHours();
+            var hour_date = element.getHourDate();
+            hour.push({ hourDate: hour_date, diningHours: dining_hours });
+        });
+
+        res.json({ hour });
     });
 });
 

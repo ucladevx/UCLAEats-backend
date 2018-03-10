@@ -57,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
     DetailedMenu.prototype.getDate = function () {
         return this.getDataValue('updatedAt');
     }
+
+    DetailedMenu.prototype.getMenuDate = function () {
+        return this.getDataValue('menuDate');
+    }
     
     return DetailedMenu;
 };
