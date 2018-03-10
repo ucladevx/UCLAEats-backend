@@ -54,7 +54,7 @@ router.get('/OverviewMenu', (req, res) => {
         menus.forEach(function(element) {
             var overview_menu = element.getOverviewMenu();
             var menu_date = element.getMenuDate();
-            menu.push({overviewMenu: overview_menu, menuDate: menu_date});
+            menu.push({ date: menu_date, overviewMenu: overview_menu });
         });
 
         res.json({ menu });
@@ -70,7 +70,7 @@ router.get('/DetailedMenu', (req, res) => {
         menus.forEach(function(element) {
             var detailed_menu = element.getDetailedMenu();
             var menu_date = element.getMenuDate();
-            menu.push({detailedMenu: detailed_menu, menuDate: menu_date});
+            menu.push({ date: menu_date, detailedMenu: detailed_menu });
         });
 
         res.json({ menu });
@@ -100,7 +100,7 @@ router.get('/Hours', (req, res) => {
         hours.forEach(function(element) {
             var dining_hours = element.getHours();
             var hour_date = element.getHourDate();
-            hour.push({ hourDate: hour_date, diningHours: dining_hours });
+            hour.push({ date: hour_date, diningHours: dining_hours });
         });
 
         res.json({ hour });
