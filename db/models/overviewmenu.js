@@ -40,7 +40,8 @@ module.exports = (Sequelize, DataTypes) => {
                 menuDate: {
                     $between: [startDate, endDate],
                 }
-            }
+            },
+            order: [[ 'menuDate', 'ASC' ]]
         });
     }
 
