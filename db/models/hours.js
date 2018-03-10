@@ -36,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
                 hourDate: {
                     $between: [startDate, endDate],
                 }
-            }
+            },
+            order: [[ 'hourDate', 'ASC' ]]
         });
     }
 
@@ -58,6 +59,10 @@ module.exports = (sequelize, DataTypes) => {
 
     Hours.prototype.getDate = function () {
         return this.getDataValue('updatedAt');
+    }
+
+    Hours.prototype.getHourDate = function () {
+        return this.getDataValue('hourDate');
     }
 
 
