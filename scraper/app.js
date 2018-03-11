@@ -72,7 +72,7 @@ function insertHours(queryDate) {
     Hour.findAllByDate(queryDate).then( hour => {
         if(hour.length == 0) {
             console.log("no hours data for " + queryDate);
-            let obj = JSON.stringify(scraper.getHours(queryDate));
+            let obj = scraper.getHours(queryDate);
             Hour.create({hours: obj, hourDate: queryDate}).then( err => {
                 if(!err)
                     console.log("finished insertion hour for " + queryDate);
@@ -91,7 +91,7 @@ function insertOverviewMenu(queryDate) {
 
     OverviewMenu.findAllByDate(queryDate).then(menu => {
         if(menu.length == 0) {
-            let obj = JSON.stringify(scraper.getOverviewPage(queryDate));
+            let obj = scraper.getOverviewPage(queryDate);
             OverviewMenu.create({overviewMenu:obj, menuDate: queryDate}).then(err => {
                 if(!err)
                     console.log("finished insertion overViewMenu for " + queryDate);
@@ -115,7 +115,6 @@ function insertDetailMenu(queryDate) {
             obj["lunch"] = returned_arr2[0]["lunch"];
             var returned_arr3 = scraper.getDetailPage(queryDate, "Dinner");
             obj["dinner"] = returned_arr3[0]["dinner"];
-            obj = JSON.stringify(obj);
             var recipe_nutrition_dict = Object.assign({},returned_arr1[1],returned_arr2[1],returned_arr3[1]);
             DetailedMenu.create({detailedMenu:obj, menuDate: queryDate}).then(err => {
                 Object.keys(recipe_nutrition_dict).forEach(function(key){
