@@ -35,7 +35,7 @@ app.listen(PORT, HOST, () => {
 
 const apiLimiter = new RateLimit({
     windowMs: 15*60*1000, // 15 minutes
-    max: 2,
+    max: 1000,
     delayMs: 0, // disabled
     delayAfter: 0
 });
