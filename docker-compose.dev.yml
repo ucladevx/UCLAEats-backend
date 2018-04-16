@@ -1,7 +1,7 @@
 version: "3"
 services:
     api:
-        build: .
+        build: ./menu_backend
         ports:
             - "5000:5000"
         restart: always
