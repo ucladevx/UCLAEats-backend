@@ -13,28 +13,39 @@ from users.serializers import UserSerializer
 
 # Create your views here.
 
-class UserService(APIView):
-    """
-    Manage user requests
-    Get
-    Create
-    Update
-    Delete
+"""
+LOGIN
+/o/token POST
+HEADER - Content-Type: application/x-www-form-urlencoded
+Body -  grant_type: password
+        username: <email>
+        password: <password>
+        client_id: <client_id>
+        client_secret: <client_secret>
 
-    Login
-    Logout
+REFRESH ACCESS TOKEN
+/o/token POST
+HEADER - Content-Type: application/x-www-form-urlencoded
+Body -  grant_type: refresh_token
+        refresh_token: <refresh_token>
+        client_id: <client_id>
+        client_secret: <client_secret>
+
+LOGOUT
+/o/revoke_token POST
+HEADER - Content-Type: application/x-www-form-urlencoded
+BODY -  token: <access_token>
+        client_id: <client_id>
+        client_secret: <client_secret>
+"""
+
+class UserSignup(APIView):
+    """
+    Allow a user to sign up and create a user account
+    Does not require authentication or permissions
     """
     authentication_classes = ()
     permission_classes = ()
-
-
-    def get(self, request, format=None):
-        """
-        Get data of all users.  THIS SHOULD BE DEPRECATED
-        """
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
 
     def post(self, request, format=None):
         """
@@ -46,12 +57,38 @@ class UserService(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UserService(APIView):
+    """
+    Manage user requests
+
+    Get
+    Update
+    Delete
+
+    Requires default permissions
+    """
+
+    def get(self, request, format=None):
+        """
+        Get data of a user.
+        QUERY PARAMETER: email="email@address.com"
+        """
+        email = request.GET.get('email')
+        user = get_user(email)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+        # Gets all user data
+        # users = User.objects.all()
+        # serializer = UserSerializer(users, many=True)
+        # return Response(serializer.data)
+
     def put(self, request, format=None):
         """
         Update information about a user.
         """
-        email = self.get_email(request)
-        user = self.get_user(email)
+        email = get_email(request)
+        user = get_user(email)
         serializer = UserSerializer(user, request.data)
         if serializer.is_valid():
             serializer.save()
@@ -62,46 +99,37 @@ class UserService(APIView):
         """
         Delete a user
         """
-        email = self.get_email(request)
-        user = self.get_user(email)
+        email = get_email(request)
+        user = get_user(email)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # Non Router Functions
-    def get_user(self, email):
-        """
-        Returns user based on public key
-        """
-        try:
-            return User.objects.get(email=email)
-        except:
-            raise Http404
 
-    def get_email(self, request):
-        """
-        Returns email of a user from the request, or raises Http404
-        """
-        try:
-            return request.data["email"]
-        except:
-            raise Http404
-
-    def get_pk(self, request):
-        """
-        Returns public key from request
-        """
-        try:
-            return request.data["id"]
-        except:
-            raise Http404
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
+### Non Router Functions ###
+def get_user(email):
     """
-    When a user is saved to the database, this function is run, and will
-    associate a authtoken to that user
+    Returns user based on public key
     """
+    try:
+        return User.objects.get(email=email)
+    except:
+        raise Http404
 
-    if created:
-        Token.objects.create(user=instance)
+def get_email(request):
+    """
+    Returns email of a user from the request, or raises Http404
+    """
+    try:
+        return request.data["email"]
+    except:
+        raise Http404
+
+def get_pk(request):
+    """
+    Returns public key from request
+    """
+    try:
+        return request.data["id"]
+    except:
+        raise Http404
+

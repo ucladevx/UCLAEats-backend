@@ -25,6 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_updated = models.DateTimeField(_('date_updated'), auto_now=True)
     is_active = models.BooleanField(_('is_active'), default=True)
     is_admin = models.BooleanField(_('is_admin'), default=False)
+    is_staff = models.BooleanField(_('staff status'),default=True)
 
     # Add email as the username field for auth purposes
     USERNAME_FIELD = 'email'
