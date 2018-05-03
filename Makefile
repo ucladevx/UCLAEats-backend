@@ -23,3 +23,6 @@ prod-down:
 clean:
 	docker-compose -f ./docker-compose.yml rm postgres
 	docker-compose -f ./docker-compose.yml rm api
+
+secrets:
+	tar -cvzf BruinBiteSecrets.tar.gz *.pem *.env

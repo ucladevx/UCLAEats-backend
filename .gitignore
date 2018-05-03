@@ -186,6 +186,7 @@ scraper/config.json
 *config.json
 *.env
 *.pem
+*.key
 TODO
 mysite
 tutorial
