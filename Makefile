@@ -26,3 +26,7 @@ clean:
 
 secrets:
 	tar -cvzf BruinBiteSecrets.tar.gz *.pem *.env
+
+unlock:
+	git-crypt unlock ./BruinBiteSecretKey.key
+	tar -xzf BruinBiteSecrets.tar.gz
