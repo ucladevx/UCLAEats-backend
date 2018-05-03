@@ -1,10 +1,10 @@
 # Dev commands
 default: build-dev run-dev
 
-build-dev:
+dev-build:
 	docker-compose -f ./docker-compose.dev.yml build
 
-run-dev:
+dev-run:
 	docker-compose -f ./docker-compose.dev.yml up
 
 
@@ -12,7 +12,7 @@ run-dev:
 prod: prod-build prod-up
 
 prod-build: 
-	docker-compose build 
+	docker-compose -f ./docker-compose.yml build 
 
 prod-up:
 	docker-compose -f ./docker-compose.yml up -d
