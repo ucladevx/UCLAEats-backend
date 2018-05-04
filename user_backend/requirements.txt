@@ -1,0 +1,11 @@
+certifi==2018.4.16
+chardet==3.0.4
+Django==2.0.5
+django-oauth-toolkit==1.1.0
+djangorestframework==3.8.2
+idna==2.6
+oauthlib==2.0.7
+psycopg2==2.7.4
+pytz==2018.4
+requests==2.18.4
+urllib3==1.22

@@ -12,6 +12,18 @@ services:
         networks:
             - webnet
 
+    users:
+        build: ./user_backend
+        ports:
+            - "8000:8000"
+        restart: always
+        depends_on:
+            - postgres
+        env_file:
+            - users.env
+        networks:
+            - webnet
+
     postgres:
         image: postgres:10.2-alpine
         ports:
