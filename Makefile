@@ -1,5 +1,5 @@
 # Dev commands
-default: build-dev run-dev
+default: dev-build dev-run
 
 dev-build:
 	docker-compose -f ./docker-compose.dev.yml build
