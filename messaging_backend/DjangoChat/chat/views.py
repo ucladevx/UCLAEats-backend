@@ -1,5 +1,6 @@
 import random
 import string
+import json
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -9,7 +10,7 @@ from .models import Room
 def about(request):
     return render(request, "chat/about.html")
 
-def new_room(request):
+def new_random_room(request):
     """
     Randomly create a new room, and redirect to it.
     """
@@ -20,6 +21,30 @@ def new_room(request):
             if Room.objects.filter(label=label).exists():
                 continue
             new_room = Room.objects.create(label=label)
+    return redirect(chat_room, label=label)
+
+def new_room(request):
+    """
+    Create a new room based on the user ids.
+    The request json should contain user1 and user2 fields (with User ids)
+    """
+    # Creates chat room id based on usernames
+    if request.method != "POST":
+        print("Request is not post request")
+        return redirect(about)
+    # Read user1, user2 info from JSON request
+    user1, user2 = request.body['user1'], request.body['user2']
+    user1, user2 = min(user1, user2), max(user1, user2)
+    label = user1 + '_' + user2
+    # TODO: Encrypt the label
+    if not Room.objects.filter(label=label).exists():
+        new_room = None
+        while not new_room:
+            # Creates chat rooms with that list of users
+            with transaction.atomic():
+                new_room = Room.objects.create(label=label)
+                users = [user1, user2]
+                new_room.users = json.dumps(users)
     return redirect(chat_room, label=label)
 
 
