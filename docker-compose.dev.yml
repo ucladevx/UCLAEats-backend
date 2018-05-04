@@ -12,6 +12,18 @@ services:
         # networks:
         #     - webnet
 
+    # menu:
+    #     build: ./menu_backend
+    #     ports:
+    #         - "5000:8000"
+    #     restart: always
+    #     depends_on:
+    #         - postgres
+    #     env_file:
+    #         menu.dev.env
+    #     networks:
+    #         - webnet
+
     users:
         build: ./user_backend
         ports:
