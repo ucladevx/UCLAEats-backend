@@ -6,7 +6,6 @@ set -e
 /app/BruinBite/menu/manage.py migrate
 /app/BruinBite/menu/manage.py test --no-input
 
-
 uwsgi --ini /app/BruinBite/menu/uwsgi.ini
 
 # /usr/sbin/crond -l 8

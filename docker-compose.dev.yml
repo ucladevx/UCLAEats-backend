@@ -44,7 +44,7 @@ services:
         build: 
             context: ./menu_backend
             dockerfile: Dockerfile.cron
-        restart: always
+        restart: on-failure
         depends_on:
             - postgres
         env_file:
