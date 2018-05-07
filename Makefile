@@ -29,4 +29,4 @@ secrets:
 
 unlock:
 	git-crypt unlock ./BruinBiteSecretKey.key
-	tar -xzf BruinBiteSecrets.tar.gz
+	tar -xvzf BruinBiteSecrets.tar.gz
