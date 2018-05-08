@@ -3,7 +3,11 @@ api.ucla-eats.com {
     log stdout
     errors stderr
     tls terrenceho.books@gmail.com
-    proxy / api:5000 {
+    proxy /api/v1/menu api:5000 {
+        transparent
+    }
+
+    proxy /api/v1/users users:8000 {
         transparent
     }
 }
