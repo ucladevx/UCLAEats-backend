@@ -15,30 +15,83 @@ class TestUserSerializers(TestCase):
             "year" : 2,
             "self_bio" : "I'm a unit test that should pass",
         }
-        self.user = User.objects.create_user(**self.user_attributes)
 
-        self.serializer_data = {
-            "email" : "test_serializer@gmail.com",
-            "password" : "test_serializer",
-            "first_name" : "Test",
-            "last_name" : "Serializer",
-            "major" : "Testing Serializer",
-            "minor" : "Unit Testing",
-            "year" : 2,
-            "self_bio" : "I'm testing the serializer",
-        }
+        self.serializer = UserSerializer(data=self.user_attributes)
+        if self.serializer.is_valid():
+            user = self.serializer.save()
+            self.user = User.objects.get(email=self.user_attributes['email'])
 
-        self.serializer = UserSerializer(data=self.serializer_data)
-
-    def test_fields(self):
+    def test_field_names(self):
         if self.serializer.is_valid():
             data = self.serializer.data
-            print(data.keys())
-            self.assertEqual(set(data.keys()), set(['id', 'email', 'password',
-                'first_name', 'last_name', 'major', 'minor', 'year', 'self_bio',
-                'date_created', 'date_updated', 'is_active', 'is_admin']))
+            self.assertEqual(set(data.keys()), set(['id', 'email', 'first_name', 
+                'last_name', 'major', 'minor', 'year', 'self_bio', 'is_active',
+                'date_created', 'date_updated', 'is_admin', 'date_updated']))
+        else:
+            print(self.serializer)
+            print(self.user)
+            raise Exception('Serializer not valid.')
+
+    def test_email(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['email'], self.user_attributes['email'])
         else:
             raise Exception('Serializer not valid.')
 
+    def test_last_name(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['last_name'], self.user_attributes['last_name'])
+        else:
+            raise Exception('Serializer not valid.')
 
+    def test_first_name(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['first_name'], self.user_attributes['first_name'])
+        else:
+            raise Exception('Serializer not valid.')
+
+    def test_major(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['major'], self.user_attributes['major'])
+        else:
+            raise Exception('Serializer not valid.')
+
+    def test_minor(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['minor'], self.user_attributes['minor'])
+        else:
+            raise Exception('Serializer not valid.')
+
+    def test_year(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['year'], self.user_attributes['year'])
+        else:
+            raise Exception('Serializer not valid.')
+
+    def test_self_bio(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['self_bio'], self.user_attributes['self_bio'])
+        else:
+            raise Exception('Serializer not valid.')
+
+    def test_first_name(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['first_name'], self.user_attributes['first_name'])
+        else:
+            raise Exception('Serializer not valid.')
+
+    def test_first_name(self):
+        if self.serializer.is_valid():
+            data = self.serializer.data
+            self.assertEqual(data['first_name'], self.user_attributes['first_name'])
+        else:
+            raise Exception('Serializer not valid.')
 
