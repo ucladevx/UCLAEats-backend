@@ -30,5 +30,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.major = validated_data.get("major", user.major)
         user.minor = validated_data.get("minor", user.minor)
         user.year = validated_data.get("year", user.year)
+        user.self_bio = validated_data.get("self_bio", user.self_bio)
         user.save()
         return user
