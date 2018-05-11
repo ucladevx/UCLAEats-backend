@@ -113,7 +113,7 @@ class DetailedMenu(models.Model):
                 # exclude the createdAt and updatedAt
                 menu_arr.append({
                     "menuDate": q.menuDate.isoformat(),
-                    "overviewMenu": q.detailedMenu                    
+                    "detailedMenu": q.detailedMenu                    
                 })
             
             return menu_arr
