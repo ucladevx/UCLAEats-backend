@@ -15,6 +15,14 @@ def activity_level(request):
         "level": ActivityLevel.getLast()
     })
 
+def hour(request):
+    """
+    return hours starting from yesterday, with length 8
+    """
+    return JsonResponse({
+        "hours": Hour.getByDateRange(date.today()-timedelta(days=1),date.today()+timedelta(days=6))
+    })
+
 def overview_menu(request):
     """
     return the overmenu starting from yesterday, with length 8
@@ -88,5 +96,5 @@ def nutrition_box(request):
 def test(request):
     # insert_activity_level()
     # return HttpResponse("yes")
-    insert_hour("2018-05-11")
+    insert_hours()
     return HttpResponse("yes3")
