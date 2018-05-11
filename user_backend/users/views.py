@@ -53,7 +53,7 @@ class UserSignup(APIView):
         """
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = self.serializer.save()
+            user = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -74,21 +74,16 @@ class UserService(APIView):
         QUERY PARAMETER: email="email@address.com"
         """
         email = request.GET.get('email')
-        user = get_user(email)
+        user = get_user_by_email(email)
         serializer = UserSerializer(user)
         return Response(serializer.data)
-
-        # Gets all user data
-        # users = User.objects.all()
-        # serializer = UserSerializer(users, many=True)
-        # return Response(serializer.data)
 
     def put(self, request, format=None):
         """
         Update information about a user.
         """
         email = get_email(request)
-        user = get_user(email)
+        user = get_user_by_email(email)
         serializer = UserSerializer(user, request.data)
         if serializer.is_valid():
             serializer.save()
@@ -100,18 +95,24 @@ class UserService(APIView):
         Delete a user
         """
         email = get_email(request)
-        user = get_user(email)
+        user = get_user_by_email(email)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 ### Non Router Functions ###
-def get_user(email):
+def get_user_by_email(email):
     """
     Returns user based on public key
     """
     try:
         return User.objects.get(email=email)
+    except:
+        raise Http404
+
+def get_user_by_pk(pk):
+    try:
+        return User.objects.get(pk=pk)
     except:
         raise Http404
 

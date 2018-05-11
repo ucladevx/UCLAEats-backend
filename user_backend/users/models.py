@@ -43,7 +43,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         If printed, return email address
         """
-        return self.email
+        return (self.email, self.first_name, self.last_name, self.major,
+                self.minor, self.year, self.self_bio, self.date_created,
+                self.date_updated, self.is_active, self.is_admin, self.is_staff)
 
     def get_full_name(self):
         """

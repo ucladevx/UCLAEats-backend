@@ -43,9 +43,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'oauth2_provider',
-    # 'rest_framework.authtoken',
 
     'users.apps.UsersConfig',
+    'matching.apps.MatchingConfig',
 ]
 
 MIDDLEWARE = [
