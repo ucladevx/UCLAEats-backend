@@ -2,32 +2,41 @@ from .util.scrape import *
 from .models import *
 from datetime import date
 
+days_to_scrape = 7
+
 def insert_activity_level():
     activity_level = scraper_for_activity_level()
     ActivityLevel.objects.create(level=activity_level)
 
-def insert_hour(hour_date):
-    """
-    date is a string: YYYY-MM-DD
-    """
-    hour = scraper_for_hours(hour_date)
-    scraped_hour_date_arr = hour["hourDate"].split("-")
-    scraped_hour_date = date(int(scraped_hour_date_arr[0]),int(scraped_hour_date_arr[1]),int(scraped_hour_date_arr[2]))
-    scraped_hours = hour["hours"]
+def insert_hours():
+    def insert_hour(hour_date):
+        """
+        date is a string: YYYY-MM-DD
+        """
+        hour = scraper_for_hours(hour_date)
+        scraped_hour_date_arr = hour["hourDate"].split("-")
+        scraped_hour_date = date(int(scraped_hour_date_arr[0]),int(scraped_hour_date_arr[1]),int(scraped_hour_date_arr[2]))
+        scraped_hours = hour["hours"]
 
-    obj = Hour.objects.filter(hourDate=scraped_hour_date).order_by("-updatedAt")
+        obj = Hour.objects.filter(hourDate=scraped_hour_date).order_by("-updatedAt")
 
-    if obj.count() == 0:
-        Hour.objects.create(hourDate=scraped_hour_date,hours=scraped_hours)
-    elif obj.count() == 1:
-        obj.update(hours=scraped_hours)
-    else:
+        if obj.count() == 0:
+            Hour.objects.create(hourDate=scraped_hour_date,hours=scraped_hours)
+        elif obj.count() == 1:
+            obj.update(hours=scraped_hours)
+        else:
             # in this case, there is some error
             print("Error in hour")
             obj.update(hours=scraped_hours)
 
+    for i in range(0,days_to_scrape):
+        date_to_scrape = (date.today() + timedelta(i)).isoformat()
+        insert_hour(date_to_scrape)
+
+
+
 def insert_overview_menu():
-    overview_menus = multi_thread_menu_scraper(7,scraper_for_day_overview)
+    overview_menus = multi_thread_menu_scraper(days_to_scrape,scraper_for_day_overview)
     for menu in overview_menus["menus"]:
         scraped_menu_date_arr = menu["menuDate"].split("-")
         if len(scraped_menu_date_arr) != 3:
@@ -49,7 +58,7 @@ def insert_overview_menu():
             obj.update(overviewMenu=scraped_overview_menu)
 
 def insert_detailed_menu_and_recipe():
-    detailed_menus = multi_thread_menu_scraper(7,scraper_for_day_detail)
+    detailed_menus = multi_thread_menu_scraper(days_to_scrape,scraper_for_day_detail)
     for menu in detailed_menus["menus"]:
         scraped_menu_date_arr = menu["menuDate"].split("-")
         if len(scraped_menu_date_arr) != 3:

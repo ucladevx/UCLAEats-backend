@@ -7,6 +7,6 @@ urlpatterns = [
     path('overviewMenu', views.overview_menu, name='overview_menu'),
     path('detailedMenu', views.detailed_menu, name="detailed_menu"),
     path('nutritionbox', views.nutrition_box, name='nutrition_box'),
-    # TODO: write the hour route
+    path("Hours", views.hour, name="hour"),
     path('test',views.test, name="test")
 ]
