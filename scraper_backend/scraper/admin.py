@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ActivityLevel,OverviewMenu,DetailedMenu,Recipe
+from .models import ActivityLevel,OverviewMenu,DetailedMenu,Recipe,Hour
 
 # Register your models here.
 class ActivityLevelModelAdmin(admin.ModelAdmin):
@@ -26,7 +26,14 @@ class RecipeModelAdmin(admin.ModelAdmin):
     class Meta:
         model = Recipe
 
+class HourModelAdmin(admin.ModelAdmin):
+    list_display = ["__str__","createdAt","updatedAt"]
+
+    class Meta:
+        model = Hour
+
 admin.site.register(ActivityLevel, ActivityLevelModelAdmin)
 admin.site.register(OverviewMenu, OverviewMenuModelAdmin)
 admin.site.register(DetailedMenu, DetailedMenuModelAdmin)
 admin.site.register(Recipe, RecipeModelAdmin)
+admin.site.register(Hour, HourModelAdmin)

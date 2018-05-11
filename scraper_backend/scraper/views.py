@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from .models import ActivityLevel,OverviewMenu,DetailedMenu,Recipe
 from datetime import date, timedelta
 import os
+from .db_insertion import *
 
 # Create your views here.
 def activity_level(request):
@@ -82,3 +83,10 @@ def nutrition_box(request):
 
     else:
         return render(request,os.path.join("scraper","not_found.html"),context={})
+
+
+def test(request):
+    # insert_activity_level()
+    # return HttpResponse("yes")
+    insert_hour("2018-05-11")
+    return HttpResponse("yes3")
