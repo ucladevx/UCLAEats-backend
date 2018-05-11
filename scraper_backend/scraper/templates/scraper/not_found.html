@@ -1,0 +1,58 @@
+{% load static %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'scraper/nutritionfacts.css' %}" type="text/css">
+    </head> 
+
+    <body>
+        <div class="scaled">
+            <div class="nfbox">
+                <h3 class="nftitle">Nutrition Facts</h3>							
+                <p class="nfserv">--</p>
+                <p class="nfamt">Amount Per Serving</p>
+                <p class="nfcal"><span class="nfcaltxt">Calories</span> -- <span class="nffatcal">Fat Cal --</span></p>
+                            
+                <p class="nfdvhdr">% Daily Value*</p>
+                <p class="nfnutrient"><span class="nfmajornutrient">Total Fat</span> -- <span class="nfdvval"><span class="nfdvvalnum">--</span></span></p>
+                <div class="nfindent">
+                    <p class="nfnutrient">Saturated Fat -- <span class="nfdvval"><span class="nfdvvalnum">--</span></span></p>
+                    <p class="nfnutrient">Trans Fat -- </p>
+                </div>
+                <p class="nfnutrient"><span class="nfmajornutrient">Cholesterol</span> -- <span class="nfdvval"><span class="nfdvvalnum">--</span></span></p>
+                <p class="nfnutrient"><span class="nfmajornutrient">Sodium</span> -- <span class="nfdvval"><span class="nfdvvalnum">--</span></span></p>
+                <p class="nfnutrient"><span class="nfmajornutrient">Total Carbohydrate</span> -- <span class="nfdvval"><span class="nfdvvalnum">--</span></span></p>
+                <div class="nfindent">
+                    <p class="nfnutrient">Dietary Fiber -- <span class="nfdvval"><span class="nfdvvalnum">--</span></span></p>
+                    <p class="nfnutrient">Sugars -- </p>
+                </div>
+                <p class="nfnutrient"><span class="nfmajornutrient">Protein</span> -- </p>
+        
+                <div class="nfvitbar"></div>
+                    <div class="nfvit">
+                        <span class="nfvitleft">
+                            <span class="nfvitname">Vitamin A</span>
+                            <span class="nfvitpct">--</span>
+                        </span>      
+                        <span class="nfvitright">
+                            <span class="nfvitname">Vitamin C</span>
+                            <span class="nfvitpct">--</span>
+                        </span>
+                    </div>
+                        
+                    <div class="nfvit">
+                        <span class="nfvitleft">
+                            <span class="nfvitname">Calcium</span>
+                            <span class="nfvitpct">--</span>
+                        </span> 
+                        <span class="nfvitright">
+                            <span class="nfvitname">Iron</span>
+                            <span class="nfvitpct">--</span>
+                        </span>
+        
+                    </div>
+                    <div class="nfdisclaimer">*Percent Daily Values (DV) are based on a 2,000 calorie diet.</div>
+            </div>
+        </div>
+    </body>
+</html>
