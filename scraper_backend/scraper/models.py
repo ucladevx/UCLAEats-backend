@@ -21,7 +21,7 @@ class ActivityLevel(models.Model):
             return {}
 
 class OverviewMenu(models.Model):
-    overviewMenu = JSONField()
+    overviewMenu = JSONField(default={})
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
     menuDate = models.DateField()
@@ -34,7 +34,7 @@ class OverviewMenu(models.Model):
         """
         date is a python datetime.date object
         """
-        qs = OverviewMenu.objects.filter(menuDate=date)
+        qs = OverviewMenu.objects.filter(menuDate=date).order_by("-createdAt")
 
         if qs.count() == 0:
             return {}
@@ -70,7 +70,7 @@ class OverviewMenu(models.Model):
             return menu_arr
         
 class DetailedMenu(models.Model):
-    detailedMenu = JSONField()
+    detailedMenu = JSONField(default={})
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
     menuDate = models.DateField()
@@ -138,5 +138,37 @@ class Recipe(models.Model):
             return {}
         else:
             return qs[0].nutrition
+
+class Hour(models.Model):
+    hours = JSONField()
+    hourDate = models.DateField()
+    createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
+
+    def __str__(self):
+        return self.hourDate.isoformat()
+
+    @staticmethod
+    def getByDateRange(startDate,endDate):
+        """
+        startDate and endDate are python datetime.date objects
+        startDate is inclusive and endDate is inclusivw
+        """
+        hour_arr = []
+
+        # filter by range of date
+        qs = Hour.objects.filter(hourDate__range=[startDate,endDate]).order_by("hourDate")
+
+        if qs.count == 0:
+            return hour_arr
+        else:
+            for q in qs:
+                # exclude the createdAt and updatedAt
+                hour_arr.append({
+                    "hourDate": q.hourDate.isoformat(),
+                    "hours": q.hours
+                })
+            
+            return hour_arr
 
 
