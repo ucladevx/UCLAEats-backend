@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from .models import ActivityLevel,OverviewMenu,DetailedMenu,Recipe
 from datetime import date, timedelta
-import os
+import os,time
 from .db_insertion import *
 
 # Create your views here.
@@ -94,7 +94,4 @@ def nutrition_box(request):
 
 
 def test(request):
-    # insert_activity_level()
-    # return HttpResponse("yes")
-    insert_hours()
     return HttpResponse("yes3")
