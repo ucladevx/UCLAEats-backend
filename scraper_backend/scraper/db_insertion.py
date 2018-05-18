@@ -98,7 +98,4 @@ def insert_detailed_menu_and_recipe():
                         else:
                             # in this case, there is some error
                             print("Error in recipe")
-                            obj.update(nutrition=scraped_nutrition)                                               
-
-
-
+                            obj.update(nutrition=scraped_nutrition)                                                                       
