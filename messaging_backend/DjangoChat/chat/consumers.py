@@ -14,7 +14,7 @@ def ws_connect(message):
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
     try:
-        prefix, label = message['path'].decode('ascii').strip('/').split('/')
+        prefix, label = message['path'].strip('/').split('/')
         if prefix != 'chat':
             log.debug('invalid ws path=%s', message['path'])
             return
@@ -36,6 +36,7 @@ def ws_connect(message):
     message.channel_session['room'] = room.label
     print(room.label)
     print("!!!!!______successful connection")
+    message.reply_channel.send({'accept': True})
 
 @channel_session
 def ws_receive(message):
