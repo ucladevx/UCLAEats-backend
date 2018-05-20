@@ -5,3 +5,4 @@ htmlcov/
 staticfiles/
 venv/
 chatapp2/
+virtual/
