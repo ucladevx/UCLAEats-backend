@@ -40,6 +40,18 @@ services:
         networks:
             - webnet
 
+    cron:
+        build: 
+            context: ./menu_backend
+            dockerfile: Dockerfile.cron
+        restart: always
+        depends_on:
+            - postgres
+        env_file:
+            menu.dev.env
+        networks:
+            - webnet
+
     postgres:
         image: postgres:10.2-alpine
         ports:
