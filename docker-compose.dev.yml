@@ -28,7 +28,9 @@ services:
         build: ./user_backend
         ports:
             - "8000:8000"
-        restart: always
+        restart: on-failure
+        volumes:
+            - ./user_backend:/app/BruinBite/users
         depends_on:
             - postgres
         env_file:

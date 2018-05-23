@@ -9,8 +9,6 @@ from django.conf import settings
 from matching.models import WaitingUser
 from matching.serializers import WaitingUserSerializer
 
-
-
 class MatchingService(APIView):
     authentication_classes = ()
     permission_classes = ()

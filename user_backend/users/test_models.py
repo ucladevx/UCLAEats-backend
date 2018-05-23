@@ -108,9 +108,9 @@ class UserTest(TestCase):
                 " before deploying")
         self.assertEqual(user2.self_bio, "")
 
-    def test_print(self):
-        user1 = User.objects.get(email="test1@gmail.com")
-        self.assertEqual(str(user1), "test1@gmail.com")
+    # def test_print(self):
+    #     user1 = User.objects.get(email="test1@gmail.com")
+    #     self.assertEqual(str(user1), "test1@gmail.com")
 
     def test_full_name(self):
         user1 = User.objects.get(email="test1@gmail.com")

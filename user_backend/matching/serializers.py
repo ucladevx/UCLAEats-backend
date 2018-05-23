@@ -4,7 +4,8 @@ from .models import WaitingUser, MatchedUsers
 class WaitingUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WaitingUser
-        fields = ('id', 'user', 'times', 'meal_period', 'dining_halls')
+        fields = ('id', 'user', 'times', 'meal_period', 'dining_halls',
+            'found_match')
 
     def create(self, validated_data):
         return WaitingUser.objects.create(**validated_data)

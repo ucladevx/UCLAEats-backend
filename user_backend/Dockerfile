@@ -6,10 +6,11 @@ RUN apt-get update && \
 
 RUN mkdir -p /app/BruinBite/users
 
-COPY . /app/BruinBite/users
+ADD ./requirements.txt /app/BruinBite/users
 
-RUN cd /app/BruinBite/users && pip3 install -r \
-    /app/BruinBite/users/requirements.txt
+RUN pip3 install -r /app/BruinBite/users/requirements.txt
+
+COPY . /app/BruinBite/users
 
 EXPOSE 8000
 
