@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd /app/BruinBite/users && ./manage.py makemigrations users
 cd /app/BruinBite/users && ./manage.py makemigrations matching

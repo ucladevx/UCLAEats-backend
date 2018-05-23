@@ -1,8 +1,9 @@
-FROM python:3.6
+FROM python:3.6-alpine
 
-RUN apt-get update && \
-    apt-get install -y && \
-    pip3 install uwsgi
+RUN apk add -U postgresql-dev gcc python3-dev musl-dev linux-headers 
+        # libxslt-dev libxml2-dev
+
+RUN pip3 install --upgrade uwsgi
 
 RUN mkdir -p /app/BruinBite/users
 
