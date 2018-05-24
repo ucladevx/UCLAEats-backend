@@ -4,8 +4,8 @@ from .models import WaitingUser, MatchedUsers
 class WaitingUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WaitingUser
-        fields = ('id', 'user', 'times', 'meal_period', 'dining_halls',
-            'found_match')
+        fields = ('id', 'user', 'meal_times', 'meal_day', 'meal_period', 
+                'dining_halls', 'found_match')
 
     def create(self, validated_data):
         return WaitingUser.objects.create(**validated_data)
@@ -22,9 +22,10 @@ class WaitingUserSerializer(serializers.ModelSerializer):
 class MatchedUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = MatchedUsers
-        fields = ('id', 'user1', 'user2', 'time', 'meal_period', 'dining_hall')
+        fields = ('id', 'user1', 'user2', 'meal_datetime', 'meal_period', 
+                'dining_hall')
 
-    def create(self, **validated_data):
+    def create(self, validated_data):
         return MatchedUsers.objects.create(**validated_data)
 
     def update(self, matched_users, **validated_data):

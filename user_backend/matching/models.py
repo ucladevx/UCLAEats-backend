@@ -3,31 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 from django.utils.timezone import now
 
+from .model_constants import *
+
 # Create your models here.
-
-FEAST = "FE"
-BPLATE = "BP"
-COVEL = "CO"
-DENEVE = "DN"
-
-DINING_HALL_CHOICES = (
-    (FEAST, "FEAST"),
-    (BPLATE, "BPLATE"),
-    (COVEL, "COVEL"),
-    (DENEVE, "DENEVE"),
-)
-
-BREAKFAST = "BR"
-LUNCH = "LU"
-DINNER = "DI"
-LATENIGHT = "LN"
-
-MEAL_PERIOD_CHOICES = (
-    (BREAKFAST, "BREAKFAST"),
-    (LUNCH, "LUNCH"),
-    (DINNER, "DINNER"),
-    (LATENIGHT, "LATENIGHT"),
-)
 
 # multiple dining halls, multiple times
 class WaitingUser(models.Model):
@@ -70,7 +48,7 @@ class MatchedUsers(models.Model):
             default = DINNER,
     )
     dining_hall = models.CharField(
-            _('dining_halls'),
+            _('dining_hall'),
             max_length=2,
             choices=DINING_HALL_CHOICES,
             default=BPLATE,
