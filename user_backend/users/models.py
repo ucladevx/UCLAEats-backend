@@ -10,6 +10,7 @@ from .managers import UserManager
 # Create your models here.
 
 class User(AbstractBaseUser, PermissionsMixin):
+    # visible user data
     email = models.EmailField(_('email'), max_length=255, unique=True)
     first_name = models.CharField(_('first_name'), max_length=40, blank=True)
     last_name = models.CharField(_('last_name'), max_length=150, blank=True)
@@ -19,6 +20,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     self_bio = models.TextField(_('self_bio'), blank=True)
     # profile_pic = models.ImageField(upload_to='profile_pictures/', null=True,
     #         blank=True)
+
+    # non-visible user data
+    is_on_chat = models.BooleanField(_('is_on_chat'), default=False)
+    device_id = models.CharField(_('device_id'), max_length=150, default="")
 
     # Metadata fields, automatically has primary key ID
     date_created = models.DateTimeField(_('date_created'), auto_now_add=True)

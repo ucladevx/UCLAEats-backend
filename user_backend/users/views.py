@@ -99,6 +99,27 @@ class UserService(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class MessagingService(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self, request, format=None):
+        user_id1 = request.GET.get('user1')
+        user_id2 = request.GET.get('user2')
+        user1 = get_user_by_pk(user_id1)
+        user2 = get_user_by_pk(user_id2)
+        messaging_payload = {
+            "user1": {
+                "device_id" : user1.device_id,
+                "is_on_chat": user1.is_on_chat,
+            },
+            "user2": {
+                "device_id" : user2.device_id,
+                "is_on_chat": user2.is_on_chat,
+            },
+        }
+        return Response(messaging_payload)
+
 
 ### Non Router Functions ###
 def get_user_by_email(email):

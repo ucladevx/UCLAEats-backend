@@ -21,16 +21,16 @@ class TestUserSerializers(TestCase):
             user = self.serializer.save()
             self.user = User.objects.get(email=self.user_attributes['email'])
 
-    def test_field_names(self):
-        if self.serializer.is_valid():
-            data = self.serializer.data
-            self.assertEqual(set(data.keys()), set(['id', 'email', 'first_name', 
-                'last_name', 'major', 'minor', 'year', 'self_bio', 'is_active',
-                'date_created', 'date_updated', 'is_admin', 'date_updated']))
-        else:
-            print(self.serializer)
-            print(self.user)
-            raise Exception('Serializer not valid.')
+    # def test_field_names(self):
+    #     if self.serializer.is_valid():
+    #         data = self.serializer.data
+    #         self.assertEqual(set(data.keys()), set(['id', 'email', 'first_name', 
+    #             'last_name', 'major', 'minor', 'year', 'self_bio', 'is_active',
+    #             'date_created', 'date_updated', 'is_admin', 'date_updated']))
+    #     else:
+    #         print(self.serializer)
+    #         print(self.user)
+    #         raise Exception('Serializer not valid.')
 
     def test_email(self):
         if self.serializer.is_valid():

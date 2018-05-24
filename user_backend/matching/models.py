@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
-from django.utils.timezone import now
+from django.utils import timezone 
 
 from .model_constants import *
 
@@ -40,7 +40,7 @@ class MatchedUsers(models.Model):
     user2 = models.ForeignKey('users.User', 
             on_delete=models.CASCADE, related_name="user2")
     meal_datetime = models.DateTimeField(_('meal_datetime'), 
-            default = now)
+            default = timezone.now)
     meal_period = models.CharField(
             _('meal_period'),
             max_length = 2,
