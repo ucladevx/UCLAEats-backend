@@ -1,4 +1,4 @@
-api.ucla-eats.com {
+api.bruin-bite.com {
     gzip
     log stdout
     errors stderr
