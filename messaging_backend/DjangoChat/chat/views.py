@@ -31,9 +31,9 @@ def new_room(request):
     The request json should contain user1 and user2 fields (with User ids)
     """
     # Creates chat room id based on usernames
-    if request.method != "POST":
-        print("Request is not post request")
-        return redirect(about)
+    # if request.method != "POST":
+        # print("Request is not post request")
+        # return redirect(about)
     # Read user1, user2 info from GET headers
     user1, user2 = request.GET['user1'], request.GET['user2']
     #user1, user2 = request.POST['user1'], request.POST['user2']
