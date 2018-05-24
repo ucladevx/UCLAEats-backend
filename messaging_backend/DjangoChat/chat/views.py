@@ -4,6 +4,7 @@ import json
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
 import haikunator
 from .models import Room
 
@@ -23,19 +24,22 @@ def new_random_room(request):
             new_room = Room.objects.create(label=label)
     return redirect(chat_room, label=label)
 
+#@csrf_protect
 def new_room(request):
     """
     Create a new room based on the user ids.
     The request json should contain user1 and user2 fields (with User ids)
     """
     # Creates chat room id based on usernames
-    if request.method != "POST":
-        print("Request is not post request")
-        return redirect(about)
-    # Read user1, user2 info from JSON request
-    user1, user2 = request.body['user1'], request.body['user2']
+    # if request.method != "POST":
+        # print("Request is not post request")
+        # return redirect(about)
+    # Read user1, user2 info from GET headers
+    user1, user2 = request.GET['user1'], request.GET['user2']
+    #user1, user2 = request.POST['user1'], request.POST['user2']
     user1, user2 = min(user1, user2), max(user1, user2)
     label = user1 + '_' + user2
+    print("{} label is created.".format(label))
     # TODO: Encrypt the label
     if not Room.objects.filter(label=label).exists():
         new_room = None
@@ -55,6 +59,7 @@ def chat_room(request, label):
     The template for this view has the WebSocket business to send and stream
     messages, so see the template for where the magic happens.
     """
+    """
     # If the room with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
     print("THE NEW VIEW IS CALLED!!!!\n\n\n\n\n")
@@ -72,15 +77,14 @@ def chat_room(request, label):
         extractedMessages.append(messageDict)
 
     responseData = {
-        'tester': "JAYANT MEHRA",
+        'tester': "BRUIN BITE",
         'messages': extractedMessages
     }
 
     return JsonResponse(responseData)
+    """
 
-
-    #   ORIGINAL STUFF
-    #return render(request, "chat/room.html", {
-    #    'room': room,
-    #    'messages': messages,
-    #})
+    return render(request, "chat/room.html", {
+        'room': label,
+        #'messages': messages,
+    })

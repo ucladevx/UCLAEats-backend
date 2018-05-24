@@ -3,17 +3,21 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 
+class User(models.Model):
+    name = models.TextField()
+    
+
 class Room(models.Model):
     name = models.TextField()
     label = models.SlugField(unique=True)
-    # users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User)
 
     def __unicode__(self):
         return self.label
 
 
 class Message(models.Model):
-    room = models.ForeignKey(Room, related_name='messages')
+    room = models.ForeignKey(Room, related_name='messages', on_delete=models.CASCADE,)
     handle = models.TextField()
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
