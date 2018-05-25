@@ -1,5 +1,5 @@
 """
-WSGI config for scraper_backend project.
+WSGI config for menu_backend project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "scraper_backend.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "menu_backend.settings")
 
 application = get_wsgi_application()

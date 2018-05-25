@@ -1,7 +1,9 @@
 #!/bin/bash
 
-/app/BruinBite/menu/manage.py makemigrations menu
+/app/BruinBite/menu/manage.py crontab add
+/app/BruinBite/menu/manage.py makemigrations scraper
 /app/BruinBite/menu/manage.py migrate
-/app/BruinBite/menu/manage.py test
+/app/BruinBite/menu/manage.py test --no-input
+
 
 uwsgi --ini /app/BruinBite/menu/uwsgi.ini
