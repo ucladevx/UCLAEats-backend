@@ -11,4 +11,3 @@ requests==2.18.4
 urllib3==1.22
 django-allauth==0.32.0
 django-rest-auth==0.9.3
-djangorestframework==3.8.2
