@@ -1,16 +1,16 @@
 version: "3"
 services:
-    # api:
-    #     build: ./menu_backend
-    #     ports:
-    #         - "5000:5000"
-    #     restart: always
-    #     depends_on:
-    #         - postgres
-    #     env_file:
-    #         - node.dev.env
-    #     networks:
-    #         - webnet
+    api:
+        build: ./menu_backend
+        ports:
+            - "5000:5000"
+        restart: on-failure
+        depends_on:
+            - postgres
+        env_file:
+            - node.dev.env
+        networks:
+            - webnet
 
     # menu:
     #     build: ./menu_backend
