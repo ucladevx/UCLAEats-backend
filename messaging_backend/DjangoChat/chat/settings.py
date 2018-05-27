@@ -19,6 +19,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'channels',
     'chat',
+    'push_notifications',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -31,6 +32,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 )
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "APNS_CERTIFICATE": "../../../bruinbite_apns.p12",
+    "APNS_TOPIC": "com.kloktech.bruinbite",
+}
 
 ROOT_URLCONF = 'chat.urls'
 
@@ -55,7 +61,15 @@ TEMPLATES = (
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default="postgres:///channels-example", conn_max_age=500)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': os.getenv('DB_HOST'),  
+        'PORT': os.getenv('DB_PORT'),
+    }
+    # 'default': dj_database_url.config(default="postgres:///channels-example", conn_max_age=500)
 }
 
 AUTH_PASSWORD_VALIDATORS = (
@@ -103,7 +117,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+            "hosts": [os.environ.get('REDIS_URL', 'redis://redis:6379')],
         },
         "ROUTING": "chat.routing.channel_routing",
     },

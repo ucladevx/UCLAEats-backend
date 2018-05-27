@@ -1,16 +1,16 @@
 version: "3"
 services:
-    api:
-        build: ./menu_backend
-        ports:
-            - "5000:5000"
-        restart: on-failure
-        depends_on:
-            - postgres
-        env_file:
-            - node.dev.env
-        networks:
-            - webnet
+    # api:
+    #     build: ./menu_backend
+    #     ports:
+    #         - "5000:5000"
+    #     restart: on-failure
+    #     depends_on:
+    #         - postgres
+    #     env_file:
+    #         - node.dev.env
+    #     networks:
+    #         - webnet
 
     # menu:
     #     build: ./menu_backend
@@ -24,17 +24,32 @@ services:
     #     networks:
     #         - webnet
 
-    users:
-        build: ./user_backend
+    # users:
+    #     build: ./user_backend
+    #     ports:
+    #         - "8000:8000"
+    #     restart: on-failure
+    #     volumes:
+    #         - ./user_backend:/app/BruinBite/users
+    #     depends_on:
+    #         - postgres
+    #     env_file:
+    #         - users.dev.env
+    #     networks:
+    #         - webnet
+    
+    messaging:
+        build: ./messaging_backend/DjangoChat
         ports:
-            - "8000:8000"
+            - "8888:8888"
         restart: on-failure
         volumes:
-            - ./user_backend:/app/BruinBite/users
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
         depends_on:
             - postgres
+            - redis
         env_file:
-            - users.dev.env
+            - messaging.dev.env
         networks:
             - webnet
 
@@ -42,9 +57,29 @@ services:
         image: postgres:10.2-alpine
         ports:
             - "5432:5432"
-        restart: always
+        restart: on-failure
         env_file:
             - postgres.dev.env
+        networks:
+            - webnet
+
+    postgres-messaging:
+        image: postgres:10.2-alpine
+        ports:
+            - "5433:5432"
+        restart: on-failure
+        env_file:
+            - postgres.dev.env
+        networks:
+            - webnet
+
+    redis:
+        image: redis:3.2-alpine
+        ports: 
+            - "6379:6379"
+        restart: on-failure
+        # env_file:
+        #     - redis.dev.env
         networks:
             - webnet
 

@@ -1,5 +1,7 @@
 from matching.models import WaitingUser
 from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
+from users.models import User
+import requests
 
 def attempt_match(waiting_user):
     users = WaitingUser.objects.filter(found_match=False) \
@@ -16,29 +18,48 @@ def attempt_match(waiting_user):
                     .intersection(set(waiting_user.meal_times)))
             if len(common_times) == 0:
                 continue
-            
 
+            # chat_url = create_chat_room(waiting_user, user)
             # Terribly choose the first time and dining hall
-            
             matched_users_data = {
                 "user1" : waiting_user.user_id,
                 "user2" : user.user_id,
                 "meal_datetime" : common_times[0],
                 "meal_period" : waiting_user.meal_period,
                 "dining_hall" : common_dining_halls[0],
+                "chat_url": chat_url,
             }
 
-            serializer = MatchedUsersSerializer(data=matched_users_data)
-            if serializer.is_valid():
-                matched_users = serializer.save()
-                print(serializer.data)
-
+            serializer1 = MatchedUsersSerializer(data=matched_users_data)
+            if serializer1.is_valid():
+                serializer1.save()
                 # pass this point, they have a match
                 user.found_match = True
                 waiting_user.found_match = True
                 user.save()
                 waiting_user.save()
                 # Send request to match making through messenger
+
+                # swap the users, and resave
+                matched_users_data["user1"], matched_users_data["user2"] =
+                        matched_users_data["user2"], matched_users_data["user1"]
+                serializer2 = MatchedUsersSerializer(data=matched_users_data)
+                if serializer2.is_valid():
+                    serializer2.save()
             else:
                 print("Serializer Not Valid", serializer.errors)
             return 
+
+def create_chat_room(user1_id, user2_id):
+    payload = {
+        'user_1': {
+            'id' : user1_id,
+            'device_id' : User.objects.get(pk=user_id1).device_id,
+        }
+        'user_2': {
+            'id' : user2.user_id,
+            'device_id' : User.objects.get(pk=user_id2).device_id,
+        }
+    }
+    chat_url = requests.post('http://messaging/new', data=payload)
+    return chat_url

@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 
 from django.http import Http404
 from django.conf import settings
+from django.db.models import Q
 
 from matching.models import WaitingUser, MatchedUsers
 from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
@@ -15,7 +16,8 @@ class MatchingService(APIView):
     permission_classes = ()
 
     def get(self, request, format=None):
-        matched_users = MatchedUsers.objects.all()
+        user_id = request.GET.get('id')
+        matched_users = MatchedUsers.objects.filter(user1=user_id)
         serializer = MatchedUsersSerializer(matched_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

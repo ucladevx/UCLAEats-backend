@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_protect
 import haikunator
 from .models import Room
 
+from push_notifications.models import APNSDevice
+
 def about(request):
     return render(request, "chat/about.html")
 
@@ -88,3 +90,8 @@ def chat_room(request, label):
         'room': label,
         #'messages': messages,
     })
+def push_notification(request):
+    apns_token = request.data.get("apns_token", "")
+    device = APNSDevice.objects.get(registration_id=apns_token)
+    device.send_message("Test Push Notification")
+

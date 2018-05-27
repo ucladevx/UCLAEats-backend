@@ -35,10 +35,10 @@ class WaitingUser(models.Model):
         ordering = ('id',)
 
 class MatchedUsers(models.Model):
-    user1 = models.ForeignKey('users.User', 
-            on_delete=models.CASCADE, related_name="user1")
-    user2 = models.ForeignKey('users.User', 
-            on_delete=models.CASCADE, related_name="user2")
+    user1 = models.ForeignKey('users.User', on_delete=models.CASCADE,
+            related_name="user1")
+    user2 = models.ForeignKey('users.User', on_delete=models.CASCADE,
+            related_name="user2")
     meal_datetime = models.DateTimeField(_('meal_datetime'), 
             default = timezone.now)
     meal_period = models.CharField(
@@ -53,6 +53,7 @@ class MatchedUsers(models.Model):
             choices=DINING_HALL_CHOICES,
             default=BPLATE,
     )
+    chat_url = models.TextField(_('chat_url'), default="")
 
     date_created = models.DateTimeField(_('date_created'), auto_now_add=True)
     date_updated = models.DateTimeField(_('date_updated'), auto_now=True)

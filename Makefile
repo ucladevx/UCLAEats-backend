@@ -25,7 +25,7 @@ clean:
 	docker-compose -f ./docker-compose.yml rm api
 
 secrets:
-	tar -cvzf BruinBiteSecrets.tar.gz *.pem *.env
+	tar -cvzf BruinBiteSecrets.tar.gz *.pem *.env *.p12
 
 unlock:
 	git-crypt unlock ./BruinBiteSecretKey.key
