@@ -49,7 +49,9 @@ def new_room(request):
             # Creates chat rooms with that list of users
             with transaction.atomic():
                 new_room = Room.objects.create(label=label)
-                users = [user1, user2]
+                users = {}
+                users["user1"] = user1
+                users["user2"] = user2
                 new_room.users = json.dumps(users)
     return redirect(chat_room, label=label)
 
