@@ -188,6 +188,7 @@ scraper/config.json
 *.pem
 *.key
 *.p12
+*.cer
 TODO
 mysite
 tutorial
