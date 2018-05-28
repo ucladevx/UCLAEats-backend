@@ -68,7 +68,6 @@ def new_room(request):
     if request.method != 'POST':
         return
 
-<<<<<<< HEAD
     payload = json.loads(request.body)
     user1_id, user2_id = payload["user1_id"], user_ids["user2_id"]
     user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
@@ -76,13 +75,6 @@ def new_room(request):
     user1_device_id, user2_device_id = payload["user1_device_id"], user_ids["user2_device_id"]
 
     label = user1_id + '_' + user2_id
-=======
-    user_ids = json.loads(request.body)
-    user1, user2 = user_ids["user1"], user_ids["user2"]
-    user1, user2 = min(user1, user2), max(user1, user2)
-
-    label = user1 + '_' + user2
->>>>>>> 81aa9467eb3ab57830063c2c1789e8305284758f
 
     print("{} label is created.".format(label))
     # TODO: Encrypt the label
@@ -93,16 +85,19 @@ def new_room(request):
             with transaction.atomic():
                 new_room = Room.objects.create(label=label)
                 print("{} label is created2222.".format(label))
-<<<<<<< HEAD
                 users = {"user1_id" : user1_id, "user2_id": user2_id, "user1_device_id": user1_device_id, "user2_device_id": user2_device_id}
-=======
-                users = {"user1" : user1, "user2": user2}
->>>>>>> 81aa9467eb3ab57830063c2c1789e8305284758f
                 new_room.users = json.dumps(users)
 
     responseData = {
         "label" : label
     }
+
+    #   Push Notification to both parties
+    pc = PushClient()
+    message = "Matched! Head to the chat!"
+    message_id_1 = pc.send_apn(device_token=user1_device_id, message=message)
+    message_id_2 = pc.send_apn(device_token=user2_device_id, message=message)
+
 
     return JsonResponse(responseData)
 
