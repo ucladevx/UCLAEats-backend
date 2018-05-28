@@ -1,6 +1,7 @@
 from matching.models import WaitingUser
 from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
 from users.models import User
+import sys
 import requests
 
 def attempt_match(waiting_user):
@@ -57,5 +58,7 @@ def create_chat_room(user1_id, user2_id):
         'user2_id' : user2_id,
         'user2_device_id' : User.objects.get(pk=user2_id).device_id,
     }
-    chat_url = requests.get('http://messaging/new/dedicated', data=payload)
-    return chat_url
+    response = requests.get('http://messaging:8888/messages/new/dedicated/', 
+	    params=payload)
+    print(response, file=sys.stderr)
+    return response.json()['room']
