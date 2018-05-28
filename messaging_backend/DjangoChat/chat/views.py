@@ -61,14 +61,14 @@ def chat_room(request, label):
     The template for this view has the WebSocket business to send and stream
     messages, so see the template for where the magic happens.
     """
-    """
+
     # If the room with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
     print("THE NEW VIEW IS CALLED!!!!\n\n\n\n\n")
     room, created = Room.objects.get_or_create(label=label)
 
     # We want to show the last 50 messages, ordered most-recent-last
-    messages = reversed(room.messages.order_by('-timestamp')[:50])
+    messages = room.messages.order_by('-timestamp')[:50]
     extractedMessages = []
     for message in messages:
         messageDict = {
@@ -84,12 +84,12 @@ def chat_room(request, label):
     }
 
     return JsonResponse(responseData)
-    """
 
-    return render(request, "chat/room.html", {
-        'room': label,
-        #'messages': messages,
-    })
+
+    #return render(request, "chat/room.html", {
+    #    'room': label,
+    #   'messages': messages,
+    #})
 
 def push_notification(request):
     pc = PushClient()
