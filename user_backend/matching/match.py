@@ -1,6 +1,7 @@
 from matching.models import WaitingUser
 from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
 from users.models import User
+import sys
 import requests
 
 def attempt_match(waiting_user):
@@ -19,7 +20,7 @@ def attempt_match(waiting_user):
             if len(common_times) == 0:
                 continue
 
-            # chat_url = create_chat_room(waiting_user, user)
+            chat_url = create_chat_room(waiting_user.user_id, user.user_id)
             # Terribly choose the first time and dining hall
             matched_users_data = {
                 "user1" : waiting_user.user_id,
@@ -41,7 +42,7 @@ def attempt_match(waiting_user):
                 # Send request to match making through messenger
 
                 # swap the users, and resave
-                matched_users_data["user1"], matched_users_data["user2"] =
+                matched_users_data["user1"], matched_users_data["user2"] = \
                         matched_users_data["user2"], matched_users_data["user1"]
                 serializer2 = MatchedUsersSerializer(data=matched_users_data)
                 if serializer2.is_valid():
@@ -52,14 +53,12 @@ def attempt_match(waiting_user):
 
 def create_chat_room(user1_id, user2_id):
     payload = {
-        'user_1': {
-            'id' : user1_id,
-            'device_id' : User.objects.get(pk=user_id1).device_id,
-        }
-        'user_2': {
-            'id' : user2.user_id,
-            'device_id' : User.objects.get(pk=user_id2).device_id,
-        }
+        'user1_id' : user1_id,
+        'user1_device_id' : User.objects.get(pk=user1_id).device_id,
+        'user2_id' : user2_id,
+        'user2_device_id' : User.objects.get(pk=user2_id).device_id,
     }
-    chat_url = requests.post('http://messaging/new', data=payload)
-    return chat_url
+    response = requests.get('http://messaging:8888/messages/new/dedicated/', 
+	    params=payload)
+    print(response, file=sys.stderr)
+    return response.json()['room']
