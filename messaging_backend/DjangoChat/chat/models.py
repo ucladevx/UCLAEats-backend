@@ -2,12 +2,11 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
-from jsonfield import JSONField
 
 class Room(models.Model):
     name = models.TextField()
     label = models.SlugField(unique=True)
-    users = JSONField()
+    users = models.TextField(null=True)
 
     def __unicode__(self):
         return self.label
