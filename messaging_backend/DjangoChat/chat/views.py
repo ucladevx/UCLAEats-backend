@@ -37,7 +37,7 @@ def new_room(request):
         # print("Request is not post request")
         # return redirect(about)
     # Read user1, user2 info from GET headers
-    user1, user2 = request.GET['user1'], request.GET['user2']
+    user1, user2 = request.GET['user1_id'], request.GET['user2_id']
     #user1, user2 = request.POST['user1'], request.POST['user2']
     user1, user2 = min(user1, user2), max(user1, user2)
     label = user1 + '_' + user2
