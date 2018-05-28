@@ -66,11 +66,13 @@ def new_room(request):
     if request.method != 'POST':
         return
 
-    user_ids = json.loads(request.body)
-    user1, user2 = user_ids["user1"], user_ids["user2"]
-    user1, user2 = min(user1, user2), max(user1, user2)
+    payload = json.loads(request.body)
+    user1_id, user2_id = payload["user1_id"], user_ids["user2_id"]
+    user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
 
-    label = user1 + '_' + user2
+    user1_device_id, user2_device_id = payload["user1_device_id"], user_ids["user2_device_id"]
+
+    label = user1_id + '_' + user2_id
 
     print("{} label is created.".format(label))
     # TODO: Encrypt the label
@@ -81,7 +83,7 @@ def new_room(request):
             with transaction.atomic():
                 new_room = Room.objects.create(label=label)
                 print("{} label is created2222.".format(label))
-                users = {"user1" : user1, "user2": user2}
+                users = {"user1_id" : user1_id, "user2_id": user2_id, "user1_device_id": user1_device_id, "user2_device_id": user2_device_id}
                 new_room.users = json.dumps(users)
 
     responseData = {
