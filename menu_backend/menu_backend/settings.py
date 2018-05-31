@@ -20,7 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'vj&56mbcpp%0so$g5yazeszfz@vyox$#c4!-gr=j&y85sm)i45'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.getenv('DJANGO_ENV') == 'prod':
@@ -49,14 +51,10 @@ CRONJOBS = [
     ('*/5 9-22 * * *', 'scraper.db_insertion.insert_activity_level'),
     # everything else runs three times a day: one at 0:01, one at 10:00, one at 15:30
     ('1 0 * * *', 'scraper.db_insertion.insert_hours'),
-    ('2 0 * * *', 'scraper.db_insertion.insert_overview_menu'),
-    ('4 0 * * *', 'scraper.db_insertion.insert_detailed_menu_and_recipe'),
     ('0 10 * * *', 'scraper.db_insertion.insert_hours'),
-    ('1 10 * * *', 'scraper.db_insertion.insert_overview_menu'),
-    ('3 10 * * *', 'scraper.db_insertion.insert_detailed_menu_and_recipe'),
     ('30 15 * * *', 'scraper.db_insertion.insert_hours'),
-    ('31 15 * * *', 'scraper.db_insertion.insert_overview_menu'),
-    ('33 15 * * *', 'scraper.db_insertion.insert_detailed_menu_and_recipe')        
+    ('2 * * * *', 'scraper.db_insertion.insert_overview_menu'),
+    ('4 * * * *', 'scraper.db_insertion.insert_detailed_menu_and_recipe')        
 ]
 
 MIDDLEWARE = [
@@ -93,15 +91,25 @@ WSGI_APPLICATION = 'menu_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME'),
+#         'USER': os.getenv('DB_USER'),
+#         'PASSWORD': os.getenv('DB_PASS'),
+#         'HOST': os.getenv('DB_HOST'),  
+#         'PORT': os.getenv('DB_PORT'),
+#     }     
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': os.getenv('DB_HOST'),  
-        'PORT': os.getenv('DB_PORT'),
-    }     
+        'NAME': 'scrape',
+        'USER': 'bruinbite',
+        'PASSWORD': 'bruinbite',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
 # Password validation
