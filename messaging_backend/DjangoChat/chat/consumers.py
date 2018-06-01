@@ -4,6 +4,7 @@ import logging
 from channels import Group
 from channels.sessions import channel_session
 from .models import Room
+from chat.push_notifications import PushClient
 
 log = logging.getLogger(__name__)
 
@@ -73,6 +74,21 @@ def ws_receive(message):
 
         # See above for the note about Group
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
+
+        receiver_device_id = 0;
+        user_info = json.loads(room.users)
+
+        if data[handle] == user_info["user1_id"]:
+            receiver_device_id = user_info["user2_device_id"]
+        else:
+            receiver_device_id = user_info["user1_device_id"]
+
+        #   Push Notification to reciever
+        pc = PushClient()
+        message = data["message"][:10]
+        message_id = pc.send_apn(device_token=receiver_device_id, message=message)
+
+
 
 @channel_session
 def ws_disconnect(message):
