@@ -1,28 +1,30 @@
 version: "3"
 services:
-    api:
-        build: ./menu_backend
-        ports:
-            - "5000:5000"
-        restart: on-failure
-        depends_on:
-            - postgres
-        env_file:
-            - node.dev.env
-        networks:
-            - webnet
-
-    # menu:
-    #     build: ./menu_backend
+    # api:
+    #     build: ./menu_backend_js
     #     ports:
-    #         - "5000:8000"
+    #         - "5000:5000"
     #     restart: always
     #     depends_on:
     #         - postgres
     #     env_file:
-    #         menu.dev.env
+    #         - node.dev.env
     #     networks:
     #         - webnet
+
+    menu:
+        build: ./menu_backend
+        ports:
+            - "5000:8000"
+        restart: on-failure
+        volumes:
+            - ./menu_backend:/app/BruinBite/menu
+        depends_on:
+            - postgres
+        env_file:
+            - menu.dev.env
+        networks:
+            - webnet
 
     users:
         build: ./user_backend
@@ -50,6 +52,19 @@ services:
             - redis
         env_file:
             - messaging.dev.env
+        networks:
+            - webnet
+
+    cron:
+        build: 
+            context: ./menu_backend
+            dockerfile: Dockerfile.cron
+        restart: on-failure
+        depends_on:
+            - postgres
+            - menu
+        env_file:
+            menu.dev.env
         networks:
             - webnet
 
@@ -85,4 +100,16 @@ services:
 
 networks:
     webnet:
+
+    # api:
+    #     build: ./menu_backend_js
+    #     ports:
+    #         - "5000:5000"
+    #     restart: always
+    #     depends_on:
+    #         - postgres
+    #     env_file:
+    #         - node.dev.env
+    #     networks:
+    #         - webnet
 

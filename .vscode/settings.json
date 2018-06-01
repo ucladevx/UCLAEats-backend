@@ -1,0 +1,3 @@
+{
+    "python.pythonPath": "${workspaceFolder}/scrape_virtualenv/bin/python"
+}
