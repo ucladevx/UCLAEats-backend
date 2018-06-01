@@ -117,6 +117,16 @@ def chat_room(request, label):
     print("THE NEW VIEW IS CALLED!!!!\n\n\n\n\n")
     room, created = Room.objects.get_or_create(label=label)
 
+    room_user_info = json.loads(room.users)
+    sender_id = request.GET["user_id"]
+
+
+    if sender_id != room_user_info["user1_id"] and sender_id != room_user_info["user2_id"]:
+        error_message = {
+            "error": "You are not authorized to download these messages."
+        }
+        return JsonResponse(error_message)
+
     # We want to show the last 50 messages, ordered most-recent-last
     messages = room.messages.order_by('-timestamp')[:50]
     extractedMessages = []
