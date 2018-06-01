@@ -1,7 +1,7 @@
 FROM python:3.6-alpine
 
 RUN apk add -U postgresql-dev gcc python3-dev musl-dev linux-headers \
-    libffi-dev openssl-dev
+    libffi-dev 
 
 RUN mkdir -p /app/BruinBite/messaging
 

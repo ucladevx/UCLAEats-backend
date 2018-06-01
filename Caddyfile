@@ -10,4 +10,9 @@ api.bruin-bite.com {
     proxy /api/v1/users users:8000 {
         transparent
     }
+
+    proxy /api/v1/messaging messaging:8888 {
+        transparent
+        websocket
+    }
 }

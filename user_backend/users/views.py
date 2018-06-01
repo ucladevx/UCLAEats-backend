@@ -110,11 +110,11 @@ class MessagingService(APIView):
         user2 = get_user_by_pk(user_id2)
         messaging_payload = {
             "user1": {
-                "device_id" : user1.device_id,
+                # "device_id" : user1.device_id,
                 "is_on_chat": user1.is_on_chat,
             },
             "user2": {
-                "device_id" : user2.device_id,
+                # "device_id" : user2.device_id,
                 "is_on_chat": user2.is_on_chat,
             },
         }
