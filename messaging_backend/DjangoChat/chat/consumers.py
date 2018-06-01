@@ -83,7 +83,7 @@ def ws_receive(message):
         else:
             receiver_device_id = user_info["user1_device_id"]
 
-        #   Push Notification to receiver
+        # Push Notification to receiver
         pc = PushClient()
         message = data["message"][:10]
         message_id = pc.send_apn(device_token=receiver_device_id, message=message)

@@ -27,7 +27,6 @@ def new_random_room(request):
     return redirect(chat_room, label=label)
 
 #@csrf_protect
-"""
 def new_room(request):
 
     #Create a new room based on the user ids.
@@ -36,8 +35,8 @@ def new_room(request):
 
     # Read user1, user2 info from GET headers
     user1, user2 = request.GET['user1_id'], request.GET['user2_id']
-    device1, device2 = request.GET['user1_device_id'], \
-            request.GET['user2_device_id']
+    #device1, device2 = request.GET['user1_device_id'], \
+            #request.GET['user2_device_id']
     #user1, user2 = request.POST['user1'], request.POST['user2']
     user1, user2 = min(user1, user2), max(user1, user2)
     label = user1 + '_' + user2
@@ -61,8 +60,8 @@ def new_room(request):
     print("New Label Sent")
 
     return JsonResponse(responseData)
-"""
 
+"""
 def new_room(request):
 
     if request.method != 'POST':
@@ -101,7 +100,7 @@ def new_room(request):
 
 
     return JsonResponse(responseData)
-
+"""
 
 def chat_room(request, label):
     """
