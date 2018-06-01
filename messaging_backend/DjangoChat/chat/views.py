@@ -25,7 +25,7 @@ def new_random_room(request):
                 continue
             new_room = Room.objects.create(label=label)
     return redirect(chat_room, label=label)
-
+"""
 #@csrf_protect
 def new_room(request):
 
@@ -60,12 +60,14 @@ def new_room(request):
     print("New Label Sent")
 
     return JsonResponse(responseData)
-
 """
+
 def new_room(request):
 
     if request.method != 'POST':
         return
+
+
     print(request.body, file=sys.stderr)
     payload = json.loads(request.body)
     user1_id, user2_id = payload["user1_id"], payload["user2_id"]
@@ -100,7 +102,7 @@ def new_room(request):
 
 
     return JsonResponse(responseData)
-"""
+
 
 def chat_room(request, label):
     """
