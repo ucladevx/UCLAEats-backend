@@ -3,6 +3,7 @@ from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
 from users.models import User
 import sys
 import requests
+import json
 
 def attempt_match(waiting_user):
     users = WaitingUser.objects.filter(found_match=False) \
@@ -58,7 +59,8 @@ def create_chat_room(user1_id, user2_id):
         'user2_id' : user2_id,
         'user2_device_id' : User.objects.get(pk=user2_id).device_id,
     }
-    response = requests.get('http://messaging:8888/messages/new/dedicated/', 
-	    params=payload)
-    print(response, file=sys.stderr)
-    return response.json()['room']
+    response = requests.post('http://messaging:8888/messages/new/dedicated/', 
+	    data=json.dumps(payload))
+    data = response.text
+    print(data, file=sys.stderr)
+    return data['label']

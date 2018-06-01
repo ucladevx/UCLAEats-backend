@@ -67,14 +67,15 @@ def new_room(request):
 
     if request.method != 'POST':
         return
-
+    print(request.body, file=sys.stderr)
     payload = json.loads(request.body)
-    user1_id, user2_id = payload["user1_id"], user_ids["user2_id"]
+    user1_id, user2_id = payload["user1_id"], payload["user2_id"]
     user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
 
-    user1_device_id, user2_device_id = payload["user1_device_id"], user_ids["user2_device_id"]
+    user1_device_id, user2_device_id = payload["user1_device_id"], \
+                payload["user2_device_id"]
 
-    label = user1_id + '_' + user2_id
+    label = str(user1_id) + '_' + str(user2_id)
 
     print("{} label is created.".format(label))
     # TODO: Encrypt the label
