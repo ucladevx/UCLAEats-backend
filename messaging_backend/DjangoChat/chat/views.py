@@ -26,12 +26,14 @@ def new_random_room(request):
             new_room = Room.objects.create(label=label)
     return redirect(chat_room, label=label)
 
+
+#@csrf_protect
 """
 def new_room(request):
 
     #Create a new room based on the user ids.
     #The request json should contain user1 and user2 fields (with User ids)
-
+    print("NEW ROOM CALLED!\n\n\n\n\n\n")
 
     # Read user1, user2 info from GET headers
     user1, user2 = request.GET['user1_id'], request.GET['user2_id']
@@ -47,10 +49,9 @@ def new_room(request):
         while not new_room:
             # Creates chat rooms with that list of users
             with transaction.atomic():
-                new_room = Room.objects.create(label=label)
-                print("{} label is created2222.".format(label))
                 users = {"user1" : user1, "user2": user2}
-                new_room.users = json.dumps(users)
+                new_room = Room.objects.create(label=label, users=json.dumps(users))
+                print("{} label is created2222.".format(label))
 
     # Need to Encrypt the label
     responseData = {
@@ -66,6 +67,8 @@ def new_room(request):
 
     if request.method != 'POST':
         return
+
+
     print(request.body, file=sys.stderr)
     payload = json.loads(request.body)
     user1_id, user2_id = payload["user1_id"], payload["user2_id"]
@@ -83,10 +86,9 @@ def new_room(request):
         while not new_room:
             # Creates chat rooms with that list of users
             with transaction.atomic():
-                new_room = Room.objects.create(label=label)
-                print("{} label is created2222.".format(label))
                 users = {"user1_id" : user1_id, "user2_id": user2_id, "user1_device_id": user1_device_id, "user2_device_id": user2_device_id}
-                new_room.users = json.dumps(users)
+                new_room = Room.objects.create(label=label,  users=json.dumps(users))
+                print("{} label is created2222.".format(label))
 
     responseData = {
         "label" : label
@@ -116,6 +118,20 @@ def chat_room(request, label):
     # upon first visit (a la etherpad).
     print("THE NEW VIEW IS CALLED!!!!\n\n\n\n\n")
     room, created = Room.objects.get_or_create(label=label)
+
+    #  Sanity check to check as to who sent the message
+    #  The frontend will need to send a user_id with their GET request
+    """
+    room_user_info = json.loads(room.users)
+    sender_id = request.GET["user_id"]
+
+
+    if sender_id != room_user_info["user1_id"] and sender_id != room_user_info["user2_id"]:
+        error_message = {
+            "error": "You are not authorized to download these messages."
+        }
+        return JsonResponse(error_message)
+    """
 
     # We want to show the last 50 messages, ordered most-recent-last
     messages = room.messages.order_by('-timestamp')[:50]

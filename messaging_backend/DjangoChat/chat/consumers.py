@@ -46,6 +46,7 @@ def ws_receive(message):
     try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
+
     except KeyError:
         log.debug('no room in channel_session')
         return
@@ -75,6 +76,7 @@ def ws_receive(message):
         # See above for the note about Group
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
 
+
         receiver_device_id = 0;
         user_info = json.loads(room.users)
 
@@ -84,10 +86,12 @@ def ws_receive(message):
             receiver_device_id = user_info["user1_device_id"]
 
         # Push Notification to receiver
-        pc = PushClient()
-        message = data["message"][:10]
-        message_id = pc.send_apn(device_token=receiver_device_id, message=message)
-
+        try:
+            pc = PushClient()
+            message = data["message"][:10]
+            message_id = pc.send_apn(device_token=receiver_device_id, message=message)
+        except:
+            pass
 
 
 @channel_session
