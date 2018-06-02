@@ -1,28 +1,18 @@
 version: "3"
 services:
-    api:
+    menu:
         build: ./menu_backend
         ports:
-            - "5000:5000"
+            - "5000:8000"
         restart: on-failure
+        volumes:
+            - ./menu_backend:/app/BruinBite/menu
         depends_on:
             - postgres
         env_file:
-            - node.dev.env
+            - menu.dev.env
         networks:
             - webnet
-
-    # menu:
-    #     build: ./menu_backend
-    #     ports:
-    #         - "5000:8000"
-    #     restart: always
-    #     depends_on:
-    #         - postgres
-    #     env_file:
-    #         menu.dev.env
-    #     networks:
-    #         - webnet
 
     users:
         build: ./user_backend
@@ -40,6 +30,21 @@ services:
     
     messaging:
         build: ./messaging_backend/DjangoChat
+        command: python manage.py runworker
+        restart: on-failure
+        volumes:
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+        depends_on:
+            - postgres
+            - redis
+        env_file:
+            - messaging.dev.env
+        networks:
+            - webnet
+
+    daphne:
+        build: ./messaging_backend/DjangoChat
+        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
         ports:
             - "8888:8888"
         restart: on-failure
@@ -50,6 +55,19 @@ services:
             - redis
         env_file:
             - messaging.dev.env
+        networks:
+            - webnet
+
+    cron:
+        build: 
+            context: ./menu_backend
+            dockerfile: Dockerfile.cron
+        restart: on-failure
+        depends_on:
+            - postgres
+            - menu
+        env_file:
+            menu.dev.env
         networks:
             - webnet
 
@@ -85,4 +103,16 @@ services:
 
 networks:
     webnet:
+
+    # api:
+    #     build: ./menu_backend_js
+    #     ports:
+    #         - "5000:5000"
+    #     restart: always
+    #     depends_on:
+    #         - postgres
+    #     env_file:
+    #         - node.dev.env
+    #     networks:
+    #         - webnet
 

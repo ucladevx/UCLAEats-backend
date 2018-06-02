@@ -1,14 +1,16 @@
 version: "3"
 services:
-    api:
+    menu:
         build: ./menu_backend
         ports:
-            - "5000:5000"
+            - "5000:8000"
         restart: on-failure
+        volumes:
+            - ./menu_backend:/app/BruinBite/menu
         depends_on:
             - postgres
         env_file:
-            - node.env
+            - menu.env
         networks:
             - webnet
 
@@ -26,6 +28,49 @@ services:
         networks:
             - webnet
 
+    messaging:
+        build: ./messaging_backend/DjangoChat
+        command: python manage.py runworker
+        restart: on-failure
+        volumes:
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+        depends_on:
+            - postgres
+            - redis
+        env_file:
+            - messaging.env
+        networks:
+            - webnet
+
+    daphne:
+        build: ./messaging_backend/DjangoChat
+        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
+        ports:
+            - "8888:8888"
+        restart: on-failure
+        volumes:
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+        depends_on:
+            - postgres
+            - redis
+        env_file:
+            - messaging.env
+        networks:
+            - webnet
+
+    cron:
+        build: 
+            context: ./menu_backend
+            dockerfile: Dockerfile.cron
+        restart: on-failure
+        depends_on:
+            - postgres
+            - menu
+        env_file:
+            menu.env
+        networks:
+            - webnet
+
     postgres:
         image: postgres:10.2-alpine
         ports:
@@ -36,11 +81,30 @@ services:
         networks:
             - webnet
 
+    postgres-messaging:
+        image: postgres:10.2-alpine
+        ports:
+            - "5433:5432"
+        restart: on-failure
+        env_file:
+            - postgres.env
+        networks:
+            - webnet
+
+    redis:
+        image: redis:3.2-alpine
+        ports: 
+            - "6379:6379"
+        restart: on-failure
+        # env_file:
+        #     - redis.env
+        networks:
+            - webnet
+
     caddy:
         image: abiosoft/caddy
-        restart: always
+        restart: on-failure
         depends_on:
-            - api
             - postgres
         ports:
             - "80:80"

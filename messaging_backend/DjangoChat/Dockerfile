@@ -15,4 +15,5 @@ EXPOSE 8888
 
 RUN chmod +x /app/BruinBite/messaging/entrypoint.sh
 
-ENTRYPOINT ["/app/BruinBite/messaging/entrypoint.sh"]
+WORKDIR /app/BruinBite/messaging
+# ENTRYPOINT ["/app/BruinBite/messaging/entrypoint.sh"]

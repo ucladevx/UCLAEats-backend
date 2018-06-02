@@ -62,8 +62,7 @@ def new_room(request):
 
     return JsonResponse(responseData)
 """
-
-
+#@csrf_protect
 def new_room(request):
 
     if request.method != 'POST':
@@ -95,14 +94,17 @@ def new_room(request):
         "label" : label
     }
 
-    #   Push Notification to both parties
-    pc = PushClient()
-    message = "Matched! Head to the chat!"
-    message_id_1 = pc.send_apn(device_token=user1_device_id, message=message)
-    message_id_2 = pc.send_apn(device_token=user2_device_id, message=message)
-
+    try:
+        message = "Matched! Head to the chat!"
+        #   Push Notification to both parties
+        pc = PushClient()
+        message_id_1 = pc.send_apn(device_token=user1_device_id, message=message)
+        message_id_2 = pc.send_apn(device_token=user2_device_id, message=message)
+    except:
+        pass
 
     return JsonResponse(responseData)
+
 
 def chat_room(request, label):
     """

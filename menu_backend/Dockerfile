@@ -1,19 +1,20 @@
-FROM node:9.5.0-alpine
+FROM python:3.6-alpine
 
-RUN apk add -U python make gcc g++ bash tzdata
+RUN apk add -U postgresql-dev gcc python3-dev musl-dev linux-headers \
+        libxslt-dev libxml2-dev
 
-# create the working directory
-RUN mkdir -p /app/dea-backend
+RUN pip3 install --upgrade uwsgi
 
-COPY *.json /app/dea-backend/
+RUN mkdir -p /app/BruinBite/menu
 
-RUN cd /app/dea-backend && \
-    npm install 
+ADD ./requirements.txt /app/BruinBite/menu/requirements.txt
 
-WORKDIR /app/dea-backend
-COPY . /app/dea-backend/
-# Entrypoint script
+RUN pip3 install -r /app/BruinBite/menu/requirements.txt
 
-EXPOSE 5000
+COPY . /app/BruinBite/menu
 
-CMD ["npm", "start"]
+EXPOSE 8000
+
+RUN chmod +x /app/BruinBite/menu/entrypoint.sh
+
+ENTRYPOINT ["/app/BruinBite/menu/entrypoint.sh"]
