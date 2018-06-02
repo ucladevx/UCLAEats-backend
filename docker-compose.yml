@@ -44,7 +44,7 @@ services:
 
     daphne:
         build: ./messaging_backend/DjangoChat
-        command: daphne -b 0.0.0.0 -9 8888 chat.asgi:channel_layer
+        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
         ports:
             - "8888:8888"
         restart: on-failure
