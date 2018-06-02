@@ -23,7 +23,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # non-visible user data
     is_on_chat = models.BooleanField(_('is_on_chat'), default=False)
-    device_id = models.CharField(_('device_id'), max_length=150, default="")
+    device_id = models.CharField(_('device_id'), max_length=150, blank=True, 
+            default="")
 
     # Metadata fields, automatically has primary key ID
     date_created = models.DateTimeField(_('date_created'), auto_now_add=True)

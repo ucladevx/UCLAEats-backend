@@ -45,8 +45,7 @@ INSTALLED_APPS = [
 ]
 
 CRONJOBS = [
-    # activity level executes every 5 minutes from 9am to 10pm
-    ('*/5 9-22 * * *', 'scraper.db_insertion.insert_activity_level'),
+    ('*/5 * * * *', 'scraper.db_insertion.insert_activity_level'),
     # everything else runs three times a day: one at 0:01, one at 10:00, one at 15:30
     ('1 0 * * *', 'scraper.db_insertion.insert_hours'),
     ('0 10 * * *', 'scraper.db_insertion.insert_hours'),
