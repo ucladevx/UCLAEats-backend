@@ -23,7 +23,7 @@ class MatchedUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = MatchedUsers
         fields = ('id', 'user1', 'user2', 'meal_datetime', 'meal_period', 
-                'dining_hall')
+                'dining_hall', 'chat_url')
 
     def create(self, validated_data):
         return MatchedUsers.objects.create(**validated_data)

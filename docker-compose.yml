@@ -30,6 +30,21 @@ services:
 
     messaging:
         build: ./messaging_backend/DjangoChat
+        command: python manage.py runworker
+        restart: on-failure
+        volumes:
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+        depends_on:
+            - postgres
+            - redis
+        env_file:
+            - messaging.env
+        networks:
+            - webnet
+
+    daphne:
+        build: ./messaging_backend/DjangoChat
+        command: daphne -b 0.0.0.0 -9 8888 chat.asgi:channel_layer
         ports:
             - "8888:8888"
         restart: on-failure
@@ -88,7 +103,7 @@ services:
 
     caddy:
         image: abiosoft/caddy
-        restart: always
+        restart: on-failure
         depends_on:
             - postgres
         ports:
