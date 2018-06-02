@@ -11,7 +11,7 @@ api.bruin-bite.com {
         transparent
     }
 
-    proxy /api/v1/messaging messaging:8888 {
+    proxy /api/v1/messaging daphne:8888 {
         transparent
         websocket
     }

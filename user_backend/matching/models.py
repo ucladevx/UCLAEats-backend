@@ -39,6 +39,14 @@ class MatchedUsers(models.Model):
             related_name="user1")
     user2 = models.ForeignKey('users.User', on_delete=models.CASCADE,
             related_name="user2")
+    user1_first_name = models.CharField(_('user1_first_name'), max_length=40, 
+            blank=True)
+    user1_last_name = models.CharField(_('user1_last_name'), max_length=150,
+            blank=True)
+    user2_first_name = models.CharField(_('user2_first_name'), max_length=40,
+            blank=True)
+    user2_last_name = models.CharField(_('user2_last_name'), max_length=150,
+            blank=True)
     meal_datetime = models.DateTimeField(_('meal_datetime'), 
             default = timezone.now)
     meal_period = models.CharField(

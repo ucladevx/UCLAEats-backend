@@ -23,9 +23,15 @@ def attempt_match(waiting_user):
 
             chat_url = create_chat_room(waiting_user.user_id, user.user_id)
             # Terribly choose the first time and dining hall
+            user1 = User.objects.get(pk=waiting_user.user_id)
+            user2 = User.objects.get(pk=user.user_id)
             matched_users_data = {
-                "user1" : waiting_user.user_id,
-                "user2" : user.user_id,
+                "user1" : user1.id,
+                "user1_first_name": user1.first_name,
+                "user1_last_name": user1.last_name,
+                "user2" : user2.id,
+                "user2_first_name": user2.first_name,
+                "user2_last_name": user2.last_name,
                 "meal_datetime" : common_times[0],
                 "meal_period" : waiting_user.meal_period,
                 "dining_hall" : common_dining_halls[0],
@@ -45,6 +51,10 @@ def attempt_match(waiting_user):
                 # swap the users, and resave
                 matched_users_data["user1"], matched_users_data["user2"] = \
                         matched_users_data["user2"], matched_users_data["user1"]
+                matched_users_data["user1_first_name"], matched_users_data["user2_first_name"] = \
+                        matched_users_data["user2_first_name"], matched_users_data["user1_first_name"]
+                matched_users_data["user1_last_name"], matched_users_data["user2_last_name"] = \
+                        matched_users_data["user2_last_name"], matched_users_data["user1_last_name"]
                 serializer2 = MatchedUsersSerializer(data=matched_users_data)
                 if serializer2.is_valid():
                     serializer2.save()
@@ -63,3 +73,4 @@ def create_chat_room(user1_id, user2_id):
             'http://daphne:8888/api/v1/messaging/messages/new/dedicated/', 
 	    data=json.dumps(payload))
     return response.json()['label']
+

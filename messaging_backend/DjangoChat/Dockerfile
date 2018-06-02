@@ -11,8 +11,6 @@ RUN pip3 install -r /app/BruinBite/messaging/requirements.txt
 
 COPY . /app/BruinBite/messaging
 
-EXPOSE 8888
-
 RUN chmod +x /app/BruinBite/messaging/entrypoint.sh
 
 WORKDIR /app/BruinBite/messaging
