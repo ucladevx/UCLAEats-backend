@@ -1,6 +1,5 @@
 import os
 import boto3
-import json
 boto3.set_stream_logger(name='botocore')
 
 
@@ -39,14 +38,19 @@ class PushClient(object):
         endpoint_arn = response.get('EndpointArn')
         return endpoint_arn
 
-    def send_apn(self, device_token, MessageStructure="string", message=""):
+    def send_apn(self, device_token, message=""):
         arn = self.arn
-        if MessageStructure == "json":
-            message = json.dumps(message)
         response = self.client.publish(
             TargetArn=self.create_endpoint(device_token),
+            # TargetArn =
+            # 'arn:aws:sns:us-west-1:432856342397:endpoint/APNS_SANDBOX/Bruin-Bite-Development/e1f3640a-0fa0-3c9d-8b65-e415f2b320d2',
             Message=message,
-            MessageStructure=MessageStructure,
+            # Subject="Subject",
+            # MessageAttributes={
+            #     "" : {
+            #         "DataType":"String",
+            #     }
+            # },
         )
 
         message_id = response.get('MessageId')

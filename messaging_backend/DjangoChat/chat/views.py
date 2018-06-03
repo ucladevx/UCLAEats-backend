@@ -160,17 +160,6 @@ def chat_room(request, label):
 def push_notification(request):
     pc = PushClient()
     device_token = request.GET['device_token']
-    # message = request.GET['message']
-    apns_dict = {
-        "aps": {
-            "mutable-content": 1,
-            "alert": request.GET['message'],
-        }
-    }
-    message = {
-        "default": "default",
-        "APNS_SANDBOX": json.dumps(apns_dict),
-    }
-    message_id = pc.send_apn(device_token=device_token, MessageStructure="json",
-            message=message)
+    message = request.GET['message']
+    message_id = pc.send_apn(device_token=device_token, message=message)
     return JsonResponse({"message_id": message_id})
