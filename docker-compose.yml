@@ -3,7 +3,7 @@ services:
     menu:
         build: ./menu_backend
         ports:
-            - "5000:8000"
+            - "5000:5000"
         restart: on-failure
         volumes:
             - ./menu_backend:/app/BruinBite/menu

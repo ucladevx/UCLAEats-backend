@@ -13,7 +13,7 @@ RUN pip3 install -r /app/BruinBite/menu/requirements.txt
 
 COPY . /app/BruinBite/menu
 
-EXPOSE 8000
+EXPOSE 5000
 
 RUN chmod +x /app/BruinBite/menu/entrypoint.sh
 
