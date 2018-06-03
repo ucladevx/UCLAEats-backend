@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
 
 from django.http import Http404
@@ -10,6 +11,16 @@ from django.db.models import Q
 from matching.models import WaitingUser, MatchedUsers
 from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
 from .match import *
+
+class WaitingService(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self, request, format=None):
+        wait_id = int(request.GET.get('id'))
+        waiting_user = WaitingUser.objects.get(pk=wait_id)
+        return Response({"found_match": waiting_user.found_match},
+            status=status.HTTP_200_OK)
 
 class MatchingService(APIView):
     authentication_classes = ()
