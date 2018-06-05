@@ -4,6 +4,7 @@ from .models import ActivityLevel,OverviewMenu,DetailedMenu,Recipe
 from datetime import date, timedelta
 import os,time
 from .db_insertion import *
+from django.utils import timezone
 
 # Create your views here.
 def activity_level(request):
@@ -19,24 +20,27 @@ def hour(request):
     """
     return hours starting from yesterday, with length 8
     """
+    today = timezone.localdate(timezone.now())
     return JsonResponse({
-        "hours": Hour.getByDateRange(date.today()-timedelta(days=1),date.today()+timedelta(days=6))
+        "hours": Hour.getByDateRange(today-timedelta(days=1),today+timedelta(days=6))
     })
 
 def overview_menu(request):
     """
     return the overmenu starting from yesterday, with length 8
     """
+    today = timezone.localdate(timezone.now())
     return JsonResponse({
-        "menus": OverviewMenu.getByDateRange(date.today()-timedelta(days=1),date.today()+timedelta(days=6))
+        "menus": OverviewMenu.getByDateRange(today-timedelta(days=1),today+timedelta(days=6))
     })
 
 def detailed_menu(request):
     """
     return the detailedmenu starting from yesterday, with length 8
     """
+    today = timezone.localdate(timezone.now())
     return JsonResponse({
-        "menus": DetailedMenu.getByDateRange(date.today()-timedelta(days=1),date.today()+timedelta(days=6))
+        "menus": DetailedMenu.getByDateRange(today-timedelta(days=1),today+timedelta(days=6))
     })    
 
 def nutrition_box(request):
