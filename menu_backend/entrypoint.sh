@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+/app/BruinBite/menu/manage.py collectstatic
 /app/BruinBite/menu/manage.py makemigrations scraper
 /app/BruinBite/menu/manage.py migrate
 /app/BruinBite/menu/manage.py test --no-input
