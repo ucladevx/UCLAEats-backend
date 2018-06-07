@@ -109,6 +109,8 @@ services:
         ports:
             - "80:80"
             - "443:443"
+        environment:
+            - ACME_AGREE=true
         networks:
             - webnet
         volumes:
