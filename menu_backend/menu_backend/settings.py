@@ -56,6 +56,7 @@ CRONJOBS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,7 +138,9 @@ USE_TZ = True
 
 STATIC_URL = '/api/v1/menu/static/'
 
-STATIC_ROOT = "/app/BruinBite/menu/static/"
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
