@@ -28,35 +28,35 @@ services:
         networks:
             - webnet
     
-    messaging:
-        build: ./messaging_backend/DjangoChat
-        command: python manage.py runworker
-        restart: on-failure
-        volumes:
-            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
-        depends_on:
-            - postgres
-            - redis
-        env_file:
-            - messaging.dev.env
-        networks:
-            - webnet
+    # messaging:
+    #     build: ./messaging_backend/DjangoChat
+    #     command: python manage.py runworker
+    #     restart: on-failure
+    #     volumes:
+    #         - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+    #     depends_on:
+    #         - postgres
+    #         - redis
+    #     env_file:
+    #         - messaging.dev.env
+    #     networks:
+    #         - webnet
 
-    daphne:
-        build: ./messaging_backend/DjangoChat
-        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
-        ports:
-            - "8888:8888"
-        restart: on-failure
-        volumes:
-            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
-        depends_on:
-            - postgres
-            - redis
-        env_file:
-            - messaging.dev.env
-        networks:
-            - webnet
+   # daphne:
+   #     build: ./messaging_backend/DjangoChat
+   #     command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
+   #     ports:
+   #         - "8888:8888"
+   #     restart: on-failure
+   #     volumes:
+   #         - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+   #     depends_on:
+   #         - postgres
+   #         - redis
+   #     env_file:
+   #         - messaging.dev.env
+   #     networks:
+   #         - webnet
 
     cron:
         build: 
@@ -73,6 +73,8 @@ services:
 
     postgres:
         image: postgres:10.2-alpine
+        volumes:
+            - ./multiple-postgres-db.sh:/docker-entrypoint-initdb.d/multiple-postgres-db.sh
         ports:
             - "5432:5432"
         restart: on-failure
@@ -87,7 +89,7 @@ services:
             - "5433:5432"
         restart: on-failure
         env_file:
-            - postgres.dev.env
+            - postgres-messaging.dev.env
         networks:
             - webnet
 

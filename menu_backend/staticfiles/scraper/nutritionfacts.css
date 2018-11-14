@@ -1,0 +1,237 @@
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::
+	NUTRTITION LABEL
+::::::::::::::::::::::::::::::::::::::::::::::::::: */
+
+div.scaled{
+	transform: scale(3.8) translateX(36.1%) translateY(36.4%);
+}
+
+.nfbox
+{
+	background-color: #FFFFFF;
+	border: 1px solid #000000;
+	color: #000000;
+	display: table;
+	font-family: Helvetica, Arial, Verdana, Geneva, sans-serif;
+	font-size: 10pt;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 0;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 5px;
+	position: relative;
+	text-decoration: none;
+	width: 230px;
+}
+
+.nf-content-wrap
+{
+    margin: 0;
+    padding: 0;
+}
+
+.nf-blur
+{
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+}
+
+#nf-overlay
+{
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    top: -3px;
+}
+
+#nf-overlay-loading
+{
+    background-color: rgba(0, 0, 0, .8); 
+    background-image: url('../Images/fancybox-loading.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 5px;
+    height: 44px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 64%;
+    vertical-align: middle;
+    width: 44px; 
+}
+
+div.nfbox p
+{
+    line-height: normal;
+}
+
+h3.nftitle
+{
+    color: #000000;
+	font-family: "Helvetica Black", "Arial Black", "Franklin Gothic Heavy", sans-serif;
+	font-size: 2.0em;
+	line-height: normal;
+	margin-bottom: 0;
+	margin-top: 0;
+	text-align: center;
+}
+
+p.nfserv
+{
+    font-size: inherit;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+p.nfamt
+{
+	border-top: 7px solid #000000;
+	font-size: 0.75em;
+	font-weight: bold;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-top: 2px;
+}
+	
+p.nfcal
+{
+	border-top: 1px solid #000000;
+    font-size: inherit;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-top: 2px;
+}
+
+span.nfcaltxt
+{
+    font-size: inherit;
+	font-weight: bold;
+}
+
+span.nffatcal
+{
+	float: right;
+    font-size: inherit;
+}
+
+p.nfdvhdr
+{
+	border-top: 3px solid #000000;
+	font-size: 0.75em;
+	font-weight: bold;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-top: 2px;
+	text-align: right;
+}
+
+span.nfdvval
+{
+	float: right;
+    font-size: inherit;
+}
+
+span.nfdvvalnum
+{
+    font-size: inherit;
+	font-weight: bold;
+}
+
+p.nfnutrient
+{
+	border-top: 1px solid #000000;
+    font-size: inherit;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-top: 2px;
+}
+
+span.nfmajornutrient
+{
+    font-size: inherit;
+	font-weight: bold;
+}
+
+div.nfindent
+{
+    font-size: inherit;
+	margin-left: 15px;
+}
+
+
+div.nfvitbar
+{
+	border-top: 6px solid #000000;
+	font-size: inherit;
+	height: 0px;
+	margin-bottom: -1px;
+	margin-top: 1px;
+	padding: 0;
+}
+
+div.nfvit
+{
+	border-top: 1px solid #000000;
+    font-size: inherit;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-top: 2px;
+	text-align: center;
+}
+
+span.nfvitleft
+{
+	float: left;
+    font-size: inherit;
+	margin-bottom: 0;
+	margin-top: 0;
+	padding-right: 2px;
+	width: 45%;
+}
+
+span.nfvitright
+{
+	float: right;
+    font-size: inherit;
+	margin-bottom: 0;
+	margin-top: 0;
+	padding-left: 2px;
+	width: 45%;
+}
+
+span.nfvitname
+{
+	float: left;
+    font-size: inherit;
+}
+
+span.nfvitpct
+{
+	float: right;
+    font-size: inherit;
+}
+
+div.nfdisclaimer
+{
+	border-top: 1px solid #000000;
+	clear: both;
+	font-family: "Helvetica Narrow", "Arial Narrow", sans-serif;
+	font-size: 0.75em;
+	margin-bottom: 1px;
+	margin-top: 1px;
+	padding-top: 2px;
+}
+
+div.redirect-info
+{
+    padding: 10px;
+}
+
+div.redirect-info p
+{
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
