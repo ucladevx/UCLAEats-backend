@@ -22,7 +22,7 @@ class ActivityLevel(models.Model):
             return {}
 
 class OverviewMenu(models.Model):
-    overviewMenu = JSONField(default={})
+    overviewMenu = JSONField(default=dict)
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
     menuDate = models.DateField()
@@ -71,7 +71,7 @@ class OverviewMenu(models.Model):
             return menu_arr
         
 class DetailedMenu(models.Model):
-    detailedMenu = JSONField(default={})
+    detailedMenu = JSONField(default=dict)
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
     menuDate = models.DateField()
@@ -123,7 +123,7 @@ class Recipe(models.Model):
 
     item_id = models.CharField(max_length = 10)
     recipe_link = models.CharField(max_length=50)
-    nutrition = JSONField(default={})
+    nutrition = JSONField(default=dict)
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
 
@@ -173,11 +173,6 @@ class Recipe(models.Model):
     @classmethod
     def insert_or_update(cls, recipe_link, nutrition):
 
-        #Note: As of now, calling this function modifies the original nutrition dictionary as well
-        # i.e., the passed-in nutrition dict gets modified outside of this function too
-        #use the dict() function to create a copy as below, renaming the function argument to nutri
-        #nutrition = dict(nutri)  --> this ensures a copy is used, so the original will not change
-        
         link_arr = recipe_link.split('/')
         item_id = link_arr[-2]
         serving_size = link_arr[-1]
@@ -201,51 +196,68 @@ class Recipe(models.Model):
         return
 
     @staticmethod
-    def scale_num(num, serving_size, scale_up, make_int):
-        if num != -1:
-            if(scale_up):
-                if(make_int):
-                    num = int(round(num * serving_size, 0))
-                else:
-                    num = round(num * serving_size, 1)
-                    if(num.is_integer()):
-                        num = int(num)
-            else:
-                num = num / serving_size
-        return num
-    
-    @staticmethod
     def scale_nutrition_by_serving_size(nutrition, serving_size, scale_up = True):
-        
+
+        #op = operator.mul if scale_up else operator.truediv
         for key, value in nutrition.items():
             
             if type(value) == str:
                 if key == 'serving_size':
                     old_number,num_float = Recipe.getNumberFromServingSize(value)
+                    
+                    #print(old_number + "  " + str(num_float))
                 elif key not in ['ingredients', 'allergens']:
                     old_number, num_float = Recipe.getNumberFromPercent(value)
+                    print(key + " "+ value + " " + old_number + " " + str(num_float))
                 else:
                     num_float = -1
 
                 if num_float != -1:
-                    num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=True)
+                    if(scale_up):
+                        num = num_float * serving_size
+                        if(num.is_integer()):
+                            num = int(num)
+                        else:
+                            num = round(num, 2)
+                        num_float = num
+                    else:
+                        num_float = num_float / serving_size
+                        
+                    #if key != 'serving_size':
                     nutrition[key] = value.replace(old_number, str(num_float))
+                    #else:
+                        #split_by_space = value.split(' ')
+                        #print(split_by_space[0])
+                        #replaced = split_by_space[0].replace(old_number,str(num_float))
+                        #nutrition[key] = ' '.join(replaced, '\\x0a', split_by_space[1])
+                        
+                        
                     
             elif type(value == list):
                 old_num, old_percent, num_float, percent_float = Recipe.getNumbersFromPair(value)
                 if num_float != -1:
-                    num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=False)
-                    val0 = value[0].replace(old_num, str(num))
+                    if(scale_up):
+                        num = num_float * serving_size
+                        perc = percent_float * serving_size
+                        if(num.is_integer()):
+                            num = int(num)
+                        else:
+                            num = round(num, 2)
+                        if(perc.is_integer()):
+                            perc = int(perc)
+                        else:
+                            perc = round(perc, 2)
+                        num_float = num
+                        percent_float = perc
+                    else:
+                        num_float = num_float / serving_size
+                        percent_float = percent_float / serving_size
+                    val0 = value[0].replace(old_num, str(num_float))
+                    val1 = value[1].replace(old_percent, str(percent_float))
                 else:
                     val0 = value[0]
-
-                if percent_float != -1:
-                    perc = Recipe.scale_num(percent_float, serving_size, scale_up=scale_up, make_int=True)
-                    print(str(perc) + "  " + str(percent_float))
-                    val1 = value[1].replace(old_percent, str(perc))
-                else:
                     val1 = value[1]
-
+                
                 nutrition[key] = [val0, val1]
                 
         return nutrition
