@@ -50,8 +50,8 @@ CRONJOBS = [
     ('1 0 * * *', 'scraper.db_insertion.insert_hours'),
     ('0 10 * * *', 'scraper.db_insertion.insert_hours'),
     ('30 15 * * *', 'scraper.db_insertion.insert_hours'),
-    ('2 * * * *', 'scraper.db_insertion.insert_overview_menu'),
-    ('4 * * * *', 'scraper.db_insertion.insert_detailed_menu_and_recipe')        
+    ('0 3 * * *', 'scraper.db_insertion.insert_slow_scrape'),
+    ('1 * * * *', 'scraper.db_insertion.insert_hourly_scrape')
 ]
 
 MIDDLEWARE = [
@@ -95,9 +95,9 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': os.getenv('DB_HOST'),  
+        'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-    }     
+    }
 }
 
 # Password validation
@@ -146,4 +146,3 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-
