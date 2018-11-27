@@ -121,9 +121,9 @@ class DetailedMenu(models.Model):
 
 class Recipe(models.Model):
 
-    item_id = models.CharField(max_length = 10)
-    recipe_link = models.CharField(max_length=50)
-    nutrition = JSONField(default={})
+    item_id = models.CharField(max_length = 10, default = '')
+    recipe_link = models.CharField(max_length=50, default = '')
+    nutrition = JSONField(default=dict)
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True,auto_now_add=False)
 
@@ -229,7 +229,7 @@ class Recipe(models.Model):
 
                 if num_float != -1:
                     num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=True)
-                    nutrition[key] = value.replace(old_number, str(num_float))
+                    nutrition[key] = value.replace(old_number, str(num))
 
             elif type(value == list):
                 old_num, old_percent, num_float, percent_float = Recipe.getNumbersFromPair(value)

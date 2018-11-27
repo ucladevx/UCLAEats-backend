@@ -4,6 +4,8 @@ from .models import ActivityLevel,OverviewMenu,DetailedMenu,Recipe
 from datetime import date, timedelta
 import os,time
 from .db_insertion import *
+from .scrape import *
+from .scraper_thread import *
 
 # Create your views here.
 def activity_level(request):
@@ -94,4 +96,8 @@ def nutrition_box(request):
 
 
 def test(request):
-    return HttpResponse("yes3")
+     return JsonResponse({
+         #"menu_detailed": scraper_for_day_detail("2018-11-26", True),
+         #"menu_overview": scraper_for_day_overview("2018-11-26", True),
+         "nutrition": Recipe.getByRecipeLink("http://menu.dining.ucla.edu/Recipes/161011/2")
+    })
