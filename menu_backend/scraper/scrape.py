@@ -208,7 +208,8 @@ def parse_dining_hall_section(dining_hall_section_block, itemcode_dict, update_r
 
         recipe_link = li_menu_item.find("a")["href"]
 
-        time.sleep(1)
+        if(update_recipes):
+            time.sleep(1)
 
         nutrition = get_nutrition(recipe_link, update_recipes)
 
