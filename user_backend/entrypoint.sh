@@ -8,6 +8,7 @@ set -e
 
 if [ $DJANGO_ENV == "prod" ]; then
     uwsgi --ini /app/BruinBite/users/uwsgi.ini
+    daphne chat.asgi:channel_layer --port 8888
 else
     /app/BruinBite/users/manage.py runserver 0.0.0.0:8000
 fi

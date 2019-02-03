@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import random
+import string
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +48,9 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'matching.apps.MatchingConfig',
+    'chat.apps.ChatConfig',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -160,5 +165,22 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     )
+}
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
+# Channel settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://redis:6379')],
+        },
+        "ROUTING": "chat.routing.channel_routing",
+    },
 }
 
