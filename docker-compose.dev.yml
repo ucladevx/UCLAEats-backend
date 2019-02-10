@@ -43,21 +43,21 @@ services:
     #     networks:
     #         - webnet
 
-    # daphne:
-    #     build: ./messaging_backend/DjangoChat
-    #     command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
-    #     ports:
-    #         - "8888:8888"
-    #     restart: on-failure
-    #     volumes:
-    #         - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
-    #     depends_on:
-    #         - postgres
-    #         - redis
-    #     env_file:
-    #         - messaging.dev.env
-    #     networks:
-    #         - webnet
+    daphne:
+        build: ./user_backend
+        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
+        ports:
+            - "8888:8888"
+        restart: on-failure
+        volumes:
+            - ./user_backend:/app/BruinBite/users
+        depends_on:
+            - postgres
+            - redis
+        env_file:
+            - users.dev.env
+        networks:
+            - webnet
 
     cron:
         build:

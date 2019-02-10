@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'channels',
+    'chat',
+
     'rest_framework',
     'oauth2_provider',
     'chat.apps.ChatConfig',
@@ -81,8 +84,6 @@ WSGI_APPLICATION = 'user_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-
 
 DATABASES = {
     'default': {
@@ -172,7 +173,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
-
 
 
 # Channel settings
