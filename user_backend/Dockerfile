@@ -1,6 +1,7 @@
 FROM python:3.6-alpine
 
-RUN apk add -U postgresql-dev gcc python3-dev musl-dev linux-headers 
+RUN apk add -U postgresql-dev gcc python3-dev musl-dev linux-headers \
+    libffi-dev
         # libxslt-dev libxml2-dev
 
 RUN pip3 install --upgrade uwsgi
