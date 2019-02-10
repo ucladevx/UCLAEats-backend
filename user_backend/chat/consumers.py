@@ -4,7 +4,7 @@ import logging
 from channels import Group
 from channels.sessions import channel_session
 from .models import Room
-from chat.push_notifications import PushClient
+# from chat.push_notifications import PushClient
 
 log = logging.getLogger(__name__)
 
