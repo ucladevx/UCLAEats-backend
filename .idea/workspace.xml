@@ -14,7 +14,7 @@
     <session id="-725776164">
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="393" />
+          <entry key="py" value="394" />
           <entry key="sh" value="22" />
           <entry key="yml" value="55" />
         </counts>
@@ -22,7 +22,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Bash" value="22" />
-          <entry key="Python" value="393" />
+          <entry key="Python" value="394" />
           <entry key="YAML" value="55" />
         </counts>
       </usages-collector>
@@ -102,7 +102,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/user_backend/chat/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
+            <state relative-caret-position="-544">
               <caret line="6" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
@@ -123,8 +123,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user_backend/chat/consumers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="98" column="9" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
+            <state relative-caret-position="498">
+              <caret line="53" column="24" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
               <folding>
                 <element signature="e#1#12#0" expanded="true" />
               </folding>
@@ -526,15 +526,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/user_backend/chat/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
+        <state relative-caret-position="-544">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/user_backend/chat/consumers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="98" column="9" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
+        <state relative-caret-position="498">
+          <caret line="53" column="24" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
           <folding>
             <element signature="e#1#12#0" expanded="true" />
           </folding>

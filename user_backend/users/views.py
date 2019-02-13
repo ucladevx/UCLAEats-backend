@@ -68,9 +68,6 @@ class UserService(APIView):
     Requires default permissions
     """
 
-    authentication_classes = ()
-    permission_classes = ()
-
     def get(self, request, format=None):
         """
         Get data of a user.

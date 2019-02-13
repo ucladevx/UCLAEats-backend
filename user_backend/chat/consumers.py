@@ -51,7 +51,7 @@ def ws_receive(message):
         log.debug('no room in channel_session')
         return
     except Room.DoesNotExist:
-        log.debug('recieved message, but room does not exist label=%s', label)
+        log.debug('received message, but room does not exist label=%s', label)
         return
 
     # Parse out a chat message from the content text, bailing if it doesn't
