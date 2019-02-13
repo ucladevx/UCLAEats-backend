@@ -2,6 +2,7 @@
 set -e
 
 /app/BruinBite/users/manage.py makemigrations users
+/app/BruinBite/users/manage.py makemigrations chat
 /app/BruinBite/users/manage.py makemigrations matching
 /app/BruinBite/users/manage.py migrate
 /app/BruinBite/users/manage.py test --no-input
