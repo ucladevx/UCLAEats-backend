@@ -55,3 +55,4 @@ virtualenv==16.0.0
 virtualenv-clone==0.3.0
 virtualenvwrapper==4.8.2
 zope.interface==4.5.0
+Twisted[tls,http2]

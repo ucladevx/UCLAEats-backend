@@ -14,20 +14,20 @@ services:
         networks:
             - webnet
 
-    users:
-        build: ./user_backend
-        ports:
-            - "8000:8000"
-        restart: on-failure
-        volumes:
-            - ./user_backend:/app/BruinBite/users
-        depends_on:
-            - postgres
-            - redis
-        env_file:
-            - users.dev.env
-        networks:
-            - webnet
+#    users:
+#        build: ./user_backend
+#        ports:
+#            - "8000:8000"
+#        restart: on-failure
+#        volumes:
+#            - ./user_backend:/app/BruinBite/users
+#        depends_on:
+#            - postgres
+#            - redis
+#        env_file:
+#            - users.dev.env
+#        networks:
+#            - webnet
 
     # messaging:
     #     build: ./messaging_backend/DjangoChat
@@ -45,9 +45,9 @@ services:
 
     daphne:
         build: ./user_backend
-        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
+        command: daphne -b 0.0.0.0 -p 8000 user_backend.asgi:channel_layer
         ports:
-            - "8888:8888"
+            - "8000:8000"
         restart: on-failure
         volumes:
             - ./user_backend:/app/BruinBite/users

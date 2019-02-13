@@ -80,10 +80,10 @@ def ws_receive(message):
         receiver_device_id = 0;
         user_info = json.loads(room.users)
 
-        if int(data["handle"]) == user_info["user1_id"]:
-            receiver_device_id = user_info["user2_device_id"]
-        else:
-            receiver_device_id = user_info["user1_device_id"]
+        # if int(data["handle"]) == user_info["user1_id"]:
+        #     receiver_device_id = user_info["user2_device_id"]
+        # else:
+        #     receiver_device_id = user_info["user1_device_id"]
 
         # Push Notification to receiver
         # try:
