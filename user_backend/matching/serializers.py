@@ -1,11 +1,12 @@
 from rest_framework import serializers
+
 from .models import WaitingUser, MatchedUsers
 
 class WaitingUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WaitingUser
         fields = ('id', 'user', 'meal_times', 'meal_day', 'meal_period', 
-                'dining_halls', 'found_match')
+                'dining_halls', 'status')
 
     def create(self, validated_data):
         return WaitingUser.objects.create(**validated_data)

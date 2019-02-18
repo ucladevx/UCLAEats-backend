@@ -4,4 +4,8 @@ from matching import views
 urlpatterns = [
     path('new/', views.MatchingService.as_view()),
     path('data/', views.WaitingService.as_view()),
+    path('requests/status', views.StatusService.as_view()),
+    path('requests', views.WaitingService.as_view()),
+    path('matches', views.MatchingService.as_view()),
+
 ]

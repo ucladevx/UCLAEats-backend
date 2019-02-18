@@ -4,16 +4,21 @@ from users.models import User
 import sys
 import requests
 import json
+from .model_constants import *
 
 def attempt_match(waiting_user):
-    users = WaitingUser.objects.filter(found_match=False) \
-            .filter(meal_day=waiting_user.meal_day) \
-            .filter(meal_period=waiting_user.meal_period)
+    if waiting_user.status != PENDING:
+        print("Attempted match on nonpending request")
+        return
+
+    users = WaitingUser.objects.filter(status=PENDING) \
+        .filter(meal_day=waiting_user.meal_day) \
+        .filter(meal_period=waiting_user.meal_period)
 
     for user in users:
         if user.user_id != waiting_user.user_id:
             common_dining_halls = list(set(user.dining_halls)
-                    .intersection(set(waiting_user.dining_halls)))
+                .intersection(set(waiting_user.dining_halls)))
             if len(common_dining_halls) == 0:
                 continue
             common_times = list(set(user.meal_times)
@@ -42,8 +47,8 @@ def attempt_match(waiting_user):
             if serializer1.is_valid():
                 serializer1.save()
                 # pass this point, they have a match
-                user.found_match = True
-                waiting_user.found_match = True
+                user.status = SUCCESS
+                waiting_user.status = SUCCESS
                 user.save()
                 waiting_user.save()
                 # Send request to match making through messenger
