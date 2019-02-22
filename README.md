@@ -40,3 +40,6 @@ on this tool.  You can install this tool through homebrew.
   https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname
   -s`-`uname -m` -o /usr/local/bin/docker-compose
 - sudo chmod +x /usr/local/bin/docker-compose
+
+## Debugging:
+- To listen to logs from python run `docker logs -f <CONTAINER_ID` where you can figure out the container ID by running `docker ps`.
