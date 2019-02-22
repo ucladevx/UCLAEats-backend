@@ -5,6 +5,7 @@ from django.utils import timezone
 
 
 class Room(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, default="1")
     name = models.TextField()
     label = models.SlugField(unique=True)
     users = models.TextField(null=True)

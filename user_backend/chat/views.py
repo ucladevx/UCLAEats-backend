@@ -11,18 +11,20 @@ from .models import Room
 # from chat.push_notifications import PushClient
 
 
+
+
 class UserChatView(APIView):
 
-    authentication_classes = ()
-    permission_classes = ()
+    # authentication_classes = ()
+    # permission_classes = ()
 
-    @staticmethod
-    def new_room(request):
+    #@staticmethod
+    def post(self, request):
 
         print(request)
 
-        if request.method != 'POST':
-            return
+        # if request.method != 'POST':
+        #     return
 
         print(request.body, file=sys.stderr)
         payload = json.loads(request.body)
@@ -58,8 +60,8 @@ class UserChatView(APIView):
 
         return JsonResponse(response_data)
 
-    @staticmethod
-    def chat_room(request, label):
+    # @staticmethod
+    def get(self, request, label):
         """
         Room view - show the room, with latest messages.
         """
