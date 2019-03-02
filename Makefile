@@ -28,5 +28,9 @@ secrets:
 	tar -cvzf BruinBiteSecrets.tar.gz *.pem *.env 
 
 unlock:
-	git-crypt unlock ./BruinBiteSecretKey.key
+	-git-crypt unlock ./BruinBiteSecretKey.key
+	-name="$$(git rev-parse --abbrev-ref HEAD)-secrets/";\
+	mkdir $$name; \
+	mv *.env $$name; \
+	mv *.pem $$name
 	tar -xvzf BruinBiteSecrets.tar.gz

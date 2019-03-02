@@ -1,34 +1,43 @@
 # DEVELOPMENT
-## Make commands
+### Installation Instructions
+Using this repo requires Docker, docker-compose, and git-crypt. See the following sections on how to install them.
+After installing them, to set up the repo would require:
+
+1. Start Docker
+2. Download the BruinBitSecretKey.key into the repo
+3. Run `make unlock` to use the key to unlock the secrets
+4. Then run `make` (this step may take a while, you can use the -j flag to speed this up)
+
+## Make commands for dev
+- make unlock: Decrypts files and untars secrets. Will move files that might be overwritten into a directory based on the git branch name (e.g. master-secrets/)
 - make: by default will build the development containers defined in
   docker-compose.dev.yml, and then calls docker-compose up on those containers
 - make dev-build: Builds containers defined in docker-compose.dev.yml
 - make dev-run:  Calls docker-compose up on containers.
 - make clean: Removes all generated files
 - make secrets: Makes tar file of env/pem files
-- make unlock: Decrypts files and untars secrets
 
 ## Tools
 ### Docker
 Our project uses Docker for development and deployment.  You should [download
 Docker](https://store.docker.com/search?type=edition&offering=community)
 (community edition), then run through the [Docker
-Tutorial](https://docs.docker.com/get-started/) to familiarize yourself with
-Docker commands and how they work.  The Makefile depends on Docker.
+Tutorial](https://docs.docker.com/get-started/) to familiarize yourself with Docker commands and how they work. The Makefile depends on Docker.
 
 ### Git-Crypt
-git-crypt: We use gitcrypt to decrypt files environment files and keys for
-usage. To do this, one must have the BruinBiteSecretKey.key file, which will be
-distributed to each developer through other means.  make secrets/unlock relies
-on this tool.  You can install this tool through homebrew.
+git-crypt: We use git-crypt to decrypt files environment files and keys usage automatically while pushing/pulling.
+On Mac, install git-crypt using `brew install git-crypt`. Otherwise follow the INSTALL.md in the [git-crypt repo.](https://github.com/AGWA/git-crypt)
+To use git-crypt, one must have the BruinBiteSecretKey.key file, which will be
+distributed to each developer through other means.  `make secrets` and `make unlock` rely on this tool.
 
 # PRODUCTION
-## Make commands
+Instructions for running/deploying stuff on production servers. You should not normally do this on your own computer.
+## Make commands for production
 - make prod: builds and runs containers in detached mode
 - prod-build: builds containers in docker-compose.yml
 - prod-up: calls docker-compose up in detached mode on containers
   (docker-compose.yml)
-- prod-down: Stops containers definedin docker-compose.yml
+- prod-down: Stops containers defined in docker-compose.yml
 
 ## Installation Instructions
 ### INSTALLING DOCKER AND DOCKER-COMPOSE ON REMOTE
@@ -42,4 +51,4 @@ on this tool.  You can install this tool through homebrew.
 - sudo chmod +x /usr/local/bin/docker-compose
 
 ## Debugging:
-- To listen to logs from python run `docker logs -f <CONTAINER_ID` where you can figure out the container ID by running `docker ps`.
+- To listen to logs from python run `docker logs -f <CONTAINER_ID>`. You can find the container ID by running `docker ps`.
