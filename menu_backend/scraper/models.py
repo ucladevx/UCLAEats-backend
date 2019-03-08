@@ -46,7 +46,7 @@ class OverviewMenu(models.Model):
                 "menuDate": date_str,
                 "overviewMenu": qs[0].overviewMenu
             }
-    
+
     @staticmethod
     def getByDateRange(startDate,endDate):
         """
@@ -65,11 +65,11 @@ class OverviewMenu(models.Model):
                 # exclude the createdAt and updatedAt
                 menu_arr.append({
                     "menuDate": q.menuDate.isoformat(),
-                    "overviewMenu": q.overviewMenu                    
+                    "overviewMenu": q.overviewMenu
                 })
-            
+
             return menu_arr
-        
+
 class DetailedMenu(models.Model):
     detailedMenu = JSONField(default={})
     createdAt = models.DateTimeField(auto_now=False,auto_now_add=True)
@@ -95,7 +95,7 @@ class DetailedMenu(models.Model):
                 "menuDate": date_str,
                 "overviewMenu": qs[0].detailedMenu
             }
-    
+
     @staticmethod
     def getByDateRange(startDate,endDate):
         """
@@ -114,9 +114,9 @@ class DetailedMenu(models.Model):
                 # exclude the createdAt and updatedAt
                 menu_arr.append({
                     "menuDate": q.menuDate.isoformat(),
-                    "detailedMenu": q.detailedMenu                    
+                    "detailedMenu": q.detailedMenu
                 })
-            
+
             return menu_arr
 
 class Recipe(models.Model):
@@ -146,7 +146,7 @@ class Recipe(models.Model):
             num_float = float(old_number)
         except:
             num_float = -1
-        
+
         return old_number, num_float
 
     @staticmethod
@@ -162,7 +162,7 @@ class Recipe(models.Model):
             num_float =  float(old_num)
         except:
             num_float = -1
-        
+
         old_percent = percent.replace('%', '')
         try:
             percent_float = float(old_percent)
@@ -177,7 +177,7 @@ class Recipe(models.Model):
         # i.e., the passed-in nutrition dict gets modified outside of this function too
         #use the dict() function to create a copy as below, renaming the function argument to nutri
         #nutrition = dict(nutri)  --> this ensures a copy is used, so the original will not change
-        
+
         link_arr = recipe_link.split('/')
         item_id = link_arr[-2]
         serving_size = link_arr[-1]
@@ -188,8 +188,8 @@ class Recipe(models.Model):
             return
         link_arr[-1] = '1'
         recipe_link = '/'.join(link_arr)
-        
-        nutrition = Recipe.scale_nutrition_by_serving_size(nutrition, serving_size, scale_up = False)
+
+        nutrition = Recipe.scale_nutrition_by_serving_size(dict(nutrition), serving_size, scale_up = False)
 
         qs = cls.objects.filter(item_id=item_id)
         if qs.count() > 1:
@@ -213,12 +213,12 @@ class Recipe(models.Model):
             else:
                 num = num / serving_size
         return num
-    
+
     @staticmethod
     def scale_nutrition_by_serving_size(nutrition, serving_size, scale_up = True):
-        
+
         for key, value in nutrition.items():
-            
+
             if type(value) == str:
                 if key == 'serving_size':
                     old_number,num_float = Recipe.getNumberFromServingSize(value)
@@ -247,15 +247,15 @@ class Recipe(models.Model):
                     val1 = value[1]
 
                 nutrition[key] = [val0, val1]
-                
+
         return nutrition
-        
+
     @staticmethod
     def getByRecipeLink(link):
         """
         link is a python string
         """
-        
+
         link_arr = link.split('/')
         serving_size = link_arr[-1]
         item_id = link_arr[-2]
@@ -273,7 +273,7 @@ class Recipe(models.Model):
         nutrition = qs[0].nutrition
         nutrition = Recipe.scale_nutrition_by_serving_size(nutrition, serving_size)
         return nutrition
-    
+
 class Hour(models.Model):
     hours = JSONField()
     hourDate = models.DateField()
@@ -303,7 +303,5 @@ class Hour(models.Model):
                     "hourDate": q.hourDate.isoformat(),
                     "hours": q.hours
                 })
-            
+
             return hour_arr
-
-
