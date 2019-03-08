@@ -3,17 +3,23 @@ import logging
 from channels import Group
 from channels.sessions import channel_session
 from .models import Room
+from channels.auth import channel_session_user, channel_session_user_from_http
 # from chat.push_notifications import PushClient
 
 log = logging.getLogger(__name__)
 
 
-@channel_session
+@channel_session_user_from_http
 def ws_connect(message):
     # Extract the room from the message. This expects message.path to be of the
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
+
+    if(not message.user.is_authenticated):
+        log.debug("User not authenticated!")
+        return
+
     try:
         api, version, mess, prefix, label = message['path'].strip('/').split('/')
         if prefix != 'chat':
@@ -31,16 +37,16 @@ def ws_connect(message):
 
     log.debug('chat connect room=%s client=%s:%s', room.label, message['client'][0], message['client'][1])
 
+    log.debug("message user={}".format(message.user))
     # Need to be explicit about the channel layer so that testability works
     Group('chat-'+label, channel_layer=message.channel_layer).add(message.reply_channel)
 
-    log.debug("{} room connected".format_map(room.label))
+    log.debug("{} room connected".format(room.label))
 
     message.channel_session['room'] = room.label
     message.reply_channel.send({'accept': True})
 
-
-@channel_session
+@channel_session_user
 def ws_receive(message):
     # Look up the room from the channel session, bailing if it doesn't exist
     try:
@@ -92,7 +98,7 @@ def ws_receive(message):
         #     pass
 
 
-@channel_session
+@channel_session_user
 def ws_disconnect(message):
     try:
         label = message.channel_session['room']
