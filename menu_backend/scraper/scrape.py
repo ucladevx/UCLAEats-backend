@@ -171,7 +171,7 @@ def scrape_nutrition(recipe_link):
     # for ingredients and allergens
     if soup.find("div",class_="ingred_allergen") != None:
         for p in soup.find("div",class_="ingred_allergen").children:
-            if type(p) != element.NavigableString:
+            if type(p) != element.NavigableString and get_next_sibling(p.find("strong")) != None:
                 name = p.find("strong").string.strip().lower().split(":")[0]
                 text = get_next_sibling(p.find("strong")).string.strip()
                 nutrition[name] = text
