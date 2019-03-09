@@ -211,7 +211,7 @@ class Recipe(models.Model):
                     if(num.is_integer()):
                         num = int(num)
             else:
-                num = num / serving_size
+                num = float(num) / serving_size
         return num
 
     @staticmethod
@@ -231,7 +231,7 @@ class Recipe(models.Model):
                     num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=True)
                     nutrition[key] = value.replace(old_number, str(num))
 
-            elif type(value == list):
+            elif type(value) == list:
                 old_num, old_percent, num_float, percent_float = Recipe.getNumbersFromPair(value)
                 if num_float != -1:
                     num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=False)
@@ -258,11 +258,16 @@ class Recipe(models.Model):
 
         link_arr = link.split('/')
         serving_size = link_arr[-1]
+        serving_size_split = serving_size.split('!')
+        if len(serving_size_split)  == 1:
+            serving_size_split.append('1')
+        elif not len(serving_size_split)  == 2:
+            print("Invalid serving size in recipe link. Link: {}".format(link))        
         item_id = link_arr[-2]
         try:
-            serving_size = int(serving_size)
+            serving_size_float = float(serving_size_split[0]) / float(serving_size_split[1])
         except:
-            print("Invalid serving size in recipe link")
+            print("Invalid serving size in recipe link. Link: {}".format(link))
 
         qs = Recipe.objects.filter(item_id=item_id)
         if qs.count() == 0:
@@ -271,7 +276,7 @@ class Recipe(models.Model):
             print("Error is recipe database, too many recipes for same item")
 
         nutrition = qs[0].nutrition
-        nutrition = Recipe.scale_nutrition_by_serving_size(nutrition, serving_size)
+        nutrition = Recipe.scale_nutrition_by_serving_size(nutrition, serving_size_float)
         return nutrition
 
 class Hour(models.Model):

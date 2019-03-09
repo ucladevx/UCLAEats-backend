@@ -105,8 +105,8 @@ def test(request):
     #elif par == 2:#"hour_overview":
     return JsonResponse({
         #"menu_detailed": scraper_for_day_detail("2018-11-26", True),
-        "menu_overview": scraper_for_day_detail("2018-11-26", False),
-        "nutrition": Recipe.getByRecipeLink("http://menu.dining.ucla.edu/Recipes/161011/2")
+        "menu_overview": scraper_for_day_detail("2019-03-07", False)
+        #"nutrition": Recipe.getByRecipeLink("http://menu.dining.ucla.edu/Recipes/161011/2")
     })
     #elif par == 3:#"hour_detail":
     #    return JsonResponse({
