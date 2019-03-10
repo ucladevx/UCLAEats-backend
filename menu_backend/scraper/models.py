@@ -129,28 +129,55 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.recipe_link
-
+   
+    
     @staticmethod
     def getNumberFromPercent(nutri):
+        #print("get num from percent")
         old_number = nutri.replace('%', '')
         try:
             num_float = float(old_number)
         except:
-            num_float = -1
+            num_float = -1.0
         return old_number, num_float
 
     @staticmethod
-    def getNumberFromServingSize(nutri):
-        old_number = nutri.replace('\xa0', ' ').split(' ')[2]
+    def getServingSizeFloat(serving_size, link):
+        #print("get serving size float")
+        serving_size_split_ = serving_size.split(' ')
+        serving_size_frac = serving_size_split_[-1]
+        serving_size_split = serving_size_frac.split('/')
+        serving_size_float = -1.0
+        if len(serving_size_split) == 1:
+            serving_size_split.append('1')
         try:
-            num_float = float(old_number)
+            serving_size_float = float(serving_size_split[0]) / float(serving_size_split[1])    
         except:
-            num_float = -1
+            print("Invalid serving size in recipe link: {}".format(str(serving_size)))
+            serving_size_float = -1.0
+        if not serving_size_float == -1.0 and len(serving_size_split_) > 1:
+            try:
+                serving_size_float += float(serving_size_split_[0])
+            except:
+                print("Invalid serving size in recipe link. {}".format(str(serving_size)))
+                serving_size_float = -1.0
+        return serving_size_float
 
-        return old_number, num_float
+    @staticmethod
+    def getNumberFromServingSize(nutri,compound = False):
+        #print("get num from serving size")
+        if not compound:
+            old_number = nutri.replace('\xa0', ' ').split(' ')[2]
+        else:
+            val_list = nutri.replace('\xa0', ' ').split(' ')
+            old_number = ' '.join(val_list[2:4])
+            
+        old_number_float = Recipe.getServingSizeFloat(old_number, None)
+        return old_number, old_number_float
 
     @staticmethod
     def getNumbersFromPair(nutri):
+        #print("get num from pair")
         num = nutri[0]
         percent = nutri[1]
         if 'mg' in num:
@@ -161,13 +188,15 @@ class Recipe(models.Model):
         try:
             num_float =  float(old_num)
         except:
-            num_float = -1
+            print("Exception getting number from pair: " + str(nutri[0]) + " " + str(nutri[1]))
+            num_float = -1.0
 
         old_percent = percent.replace('%', '')
         try:
             percent_float = float(old_percent)
         except:
-            percent_float = -1
+            print("Exception getting number from pair: " + str(nutri[0]) + " " + str(nutri[1]))
+            percent_float = -1.0
         return old_num, old_percent, num_float, percent_float
 
     @classmethod
@@ -181,15 +210,24 @@ class Recipe(models.Model):
         link_arr = recipe_link.split('/')
         item_id = link_arr[-2]
         serving_size = link_arr[-1]
-        try:
-            serving_size = int(serving_size)
-        except:
-            print("Invalid recipe link, serving size must be an int: " + recipe_link)
+
+        #### LOOK AT COMMENTS IN getRecipeByLink() TO UNDERSTAND THE USAGE OF serving_size_frac AND compound ####
+
+        #serving_size_frac = None
+        compound = False
+        if len(serving_size.split('!')) > 1:
+            if len(serving_size.split('_')) > 1:
+                compound = True
+            serving_size = serving_size.replace('!', '/').replace('_', ' ')
+        serving_size_float = Recipe.getServingSizeFloat(serving_size, recipe_link)
+
+        if serving_size_float == -1.0:
+            #print("Returning without inserting")
             return
         link_arr[-1] = '1'
         recipe_link = '/'.join(link_arr)
 
-        nutrition = Recipe.scale_nutrition_by_serving_size(dict(nutrition), serving_size, scale_up = False)
+        nutrition = Recipe.scale_nutrition_by_serving_size(dict(nutrition), serving_size_float, scale_up = False, compound=compound)
 
         qs = cls.objects.filter(item_id=item_id)
         if qs.count() > 1:
@@ -198,10 +236,12 @@ class Recipe(models.Model):
             Recipe.objects.create(item_id = item_id, recipe_link=recipe_link, nutrition=nutrition)
         else:
             qs.update(nutrition=nutrition)
+        #print("Returning normally from insert update")
         return
 
     @staticmethod
     def scale_num(num, serving_size, scale_up, make_int):
+        print("scale num " + str(make_int))
         if num != -1:
             if(scale_up):
                 if(make_int):
@@ -215,60 +255,76 @@ class Recipe(models.Model):
         return num
 
     @staticmethod
-    def scale_nutrition_by_serving_size(nutrition, serving_size, scale_up = True):
-
+    def scale_nutrition_by_serving_size(nutrition, serving_size, scale_up = True, serving_size_frac_repl = None, compound = False):
+        #print("Inside scale by nutri")
+        nutri = dict(nutrition)
         for key, value in nutrition.items():
 
             if type(value) == str:
                 if key == 'serving_size':
-                    old_number,num_float = Recipe.getNumberFromServingSize(value)
+                    old_number,num_float = Recipe.getNumberFromServingSize(value, compound=compound)
+                    if not serving_size_frac_repl == None:
+                        nutri[key] = value.replace(old_number, serving_size_frac_repl)
+                        continue
                 elif key not in ['ingredients', 'allergens']:
                     old_number, num_float = Recipe.getNumberFromPercent(value)
                 else:
-                    num_float = -1
+                    num_float = -1.0
 
-                if num_float != -1:
+                if not num_float == -1.0:
                     num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=True)
-                    nutrition[key] = value.replace(old_number, str(num))
+                    nutri[key] = value.replace(old_number, str(num))
 
             elif type(value) == list:
-                old_num, old_percent, num_float, percent_float = Recipe.getNumbersFromPair(value)
-                if num_float != -1:
+                old_num, old_percent, num_float, percent_float = Recipe.getNumbersFromPair(value)              
+                if not num_float == -1:
                     num = Recipe.scale_num(num_float, serving_size, scale_up=scale_up, make_int=False)
                     val0 = value[0].replace(old_num, str(num))
                 else:
                     val0 = value[0]
 
-                if percent_float != -1:
+                if not percent_float == -1.0:
                     perc = Recipe.scale_num(percent_float, serving_size, scale_up=scale_up, make_int=True)
-                    print(str(perc) + "  " + str(percent_float))
+                    #print(str(perc) + "  " + str(percent_float))
                     val1 = value[1].replace(old_percent, str(perc))
                 else:
                     val1 = value[1]
 
-                nutrition[key] = [val0, val1]
-
-        return nutrition
+                nutri[key] = [val0, val1]
+        return nutri
 
     @staticmethod
     def getByRecipeLink(link):
         """
         link is a python string
         """
-
+        print("Inside get by recipe link: " + str(link))
         link_arr = link.split('/')
-        serving_size = link_arr[-1]
-        serving_size_split = serving_size.split('!')
-        if len(serving_size_split)  == 1:
-            serving_size_split.append('1')
-        elif not len(serving_size_split)  == 2:
-            print("Invalid serving size in recipe link. Link: {}".format(link))        
-        item_id = link_arr[-2]
-        try:
-            serving_size_float = float(serving_size_split[0]) / float(serving_size_split[1])
-        except:
-            print("Invalid serving size in recipe link. Link: {}".format(link))
 
+        serving_size = link_arr[-1]
+
+        #### USAGE OF serving_size_frac AND compound ####
+        """
+        # serving_size_frac is not None IFF the resultant nutrition dict
+        # needs to have a "serving size" field with a compound number. 
+        # this is the case ONLY when we are GETTING data from the DB, and even then only sometimes
+        # compound is True IFF the INPUT nutrition dict (i.e., not the resultant)
+        # has a compound number for serving size. This is NEVER the case when GETTING from the DB
+        # as serving size is always set to 1.0 in the DB.
+        # """
+
+        serving_size_frac = None
+        compound = False
+
+        # assumption that serving size is compound only if there is a ! in it
+        if len(serving_size.split('!')) > 1:
+            serving_size_frac = serving_size.replace('!', '/').replace('_', ' ')
+            serving_size = serving_size_frac
+        serving_size_float = Recipe.getServingSizeFloat(serving_size, link)        
+        
+        if serving_size_float == -1.0:
+            serving_size_float = 1.0
+        item_id = link_arr[-2]
         qs = Recipe.objects.filter(item_id=item_id)
         if qs.count() == 0:
             return None
@@ -276,7 +332,8 @@ class Recipe(models.Model):
             print("Error is recipe database, too many recipes for same item")
 
         nutrition = qs[0].nutrition
-        nutrition = Recipe.scale_nutrition_by_serving_size(nutrition, serving_size_float)
+        nutrition = Recipe.scale_nutrition_by_serving_size(nutrition, serving_size_float, serving_size_frac_repl=serving_size_frac, compound=compound)
+        #print("Returning nutrition")
         return nutrition
 
 class Hour(models.Model):
