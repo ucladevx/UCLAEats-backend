@@ -18,6 +18,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     minor = models.CharField(_('minor'), max_length=150, blank=True)
     year = models.IntegerField(_('year'), default=0, null=True, blank=True)
     self_bio = models.TextField(_('self_bio'), blank=True)
+    profile_pic_url = models.TextField(_('profile_pic_url'), blank=True)
     # profile_pic = models.ImageField(upload_to='profile_pictures/', null=True,
     #         blank=True)
 
