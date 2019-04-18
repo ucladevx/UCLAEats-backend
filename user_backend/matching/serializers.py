@@ -33,6 +33,9 @@ class MatchedUsersSerializer(serializers.ModelSerializer):
             'meal_period', 'dining_hall', 'chat_url')
 
     def create(self, validated_data):
+        def convert(t):
+            return t.strftime('%Y-%m-%d %H:%M:%S' )
+        validated_data['meal_datetime'] = validated_data['meal_datetime'].strftime('%Y-%m-%d %H:%M:%S' )
         return MatchedUsers.objects.create(**validated_data)
 
     def update(self, matched_users, **validated_data):
