@@ -1,110 +1,137 @@
 import json
 import sys
+import secrets
+import logging
 
 from django.db import transaction
 from django.http import Http404
 from django.http import JsonResponse
 
 from rest_framework.views import APIView
+from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
 
 from .models import Room
 # from chat.push_notifications import PushClient
 
+from users.models import User
+
+log = logging.getLogger(__name__)
 
 
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def new_chat_room(request):
+    """
+    :param request:
+    :return:
+    """
+    print(request)
 
-class UserChatView(APIView):
+    print(request.body, file=sys.stderr)
+    payload = json.loads(request.body)
+    user1_id, user2_id = payload["user1_id"], payload["user2_id"]
+    user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
 
-    # authentication_classes = ()
-    # permission_classes = ()
+    # user1_device_id, user2_device_id = payload["user1_device_id"], payload["user2_device_id"]
 
-    #@staticmethod
-    def post(self, request):
+    label = str(user1_id) + '_' + str(user2_id)
 
-        print(request)
+    if not Room.objects.filter(label=label).exists():
+        new_room = None
+        while not new_room:
+            # Creates chat rooms with that list of users
+            with transaction.atomic():
+                users = {
+                    "user1_id": user1_id,
+                    "user2_id": user2_id
+                }
+                room_key = secrets.token_urlsafe(16)
 
-        # if request.method != 'POST':
-        #     return
+                # No try-catch since assuming the matcher always sends correct ids
 
-        print(request.body, file=sys.stderr)
-        payload = json.loads(request.body)
-        user1_id, user2_id = payload["user1_id"], payload["user2_id"]
-        user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
+                user1 = User.objects.get(id=user1_id)
+                user2 = User.objects.get(id=user2_id)
+                new_room = Room.objects.create(label=label, users=json.dumps(users), key=room_key, user1=user1, user2=user2)
 
-        # user1_device_id, user2_device_id = payload["user1_device_id"], payload["user2_device_id"]
+    response_data = {
+        "label": label
+    }
 
-        label = str(user1_id) + '_' + str(user2_id)
+    return JsonResponse(response_data)
 
-        # TODO: Encrypt the label
-        if not Room.objects.filter(label=label).exists():
-            new_room = None
-            while not new_room:
-                # Creates chat rooms with that list of users
-                with transaction.atomic():
-                    users = {"user1_id" : user1_id, "user2_id": user2_id}  #"user1_device_id": user1_device_id, "user2_device_id": user2_device_id}
-                    new_room = Room.objects.create(label=label,  users=json.dumps(users))
-                    print("{} label is created2222.".format(label))
 
-        response_data = {
-            "label": label
+@api_view(['GET'])
+def messages(request, label):
+    """
+    :param request:
+    :param label:
+    :return:
+    """
+
+    try:
+        room = Room.objects.get(label=label)
+    except Room.DoesNotExist:
+        raise Http404
+
+    # We want to show the last 50 messages, ordered most-recent-last
+    messages = room.messages.order_by('-timestamp')[:50]
+    extracted_messages = []
+    for message in messages:
+        message_dict = {
+            "timestamp": message.timestamp,
+            "handle": message.handle,
+            "message": message.message
         }
+        extracted_messages.append(message_dict)
 
-        # try:
-        #     message = "Matched! Head to the chat!"
-        #     #   Push Notification to both parties
-        #     pc = PushClient()
-        #     message_id_1 = pc.send_apn(device_token=user1_device_id, message=message)
-        #     message_id_2 = pc.send_apn(device_token=user2_device_id, message=message)
-        # except:
-        #     pass
+    response_data = {
+        'tester': "BRUIN BITE",
+        'messages': extracted_messages
+    }
 
-        return JsonResponse(response_data)
+    return JsonResponse(response_data)
 
-    # @staticmethod
-    def get(self, request, label):
-        """
-        Room view - show the room, with latest messages.
-        """
-        # If the room with the given label doesn't exist, automatically create it
-        # upon first visit (a la etherpad).
 
-        try:
-            room = Room.objects.get(label=label)
-        except Room.DoesNotExist:
-            raise Http404
+@api_view(['GET'])
+def key(request, label):
 
-        # We want to show the last 50 messages, ordered most-recent-last
-        messages = room.messages.order_by('-timestamp')[:50]
-        extracted_messages = []
-        for message in messages:
-            message_dict = {
-                "timestamp": message.timestamp,
-                "handle": message.handle,
-                "message": message.message
-            }
-            extracted_messages.append(message_dict)
+    """
+    :param request: HTTP GET request
+    :param label: The unique label of the chat room
+    :return: The unique key associated with the chat room
+    """
 
-        response_data = {
-            'tester': "BRUIN BITE",
-            'messages': extracted_messages
-        }
+    try:
+        room = Room.objects.get(label=label)
+    except Room.DoesNotExist:
+        raise Http404
 
-        return JsonResponse(response_data)
+    room_key = room.key
 
-    # def push_notification(request):
-    #     pc = PushClient()
-    #     device_token = request.GET['device_token']
-    #     # message = request.GET['message']
-    #     apns_dict = {
-    #         "aps": {
-    #             "mutable-content": 1,
-    #             "alert": request.GET['message'],
-    #         }
-    #     }
-    #     message = {
-    #         "default": "default",
-    #         "APNS_SANDBOX": json.dumps(apns_dict),
-    #     }
-    #     message_id = pc.send_apn(device_token=device_token, MessageStructure="json",
-    #             message=message)
-    #     return JsonResponse({"message_id": message_id})
+    response_dict = {
+        "key": room_key
+    }
+
+    return JsonResponse(response_dict)
+
+
+# TODO: Put this in push_notif_utils.py file
+# def push_notification(request):
+#     pc = PushClient()
+#     device_token = request.GET['device_token']
+#     # message = request.GET['message']
+#     apns_dict = {
+#         "aps": {
+#             "mutable-content": 1,
+#             "alert": request.GET['message'],
+#         }
+#     }
+#     message = {
+#         "default": "default",
+#         "APNS_SANDBOX": json.dumps(apns_dict),
+#     }
+#     message_id = pc.send_apn(device_token=device_token, MessageStructure="json",
+#             message=message)
+#     return JsonResponse({"message_id": message_id})
+

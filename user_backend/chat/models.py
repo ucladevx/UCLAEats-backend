@@ -5,10 +5,14 @@ from django.utils import timezone
 
 
 class Room(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, default="1")
+    user1 = models.ForeignKey('users.User', on_delete=models.CASCADE, default="6", related_name="user_1")
+    user2 = models.ForeignKey('users.User', on_delete=models.CASCADE, default="8", related_name="user_2")
+
     name = models.TextField()
     label = models.SlugField(unique=True)
     users = models.TextField(null=True)
+
+    key = models.TextField(null=True)
 
     def __unicode__(self):
         return self.label

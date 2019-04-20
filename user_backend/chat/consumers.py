@@ -6,29 +6,42 @@ from .models import Room
 from channels.auth import channel_session_user, channel_session_user_from_http
 # from chat.push_notifications import PushClient
 
+
+from .auth_token import rest_token_user
+
 log = logging.getLogger(__name__)
 
 
-@channel_session_user_from_http
+# @channel_session_user_from_http
+@channel_session_user
+@rest_token_user
 def ws_connect(message):
-    # Extract the room from the message. This expects message.path to be of the
-    # form /chat/{label}/, and finds a Room if the message path is applicable,
-    # and if the Room exists. Otherwise, bails (meaning this is a some othersort
-    # of websocket). So, this is effectively a version of _get_object_or_404.
-
-    if(not message.user.is_authenticated):
-        log.debug("User not authenticated!")
-        return
-
+    """
+    :param message:
+    :return:
+    """
     try:
         api, version, mess, prefix, label = message['path'].strip('/').split('/')
         if prefix != 'chat':
             log.debug('invalid ws path=%s', message['path'])
             return
 
+        # Find the chat room with that label and bail if it does not exist.
         try:
             room = Room.objects.get(label=label)
         except Room.DoesNotExist:
+            return
+
+        # While connecting to the socket, the client should send the chat room key.
+        # Bail of it does not.
+        try:
+            data = json.loads(message['text'])
+        except ValueError:
+            log.debug("ws message isn't json text=%s", data)
+            return
+
+        # Bail if the provided key does not match the room key
+        if room.key != data['key']:
             return
 
     except ValueError:
@@ -36,18 +49,22 @@ def ws_connect(message):
         return
 
     log.debug('chat connect room=%s client=%s:%s', room.label, message['client'][0], message['client'][1])
-
-    log.debug("message user={}".format(message.user))
-    # Need to be explicit about the channel layer so that testability works
     Group('chat-'+label, channel_layer=message.channel_layer).add(message.reply_channel)
 
     log.debug("{} room connected".format(room.label))
 
-    message.channel_session['room'] = room.label
-    message.reply_channel.send({'accept': True})
+    # message.channel_session['room'] = room.label
+    # message.reply_channel.send({'accept': True})
+
 
 @channel_session_user
 def ws_receive(message):
+    """
+    :param message:
+    :return:
+    """
+
+
     # Look up the room from the channel session, bailing if it doesn't exist
     try:
         label = message.channel_session['room']
@@ -100,6 +117,10 @@ def ws_receive(message):
 
 @channel_session_user
 def ws_disconnect(message):
+    """
+    :param message:
+    :return:
+    """
     try:
         label = message.channel_session['room']
         _ = Room.objects.get(label=label)
