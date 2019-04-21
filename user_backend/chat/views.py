@@ -61,6 +61,8 @@ def new_chat_room(request):
     return JsonResponse(response_data)
 
 
+# The following two end points use default authentication and permission classes.
+
 @api_view(['GET'])
 def messages(request, label):
     """
