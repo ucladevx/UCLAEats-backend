@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'password', 'first_name', 'last_name', 'major', 
-                'minor', 'year', 'self_bio', 'is_on_chat', 'device_id', 
+                'minor', 'year', 'self_bio', 'profile_pic_url', 'is_on_chat', 'device_id', 
                 'date_created', 'date_updated',  'is_active', 'is_admin')
 
     def validate_password(self, data):
@@ -43,6 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.minor = validated_data.get("minor", user.minor)
         user.year = validated_data.get("year", user.year)
         user.self_bio = validated_data.get("self_bio", user.self_bio)
+        user.profile_pic_url = validated_data.get("profile_pic_url", user.profile_pic_url)
         user.is_on_chat = validated_data.get("is_on_chat", user.is_on_chat)
         user.device_id = validated_data.get("device_id", user.device_id)
         user.save()
