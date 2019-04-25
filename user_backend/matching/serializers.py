@@ -9,9 +9,9 @@ class WaitingUserSerializer(serializers.ModelSerializer):
                 'dining_halls', 'status','date_updated')
 
     def create(self, validated_data):
-        def convert(t):
-            return t.strftime('%Y-%m-%d %H:%M:%S' )
-        validated_data['meal_times'] = list(map(convert, validated_data['meal_times']))
+        #def convert(t):
+        #    return t.strftime('%Y-%m-%d %H:%M:%S' )
+        #validated_data['meal_times'] = list(map(convert, validated_data['meal_times']))
         return WaitingUser.objects.create(**validated_data)
 
     def update(self, waiting_user, **validated_data):
@@ -33,9 +33,9 @@ class MatchedUsersSerializer(serializers.ModelSerializer):
             'meal_period', 'dining_hall', 'chat_url')
 
     def create(self, validated_data):
-        def convert(t):
-            return t.strftime('%Y-%m-%d %H:%M:%S' )
-        validated_data['meal_datetime'] = validated_data['meal_datetime'].strftime('%Y-%m-%d %H:%M:%S' )
+        #def convert(t):
+        #    return t.strftime('%Y-%m-%d %H:%M:%S' )
+        #validated_data['meal_datetime'] = validated_data['meal_datetime'].strftime('%Y-%m-%d %H:%M:%S' )
         return MatchedUsers.objects.create(**validated_data)
 
     def update(self, matched_users, **validated_data):
