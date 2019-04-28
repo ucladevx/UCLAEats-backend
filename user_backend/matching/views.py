@@ -58,7 +58,7 @@ class WaitingService(APIView):
 
             if duplicate_requests:
                 return Response({"error": "duplicate request"}, 
-                    status=s.HTTP_400_BAD_REQUEST)
+                    status=s.HTTP_409_CONFLICT)
 
             waiting_user = serializer.save()
             attempt_match(waiting_user)
