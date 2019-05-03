@@ -1,5 +1,23 @@
 .DS_Store
 
+
+# ---- Project Specific Files ----
+
+config/.config.json
+scraper/config.json
+*config.json
+*.env
+*.pem
+*.key
+*.p12
+*.cer
+TODO
+mysite
+tutorial
+.caddy
+# Django static files
+menu_backend/staticfiles/
+
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
@@ -178,18 +196,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
-# ---- Project Specific Files ----
-
-config/.config.json
-scraper/config.json
-*config.json
-*.env
-*.pem
-*.key
-*.p12
-*.cer
-TODO
-mysite
-tutorial
-.caddy

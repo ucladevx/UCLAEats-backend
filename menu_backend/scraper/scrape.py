@@ -171,11 +171,10 @@ def scrape_nutrition(recipe_link):
     # for ingredients and allergens
     if soup.find("div",class_="ingred_allergen") != None:
         for p in soup.find("div",class_="ingred_allergen").children:
-            if type(p) != element.NavigableString:
+            if type(p) != element.NavigableString and get_next_sibling(p.find("strong")) != None:
                 name = p.find("strong").string.strip().lower().split(":")[0]
-                if get_next_sibling(p.find("strong")) != None:
-                    text = get_next_sibling(p.find("strong")).string.strip()
-                    nutrition[name] = text
+                text = get_next_sibling(p.find("strong")).string.strip()
+                nutrition[name] = text
     else:
         nutrition["ingredients"] = ""
         nutrition["allergens"] = ""
@@ -209,7 +208,8 @@ def parse_dining_hall_section(dining_hall_section_block, itemcode_dict, update_r
 
         recipe_link = li_menu_item.find("a")["href"]
 
-        time.sleep(1)
+        if(update_recipes):
+            time.sleep(1)
 
         nutrition = get_nutrition(recipe_link, update_recipes)
 

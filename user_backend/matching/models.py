@@ -26,7 +26,14 @@ class WaitingUser(models.Model):
                 default=BPLATE,
             )
     )
-    found_match = models.BooleanField(_('found_match'), default=False)
+
+    status = models.CharField(
+            _('status'),
+            max_length=1,
+            choices=REQUEST_STATUS_CHOICES,
+            default=PENDING,
+    )
+    #found_match = models.BooleanField(_('found_match'), default=False)
 
     date_created = models.DateTimeField(_('date_created'), auto_now_add=True)
     date_updated = models.DateTimeField(_('date_updated'), auto_now=True)

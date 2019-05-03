@@ -73,6 +73,8 @@ services:
 
     postgres:
         image: postgres:10.2-alpine
+        volumes:
+            - ./multiple-postgres-db.sh:/docker-entrypoint-initdb.d/multiple-postgres-db.sh
         ports:
             - "5432:5432"
         restart: always
@@ -87,7 +89,7 @@ services:
             - "5433:5432"
         restart: on-failure
         env_file:
-            - postgres.env
+            - postgres-messaging.env
         networks:
             - webnet
 

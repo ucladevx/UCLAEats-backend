@@ -1,6 +1,7 @@
-from .util.scrape import *
+from .scrape import *
 from .models import *
 from datetime import date
+from .scraper_thread import Scraper_thread
 
 days_to_scrape = 7
 
@@ -33,72 +34,92 @@ def insert_hours():
         date_to_scrape = (date.today() + timedelta(i)).isoformat()
         insert_hour(date_to_scrape)
 
+def parse_date(date_str):
+    date_arr = date_str.split("-")
+    if len(date_arr) != 3:
+        return None
 
+    return date(int(date_arr[0]),int(date_arr[1]),int(date_arr[2]))
 
-def insert_overview_menu():
-    overview_menus = multi_thread_menu_scraper(days_to_scrape,scraper_for_day_overview)
-    for menu in overview_menus["menus"]:
-        scraped_menu_date_arr = menu["menuDate"].split("-")
-        if len(scraped_menu_date_arr) != 3:
-            print("Error in insert_overview_menu: date format is not correct")
-        scraped_menu_date = date(int(scraped_menu_date_arr[0]),int(scraped_menu_date_arr[1]),int(scraped_menu_date_arr[2]))
-        scraped_overview_menu = menu["overviewMenu"]
+def execute_thread(func):
+    menu_dict = {}
 
-        obj = OverviewMenu.objects.filter(menuDate=scraped_menu_date).order_by("-updatedAt")
+    s = Scraper_thread(func, menu_dict)
+    s.start()
+    s.join()
 
-        # this menu is for a new date
-        if obj.count() == 0:
-            OverviewMenu.objects.create(menuDate=scraped_menu_date,overviewMenu=scraped_overview_menu)
-        elif obj.count() == 1:
-            # update the menu anyway; if they are the same, no harm; if not, it needs to be updated
-            obj.update(overviewMenu=scraped_overview_menu)
-        else:
-            # in this case, there is some error
-            print("Error in overviewMenu")
-            obj.update(overviewMenu=scraped_overview_menu)
+    return menu_dict
 
-def insert_detailed_menu_and_recipe():
-    detailed_menus = multi_thread_menu_scraper(days_to_scrape,scraper_for_day_detail)
-    for menu in detailed_menus["menus"]:
-        scraped_menu_date_arr = menu["menuDate"].split("-")
-        if len(scraped_menu_date_arr) != 3:
-            print("Error in insert_detailed_menu: date format is not correct")
-        scraped_menu_date = date(int(scraped_menu_date_arr[0]),int(scraped_menu_date_arr[1]),int(scraped_menu_date_arr[2]))
-        scraped_detailed_menu = menu["detailedMenu"]
+def insert_slow_scrape():
+    menu_dict = execute_thread(slow_scrape)
 
-        obj = DetailedMenu.objects.filter(menuDate=scraped_menu_date).order_by("-updatedAt")
+    insert_detailed_menu(menu_dict['detailed'])
+    insert_overview_menu(menu_dict['overview'])
 
-        # this menu is for a new date
-        if obj.count() == 0:
-            DetailedMenu.objects.create(menuDate=scraped_menu_date,detailedMenu=scraped_detailed_menu)
-        elif obj.count() == 1:
-            # update the menu anyway; if they are the same, no harm; if not, it needs to be updated
-            obj.update(detailedMenu=scraped_detailed_menu)
-        else:
-            # in this case, there is some error
-            print("Error in overviewMenu")
-            obj.update(detailedMenu=scraped_detailed_menu)
+def insert_hourly_scrape():
+    menu_dict = execute_thread(hourly_scrape)
 
-        # insert into recipe table
-        for meal_name, meal_dict in scraped_detailed_menu.items():
-            for dining_hall_name, item_dict in meal_dict.items():
-                for section_name, dishes_arr in item_dict.items():
-                    for dish in dishes_arr:
-                        recipe_link_arr = dish["recipe_link"].split("/")
-                        scraped_recipe_link = recipe_link_arr[-2] + "/" + recipe_link_arr[-1]
-                        scraped_nutrition = dish["nutrition"]
+    for detailed_menu in menu_dict['detailed']:
+        insert_detailed_menu(detailed_menu)
 
-                        obj = Recipe.objects.filter(recipe_link=scraped_recipe_link).order_by("-updatedAt")
+    for overview_menu in menu_dict['overview']:
+        insert_overview_menu(overview_menu)
 
-                        if obj.count() == 0:
-                            Recipe.objects.create(recipe_link=scraped_recipe_link,nutrition=scraped_nutrition)
-                        elif obj.count() == 1:
-                            # update the menu anyway; if they are the same, no harm; if not, it needs to be updated
-                            obj.update(nutrition=scraped_nutrition)
-                        else:
-                            # in this case, there is some error
-                            print("Error in recipe")
-                            obj.update(nutrition=scraped_nutrition)                                               
+def insert_overview_menu(menu):
+    menu_date = parse_date(menu["menuDate"])
 
+    if not menu_date:
+        print("Error in insert_detailed_menu_and_recipe: invalid date format")
 
+    overview_menu = menu["overviewMenu"]
 
+    obj = OverviewMenu.objects.filter(menuDate=menu_date).order_by("-updatedAt")
+
+    # this menu is for a new date
+    if obj.count() == 0:
+        OverviewMenu.objects.create(menuDate=menu_date,overviewMenu=overview_menu)
+    elif obj.count() == 1:
+        # update the menu anyway; if they are the same, no harm; if not, it needs to be updated
+        obj.update(overviewMenu=overview_menu)
+    else:
+        # in this case, there is some error
+        print("Error in overviewMenu")
+        obj.update(overviewMenu=overview_menu)
+
+def insert_detailed_menu(menu):
+    menu_date = parse_date(menu["menuDate"])
+
+    if not menu_date:
+        print("Error in insert_detailed_menu_and_recipe: invalid date format")
+
+    detailed_menu = menu["detailedMenu"]
+
+    obj = DetailedMenu.objects.filter(menuDate=menu_date).order_by("-updatedAt")
+
+    # this menu is for a new date
+    if obj.count() == 0:
+        DetailedMenu.objects.create(menuDate=menu_date,detailedMenu=detailed_menu)
+    elif obj.count() == 1:
+        # update the menu anyway; if they are the same, no harm; if not, it needs to be updated
+        obj.update(detailedMenu=detailed_menu)
+    else:
+        # in this case, there is some error
+        print("Error in overviewMenu")
+        obj.update(detailedMenu=detailed_menu)
+
+    """
+    # insert into recipe table
+    for meal_name, meal_dict in detailed_menu.items():
+        for dining_hall_name, item_dict in meal_dict.items():
+            for section_name, dishes_arr in item_dict.items():
+                for dish in dishes_arr:
+                    insert_recipe(dish)
+    """
+
+"""
+def insert_recipe(dish):
+    recipe_link_arr = dish["recipe_link"].split("/")
+    scraped_recipe_link = recipe_link_arr[-2] + "/" + recipe_link_arr[-1]
+    scraped_nutrition = dish["nutrition"]
+    Recipe.insert_or_update(recipe_link=scraped_recipe_link, nutrition=scraped_nutrition)
+"""
