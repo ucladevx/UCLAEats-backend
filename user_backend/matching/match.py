@@ -44,6 +44,7 @@ def attempt_match(waiting_user):
             }
 
             serializer1 = MatchedUsersSerializer(data=matched_users_data)
+
             if serializer1.is_valid():
                 serializer1.save()
                 # pass this point, they have a match
@@ -63,6 +64,8 @@ def attempt_match(waiting_user):
                 serializer2 = MatchedUsersSerializer(data=matched_users_data)
                 if serializer2.is_valid():
                     serializer2.save()
+                else:
+                    print('error creating match record')
             else:
                 print("Serializer Not Valid", serializer.errors)
             return 
@@ -75,7 +78,6 @@ def create_chat_room(user1_id, user2_id):
         'user2_device_id' : User.objects.get(pk=user2_id).device_id,
     }
     response = requests.post(
-            'http://daphne:8888/api/v1/messaging/messages/new/dedicated/', 
-	    data=json.dumps(payload))
+            'http://daphne:8888/api/v1/messaging/messages/new/dedicated/', data=json.dumps(payload))
     return response.json()['label']
 
