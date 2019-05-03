@@ -40,7 +40,6 @@ psycopg2-binary==2.7.4
 py-vapid==1.4.0
 pycparser==2.18
 PyJWT==1.6.1
-python-dateutil==2.7.3
 pytz==2018.4
 pywebpush==1.7.0
 redis==2.10.6
