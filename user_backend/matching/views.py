@@ -9,7 +9,7 @@ from django.conf import settings
 from django.db.models import Q
 
 from matching.models import WaitingUser, MatchedUsers
-from matching.serializers import WaitingUserSerializer, MatchedUsersSerializer
+from matching.serializers import ReportSerializer, WaitingUserSerializer, MatchedUsersSerializer
 from .match import *
 from .model_constants import *
 import requests
@@ -18,6 +18,10 @@ import dateutil.parser
 
 def convert_time(t):
     return dateutil.parser.parse(t).strftime('%Y-%m-%d %H:%M:%S')
+
+def format_report(data):
+    data['date_created'] = convert_time(data['date_created'])
+    return data
 
 def format_matcheduser(data):
     data['meal_datetime'] = convert_time(data['meal_datetime'])
@@ -28,9 +32,49 @@ def format_waitinguser(data):
     data['date_updated'] = convert_time(data['date_updated'])
     return data
 
+class ReportingService(APIView):
+    #authentication_classes = ()
+    #permission_classes = ()
+
+    def post(self, request, format=None):
+        reporting_user = request.data['reporting_user']
+        chat_url = request.data['chat_url']
+        report_details = request.data['report_details']
+        request.data['details'] = request.data['report_details']
+
+        matches = MatchedUsers.objects.filter(chat_url=chat_url)
+        if not matches:
+            return Response({'error':'chat_url not found'}, status=s.HTTP_400_BAD_REQUEST)
+
+        if matches[0].user1.id != reporting_user and matches[0].user2.id != reporting_user:
+            return Response({'error':'reporting_user does not match chat_url'}, status=s.HTTP_400_BAD_REQUEST)
+
+        #grab 'reported_user' field
+        for m in matches:
+            if m.user1.id == reporting_user:
+                request.data['reported_user'] = m.user2.id
+
+        serializer = ReportSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            #updating WaitingUsers to 'C' (cancelled)
+            for m in matches:
+                WaitingUser.objects.filter(user=m.user1.id,meal_day=m.meal_datetime.date(),meal_period=m.meal_period).update(status=CANCELLED)
+            
+            #delete matches
+            matches.delete()
+
+            data = format_report(serializer.data)
+            return Response(data, status=s.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=s.HTTP_400_BAD_REQUEST)
+
 class WaitingService(APIView):
     #authentication_classes = ()
-    permission_classes = ()
+    #permission_classes = ()
 
     #get all requests of status
     def get(self, request, format=None):
@@ -69,7 +113,7 @@ class WaitingService(APIView):
 
 class MatchingService(APIView):
     #authentication_classes = ()
-    permission_classes = ()
+    #permission_classes = ()
 
     #get all matches
     def get(self, request, format=None):
@@ -78,9 +122,6 @@ class MatchingService(APIView):
         serializer = MatchedUsersSerializer(matched_users, many=True)
         data = list(map(format_matcheduser, serializer.data))
         return Response(data, status=s.HTTP_200_OK)
-
-    #TODO: get match on chat_url
-    #examine postgres
 
     #delete MatchedUsers record, update status of both WaitingUser records to CANCELLED
     def delete(self, request, format=None):
@@ -106,7 +147,7 @@ class MatchingService(APIView):
 
 class MatchByURLService(APIView):
     #authentication_classes = ()
-    permission_classes = ()
+    #permission_classes = ()
 
     def get(self, request, format=None):
         chat_url = request.GET.get('chat_url')
@@ -118,7 +159,7 @@ class MatchByURLService(APIView):
 
 class StatusService(APIView):
     #authentication_classes = ()
-    permission_classes = ()
+    #permission_classes = ()
 
     def get(self, request, format=None):
         wait_id = int(request.GET.get('id'))

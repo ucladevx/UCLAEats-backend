@@ -7,6 +7,14 @@ from .model_constants import *
 
 # Create your models here.
 
+class Report(models.Model):
+    reporting_user = models.ForeignKey('users.User', related_name="reporting_user", on_delete=models.CASCADE)
+    reported_user = models.ForeignKey('users.User', related_name="reported_user", on_delete=models.CASCADE)
+    chat_url = models.TextField(_('chat_url'), default="")
+    details = models.TextField(_('details'), default="")
+    date_created = models.DateTimeField(_('date_created'), auto_now_add=True)
+    date_updated = models.DateTimeField(_('date_updated'), auto_now=True)
+
 # multiple dining halls, multiple times
 class WaitingUser(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)

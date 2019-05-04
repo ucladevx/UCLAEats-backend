@@ -8,6 +8,8 @@ urlpatterns = [
     path('requests/status', views.StatusService.as_view()),
     path('requests', views.WaitingService.as_view()),
     path('matches/url', views.MatchByURLService.as_view()),
+    path('report', views.ReportingService.as_view()),
     path('matches', views.MatchingService.as_view()),
+
     
 ]
