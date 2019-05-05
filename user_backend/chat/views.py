@@ -26,9 +26,7 @@ def new_chat_room(request):
     :param request:
     :return:
     """
-    print(request)
 
-    print(request.body, file=sys.stderr)
     payload = json.loads(request.body)
     user1_id, user2_id = payload["user1_id"], payload["user2_id"]
     user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
@@ -36,6 +34,8 @@ def new_chat_room(request):
     # user1_device_id, user2_device_id = payload["user1_device_id"], payload["user2_device_id"]
 
     label = str(user1_id) + '_' + str(user2_id)
+
+    log.debug('The label for the new room created is: ' + label)
 
     if not Room.objects.filter(label=label).exists():
         new_room = None
@@ -136,4 +136,3 @@ def key(request, label):
 #     message_id = pc.send_apn(device_token=device_token, MessageStructure="json",
 #             message=message)
 #     return JsonResponse({"message_id": message_id})
-

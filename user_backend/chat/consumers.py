@@ -34,15 +34,15 @@ def ws_connect(message):
 
         # While connecting to the socket, the client should send the chat room key.
         # Bail of it does not.
-        try:
-            data = json.loads(message['text'])
-        except ValueError:
-            log.debug("ws message isn't json text=%s", data)
-            return
+        # try:
+        #     data = json.loads(message['text'])
+        # except ValueError:
+        #     log.debug("ws message isn't json text=%s", data)
+        #     return
 
         # Bail if the provided key does not match the room key
-        if room.key != data['key']:
-            return
+        # if room.key != data['key']:
+        #     return
 
     except ValueError:
         log.debug('invalid ws path=%s', message['path'])
@@ -53,8 +53,8 @@ def ws_connect(message):
 
     log.debug("{} room connected".format(room.label))
 
-    # message.channel_session['room'] = room.label
-    # message.reply_channel.send({'accept': True})
+    message.channel_session['room'] = room.label
+    message.reply_channel.send({'accept': True})
 
 
 @channel_session_user
