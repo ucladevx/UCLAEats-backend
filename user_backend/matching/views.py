@@ -29,8 +29,8 @@ def format_waitinguser(data):
     return data
 
 class WaitingService(APIView):
-    #authentication_classes = ()
-    permission_classes = ()
+    # authentication_classes = ()
+    # permission_classes = ()
 
     #get all requests of status
     def get(self, request, format=None):
@@ -68,8 +68,8 @@ class WaitingService(APIView):
 
 
 class MatchingService(APIView):
-    #authentication_classes = ()
-    permission_classes = ()
+    # authentication_classes = ()
+    # permission_classes = ()
 
     #get all matches
     def get(self, request, format=None):
@@ -105,8 +105,8 @@ class MatchingService(APIView):
                 status=s.HTTP_400_BAD_REQUEST)
 
 class MatchByURLService(APIView):
-    #authentication_classes = ()
-    permission_classes = ()
+    # authentication_classes = ()
+    # permission_classes = ()
 
     def get(self, request, format=None):
         chat_url = request.GET.get('chat_url')
@@ -117,16 +117,11 @@ class MatchByURLService(APIView):
         return Response(data, status=s.HTTP_200_OK)
 
 class StatusService(APIView):
-    #authentication_classes = ()
-    permission_classes = ()
+    # authentication_classes = ()
+    # permission_classes = ()
 
     def get(self, request, format=None):
         wait_id = int(request.GET.get('id'))
         waiting_user = WaitingUser.objects.get(id=wait_id)
         return Response({"status": waiting_user.status},
             status=s.HTTP_200_OK)
-
-
-
-
-

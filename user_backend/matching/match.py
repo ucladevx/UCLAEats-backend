@@ -78,6 +78,6 @@ def create_chat_room(user1_id, user2_id):
         'user2_device_id' : User.objects.get(pk=user2_id).device_id,
     }
     response = requests.post(
-            'http://daphne:8888/api/v1/messaging/messages/new/dedicated/', data=json.dumps(payload))
+            'http://daphne:8000/api/v1/messaging/messages/new/dedicated/', data=json.dumps(payload))
     return response.json()['label']
 
