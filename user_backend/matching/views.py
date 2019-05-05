@@ -135,15 +135,17 @@ class MatchingService(APIView):
 
         to_delete.delete()
 
-        response = requests.delete(
-            'http://daphne:8888/api/v1/messaging/messages/' + request.GET.get('chat_url'))
+        return Response({"status":"success"},status=s.HTTP_200_OK)
 
-        if response.status_code == 200:
-            return Response({"status":"success"},status=s.HTTP_200_OK)
-        else:
-            return Response({
-                "error":"status code " + response.status_code + " from deleting chat room"},
-                status=s.HTTP_400_BAD_REQUEST)
+        #response = requests.delete(
+        #    'http://daphne:8888/api/v1/messaging/messages/' + request.GET.get('chat_url'))
+        
+        #if response.status_code == 200:
+        #    return Response({"status":"success"},status=s.HTTP_200_OK)
+        #else:
+        #    return Response({
+        #        "error":"status code " + response.status_code + " from deleting chat room"},
+        #        status=s.HTTP_400_BAD_REQUEST)
 
 class MatchByURLService(APIView):
     #authentication_classes = ()
