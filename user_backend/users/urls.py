@@ -6,6 +6,7 @@ urlpatterns = [
     re_path(r'^data/', views.UserService.as_view()),
     re_path(r'^sign_up/', views.UserSignup.as_view()),
     re_path(r'^messaging/', views.MessagingService.as_view()),
+    re_path(r'^profile_picture/', views.ProfilePicture.as_view()),
 ]
 
 # Sign up/Create

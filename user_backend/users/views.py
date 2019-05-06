@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 
 from django.http import Http404
 from django.conf import settings
@@ -9,7 +10,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from users.models import User
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, ProfilePicSerializer
+from users.S3Client import S3Client
+
+import base64
 
 # Create your views here.
 
@@ -120,6 +124,47 @@ class MessagingService(APIView):
         }
         return Response(messaging_payload)
 
+class ProfilePicture(APIView):
+    
+    #authentication_classes = ()
+    #permission_classes = ()
+
+    parser_classes = (JSONParser, MultiPartParser, FormParser)
+    def create_file_name(self, user_id):
+        return str(user_id) + ".jpg"
+        #return 'test.jpg'
+    
+    def get(self, request, format=None):
+        
+        if not 'user_id' in request.data:
+            return Response({"error": "User id not provided"}, status=status.HTTP_400_BAD_REQUEST)
+        user_id = request.data['user_id']
+        #print("@@@@@@@@@@@@@@@@@@@@" + str(user_id) + " @@@@@@@@@@@")
+        pic_name = self.create_file_name(user_id)        
+        try:
+            s3 = S3Client()
+            pic_obj = s3.download_obj(pic_name)
+            ret_dict = {'user_id': user_id, 'profile_picture': base64.b64encode(pic_obj)}
+        except Exception as e:
+            print(e)
+            return Response({"error": "whoops"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(ret_dict, status=status.HTTP_200_OK)
+    
+    
+    def post(self, request, format=None):
+        user_id = request.user.id
+        if 'profile_picture' not in request.data:
+            return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
+        pic_obj = request.data['profile_picture']
+        pic_name = self.create_file_name(user_id)
+        try:
+            s3 = S3Client()
+            s3.upload_obj(pic_obj, pic_name)
+        except Exception as e:
+            print(e)
+            return Response({"error": "Whoops"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"success": True}, status=status.HTTP_201_CREATED)
+    
 
 ### Non Router Functions ###
 def get_user_by_email(email):
