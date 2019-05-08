@@ -133,7 +133,7 @@ class ProfilePicture(APIView):
 
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     def create_file_name(self, user_id):
-        return str(user_id) + "_new.jpg"
+        return str(user_id) + ".jpg"
         #return 'test.jpg'
     
     def get(self, request, format=None):
