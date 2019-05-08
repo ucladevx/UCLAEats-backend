@@ -13,6 +13,8 @@ from users.models import User
 from users.serializers import UserSerializer
 from users.S3Client import S3Client
 
+from botocore.exceptions import ClientError
+
 import base64
 
 # Create your views here.
@@ -131,7 +133,7 @@ class ProfilePicture(APIView):
 
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     def create_file_name(self, user_id):
-        return str(user_id) + ".jpg"
+        return str(user_id) + "_new.jpg"
         #return 'test.jpg'
     
     def get(self, request, format=None):
@@ -143,11 +145,16 @@ class ProfilePicture(APIView):
         pic_name = self.create_file_name(user_id)        
         try:
             s3 = S3Client()
-            pic_obj = s3.download_obj(pic_name)
+            pic_obj = s3.download_obj(pic_name)                
             ret_dict = {'user_id': user_id, 'profile_picture': base64.b64encode(pic_obj)}
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'NoSuchKey':                
+                return Response({"error": "Could not find profile picture"}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             print(e)
-            return Response({"error": "whoops"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(ret_dict, status=status.HTTP_200_OK)
     
     
@@ -162,7 +169,7 @@ class ProfilePicture(APIView):
             s3.upload_obj(pic_obj, pic_name)
         except Exception as e:
             print(e)
-            return Response({"error": "Whoops"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({"success": True}, status=status.HTTP_201_CREATED)
     
 
