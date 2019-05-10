@@ -79,7 +79,7 @@ class ReportingService(APIView):
 
     def post(self, request, format=None):
         reporting_user = request.data['reporting_user']
-        chat_url = request.data['chat_url']
+        chat_url = request.data['chat_room_url']
         report_details = request.data['report_details']
         request.data['details'] = request.data['report_details']
 

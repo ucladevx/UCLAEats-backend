@@ -44,6 +44,8 @@ class UserSignup(APIView):
     Allow a user to sign up and create a user account
     Does not require authentication or permissions
     """
+    authentication_classes = ()
+    permission_classes = ()
 
     def post(self, request, format=None):
         """
@@ -98,6 +100,8 @@ class UserService(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class MessagingService(APIView):
+    authentication_classes = ()
+    permission_classes = ()
 
     def get(self, request, format=None):
         user_id1 = request.GET.get('user1')
