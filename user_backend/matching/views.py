@@ -15,6 +15,7 @@ from .model_constants import *
 import requests
 from datetime import datetime
 import dateutil.parser
+from django.utils import timezone
 
 def convert_time(t):
     return dateutil.parser.parse(t).strftime('%Y-%m-%d %H:%M:%S')
@@ -31,6 +32,46 @@ def format_waitinguser(data):
     data['meal_times'] = list(map(convert_time, data['meal_times']))
     data['date_updated'] = convert_time(data['date_updated'])
     return data
+
+def filter_chats(matched_users):
+    chats = []
+
+    current_url = None
+    found = False
+    cur_time = timezone.now()
+    for i in range(len(matched_users)):
+        m = matched_users[i]
+
+        if m.chat_url == current_url and found:
+            continue
+
+        elif m.chat_url == current_url:
+            if i+1 >= len(matched_users) or matched_users[i+1].chat_url != current_url or matched_users[i+1].meal_datetime < cur_time:
+                found = True
+                chats.append(m)
+        else:
+            current_url = m.chat_url
+            if i+1 >= len(matched_users) or matched_users[i+1].chat_url != current_url or matched_users[i+1].meal_datetime < cur_time:
+                found = True
+                chats.append(m)
+            else:
+                found = False
+
+    return chats
+
+class ChatsService(APIView):
+    #authentication_classes = ()
+    #permission_classes = ()
+
+    def get(self, request, format=None):
+        user = request.GET.get('id')
+        matched_users = MatchedUsers.objects.filter(user1=user).order_by('chat_url', '-meal_datetime')
+        chats = filter_chats(matched_users)
+
+        serializer = MatchedUsersSerializer(chats, many=True)
+        data = list(map(format_matcheduser, serializer.data))
+        return Response(data, status=s.HTTP_200_OK)
+
 
 class ReportingService(APIView):
     #authentication_classes = ()
