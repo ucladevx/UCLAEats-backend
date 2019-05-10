@@ -138,15 +138,15 @@ class ProfilePicture(APIView):
     
     def get(self, request, format=None):
         
-        if not 'user_id' in request.data:
+        if not 'user_id' in request.GET.dict():
             return Response({"error": "User id not provided"}, status=status.HTTP_400_BAD_REQUEST)
-        user_id = request.data['user_id']
+        user_id = request.GET.get('user_id')
         #print("@@@@@@@@@@@@@@@@@@@@" + str(user_id) + " @@@@@@@@@@@")
         pic_name = self.create_file_name(user_id)        
         try:
             s3 = S3Client()
             pic_obj = s3.download_obj(pic_name)                
-            ret_dict = {'user_id': user_id, 'profile_picture': base64.b64encode(pic_obj)}
+            ret_dict = {'user_id': int(user_id), 'profile_picture': base64.b64encode(pic_obj)}
         except ClientError as e:
             if e.response['Error']['Code'] == 'NoSuchKey':                
                 return Response({"error": "Could not find profile picture"}, status=status.HTTP_404_NOT_FOUND)
@@ -156,6 +156,7 @@ class ProfilePicture(APIView):
             print(e)
             return Response({"error": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(ret_dict, status=status.HTTP_200_OK)
+
     
     
     def post(self, request, format=None):
