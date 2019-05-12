@@ -109,10 +109,11 @@ def ws_receive(message):
         try:
             pc = PushClient()
             message_body = data["message"]
-            #sender = room.user1.first_name if not str(room.user1.id) == str(data['handle']) else room.user2.user_name
-            #message = {'default': message_body, 'APNS':{'aps':{'alert': {'body': message_body, 'title': sender} }}}
-            message = message_body
-            message_structure = 'string'
+            sender = room.user1.first_name if str(room.user1.id) == str(data['handle']) else room.user2.first_name
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + sender)
+            message = {'APNS_SANDBOX':json.dumps({'aps':{'alert': {'body': message_body, 'title': sender} }})}
+            #message =message_body
+            message_structure = 'json'
             log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + str(json.dumps(message)))     
             message_id = pc.send_apn(device_token=user_device_id, MessageStructure=message_structure, message=message)
         except:

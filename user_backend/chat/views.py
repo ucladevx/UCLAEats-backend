@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
 
 from .models import Room
-# from chat.push_notifications import PushClient
+from chat.push_notifications import PushClient
 
 from users.models import User
 
@@ -29,14 +29,16 @@ def new_chat_room(request):
 
     payload = json.loads(request.body)
     user1_id, user2_id = payload["user1_id"], payload["user2_id"]
+    user1_device_id, user2_device_id = payload["user1_device_id"], payload["user2_device_id"]
+    
     user1_id, user2_id = min(user1_id, user2_id), max(user1_id, user2_id)
-
+    
     # user1_device_id, user2_device_id = payload["user1_device_id"], payload["user2_device_id"]
-
+    
     label = str(user1_id) + '_' + str(user2_id)
-
+    
     log.debug('The label for the new room created is: ' + label)
-
+    
     if not Room.objects.filter(label=label).exists():
         new_room = None
         while not new_room:
@@ -47,17 +49,26 @@ def new_chat_room(request):
                     "user2_id": user2_id
                 }
                 room_key = secrets.token_urlsafe(16)
-
+    
                 # No try-catch since assuming the matcher always sends correct ids
-
+    
                 user1 = User.objects.get(id=user1_id)
                 user2 = User.objects.get(id=user2_id)
                 new_room = Room.objects.create(label=label, users=json.dumps(users), key=room_key, user1=user1, user2=user2)
-
-    response_data = {
-        "label": label
-    }
-
+    
+    try:
+        title = "Matched!"
+        message_body = "Go to your chat list! We don't do deep linking for you!"
+        message = {'APNS_SANDBOX':json.dumps({'aps':{'alert': {'body': message_body, 'title': title} }})}
+        message_structure = 'json'
+        pc = PushClient()
+        if not len(str(user1_device_id)) == 0:
+            message_id_1 = pc.send_apn(device_token=user1_device_id, MessageStructure=message_structure, message=message)
+        if not len(str(user2_device_id)) == 0:
+            message_id_2 = pc.send_apn(device_token=user2_device_id, MessageStructure=message_structure, message=message)
+    except Exception as e:
+        return JsonResponse({'error': 'Something went wrong'}) 
+    response_data = {"label": label}
     return JsonResponse(response_data)
 
 
