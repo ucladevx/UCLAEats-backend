@@ -4,7 +4,7 @@ from channels import Group
 from channels.sessions import channel_session
 from .models import Room
 from channels.auth import channel_session_user, channel_session_user_from_http
-# from chat.push_notifications import PushClient
+from chat.push_notifications import PushClient
 
 
 from .auth_token import rest_token_user
@@ -32,7 +32,7 @@ def ws_connect(message):
         except Room.DoesNotExist:
             return
 
-        # While connecting to the socket, the client should send the chat room key.
+        #cWhile connecting to the socket, the client should send the chat room key.
         # Bail of it does not.
         # try:
         #     data = json.loads(message['text'])
@@ -99,20 +99,24 @@ def ws_receive(message):
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
 
         log.debug("Chat received and added successfully.")
-
-        # receiver_device_id = 0;
-        # user_info = json.loads(room.users)
-        # if int(data["handle"]) == user_info["user1_id"]:
-        #     receiver_device_id = user_info["user2_device_id"]
-        # else:
-        #     receiver_device_id = user_info["user1_device_id"]
+        #user_device1_id = room.user1.device_id
+        #user_device2_id = room.user2.device_id
+        user_device_id = room.user1.device_id if not str(room.user1.id) == str(data['handle']) else room.user2.device_id
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + str(user_device_id) + "Len = " + str(len(str(user_device_id))))
+        #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + str(user_device1_id) + "Len = " + str(len(str(user_device1_id)))) 
+        #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + str(user_device2_id) + "Len = " + str(len(str(user_device1_id))))
         # Push Notification to receiver
-        # try:
-        #     pc = PushClient()
-        #     message = data["message"][:10]
-        #     message_id = pc.send_apn(device_token=receiver_device_id, message=message)
-        # except:
-        #     pass
+        try:
+            pc = PushClient()
+            message_body = data["message"]
+            #sender = room.user1.first_name if not str(room.user1.id) == str(data['handle']) else room.user2.user_name
+            #message = {'default': message_body, 'APNS':{'aps':{'alert': {'body': message_body, 'title': sender} }}}
+            message = message_body
+            message_structure = 'string'
+            log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + str(json.dumps(message)))     
+            message_id = pc.send_apn(device_token=user_device_id, MessageStructure=message_structure, message=message)
+        except:
+            pass
 
 
 @channel_session_user
