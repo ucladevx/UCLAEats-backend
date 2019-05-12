@@ -90,7 +90,7 @@ class UserService(APIView):
         """
         email = get_email(request)
         user = get_user_by_email(email)
-        serializer = UserSerializer(user, request.data)
+        serializer = UserSerializer(user, request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

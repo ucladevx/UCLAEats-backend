@@ -1,6 +1,19 @@
 from rest_framework import serializers
 
-from .models import WaitingUser, MatchedUsers
+from .models import WaitingUser, MatchedUsers, Report
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ('id', 'reporting_user', 'reported_user', 'chat_url', 'details', 'date_created')
+    
+    def create(self, validated_data):
+        return Report.objects.create(**validated_data)
+
+    def update(self, report, **validated_data):
+        report.details = validated.get("details", report.details)
+        report.save()
+        return report
 
 class WaitingUserSerializer(serializers.ModelSerializer):
     class Meta:

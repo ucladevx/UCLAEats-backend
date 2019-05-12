@@ -9,5 +9,9 @@ urlpatterns = [
     path('requests', views.WaitingService.as_view()),
     path('matches/url', views.MatchByURLService.as_view()),
     path('matches', views.MatchingService.as_view()),
+    path('chats', views.ChatsService.as_view()),
+    path('report', views.ReportingService.as_view()),
+    
+
     
 ]
