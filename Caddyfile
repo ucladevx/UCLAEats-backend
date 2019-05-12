@@ -1,4 +1,4 @@
-api.bruin-bite.com {
+dev.bruin-bite.com {
     gzip
     log stdout
     errors stderr
@@ -7,12 +7,8 @@ api.bruin-bite.com {
         transparent
     }
 
-    proxy /api/v1/users users:8000 {
+    proxy /api/v1 daphne:8000 {
         transparent
-    }
-
-    proxy /api/v1/messaging daphne:8888 {
-        transparent
-        websocket
+	websocket
     }
 }

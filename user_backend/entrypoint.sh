@@ -7,7 +7,7 @@ set -e
 /app/BruinBite/users/manage.py migrate
 #/app/BruinBite/users/manage.py test --no-input
 
-if [ $DJANGO_ENV == "prod" ]; then
+if [ $DJANGO_ENV == "dev" ]; then
 #    uwsgi --ini /app/BruinBite/users/uwsgi.ini
     daphne user_backend.asgi:channel_layer --port 8888
 else
