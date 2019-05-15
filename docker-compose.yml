@@ -14,47 +14,24 @@ services:
         networks:
             - webnet
 
-    users:
+    daphne:
+        # build: ./messaging_backend/DjangoChat
         build: ./user_backend
+        # command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
+        command: daphne -b 0.0.0.0 -p 8000 user_backend.asgi:channel_layer
         ports:
+            # - "8888:8888"
             - "8000:8000"
         restart: on-failure
         volumes:
             - ./user_backend:/app/BruinBite/users
-        depends_on:
-            - postgres
-        env_file:
-            - users.env
-        networks:
-            - webnet
-
-    messaging:
-        build: ./messaging_backend/DjangoChat
-        command: python manage.py runworker
-        restart: on-failure
-        volumes:
-            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+            # - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
         depends_on:
             - postgres
             - redis
         env_file:
-            - messaging.env
-        networks:
-            - webnet
-
-    daphne:
-        build: ./messaging_backend/DjangoChat
-        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
-        ports:
-            - "8888:8888"
-        restart: on-failure
-        volumes:
-            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
-        depends_on:
-            - postgres
-            - redis
-        env_file:
-            - messaging.env
+             - users.env
+            # - messaging.env
         networks:
             - webnet
 

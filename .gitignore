@@ -17,6 +17,8 @@ tutorial
 .caddy
 # Django static files
 menu_backend/staticfiles/
+*/staticfiles/
+.idea/
 
 # Created by https://www.gitignore.io/api/node
 

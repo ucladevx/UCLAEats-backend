@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/v1/users/o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api/v1/users/matching/', include('matching.urls')),
     path('api/v1/users/', include('users.urls')),
+    path('api/v1/messaging/', include('chat.urls')),
 ]
