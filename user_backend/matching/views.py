@@ -119,9 +119,10 @@ class WaitingService(APIView):
 
     #get all requests of status
     def get(self, request, format=None):
-        statuses = request.GET.getlist('status')
+        #statuses = request.GET.getlist('status')
+        statuses = request.data['status']
 
-        query = Q(user=request.GET.get('user_id'))
+        query = Q(user=request.data['user_id'])
         query.add(Q(status__in=statuses), Q.AND)
         
         matched = WaitingUser.objects.filter(query)
