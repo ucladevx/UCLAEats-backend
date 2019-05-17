@@ -102,7 +102,7 @@ def scraper_for_hours(date):
         return hours
 
 def scrape_nutrition(recipe_link):
-    print("scraping nutrition")
+    # print("scraping nutrition")
     soup = BeautifulSoup(requests.get(recipe_link).text,"lxml")
 
     nutrition = {}
@@ -183,13 +183,22 @@ def scrape_nutrition(recipe_link):
 
 def get_nutrition(recipe_link, update_recipes):
     if update_recipes:
-        nutrition = scrape_nutrition(recipe_link)
-        Recipe.insert_or_update(recipe_link, nutrition)
+        try:
+            nutrition = scrape_nutrition(recipe_link)
+            Recipe.insert_or_update(recipe_link, nutrition)
+        except Exception as e:
+            print("**********ERROR AT RECIPLE LINK********: " + recipe_link)
+            print(e)
+            nutrition = Recipe.getByRecipeLink(recipe_link)      
     else:
         nutrition = Recipe.getByRecipeLink(recipe_link)
         if not nutrition:
-            nutrition = scrape_nutrition(recipe_link)
-            Recipe.insert_or_update(recipe_link, nutrition)
+            try:
+                nutrition = scrape_nutrition(recipe_link)
+                Recipe.insert_or_update(recipe_link, nutrition)
+            except Exception as e:
+                print("**********ERROR AT RECIPLE LINK********: " + recipe_link)
+                print(e)            
 
     return nutrition
 
@@ -284,7 +293,7 @@ def scraper_for_day_overview(menu_date, update_recipes):
             menu_block_div = get_next_sibling(menu_block_div)
             # dining_hall_name
             dining_hall_name = menu_block_div.find("h3").string
-            print(dining_hall_name)
+            #print(dining_hall_name)
 
             overview_menu[meal_name][dining_hall_name] = parse_menu(menu_block_div, itemcode_dict, update_recipes)
 
@@ -326,7 +335,7 @@ def scraper_for_day_detail(menu_date, update_recipes):
                 menu_block_div = get_next_sibling(menu_block_div)
 
                 dining_hall_name = menu_block_div.find("h3").string
-                print(dining_hall_name)
+                #print(dining_hall_name)
 
                 detailed_menu[meal_name][dining_hall_name] = parse_menu(menu_block_div, itemcode_dict, update_recipes)
 

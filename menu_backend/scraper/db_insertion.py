@@ -51,12 +51,15 @@ def execute_thread(func):
     return menu_dict
 
 def insert_slow_scrape():
+    print("Performing slow scrape")
     menu_dict = execute_thread(slow_scrape)
 
     insert_detailed_menu(menu_dict['detailed'])
     insert_overview_menu(menu_dict['overview'])
+    print("Slow scrape completed")
 
 def insert_hourly_scrape():
+    print("Performing hourly scrape")
     menu_dict = execute_thread(hourly_scrape)
 
     for detailed_menu in menu_dict['detailed']:
@@ -64,8 +67,10 @@ def insert_hourly_scrape():
 
     for overview_menu in menu_dict['overview']:
         insert_overview_menu(overview_menu)
+    print("Hourly scrape completed")
 
 def insert_overview_menu(menu):
+    print("Inserting overview menu for " + menu["menuDate"])
     menu_date = parse_date(menu["menuDate"])
 
     if not menu_date:
@@ -85,8 +90,10 @@ def insert_overview_menu(menu):
         # in this case, there is some error
         print("Error in overviewMenu")
         obj.update(overviewMenu=overview_menu)
+    print("DONE inserting overview menu for " + menu["menuDate"])
 
 def insert_detailed_menu(menu):
+    print("Inserting detailed menu for " + menu["menuDate"])
     menu_date = parse_date(menu["menuDate"])
 
     if not menu_date:
@@ -106,6 +113,7 @@ def insert_detailed_menu(menu):
         # in this case, there is some error
         print("Error in overviewMenu")
         obj.update(detailedMenu=detailed_menu)
+    print("DONE inserting detailed menu for " + menu["menuDate"])
 
     """
     # insert into recipe table

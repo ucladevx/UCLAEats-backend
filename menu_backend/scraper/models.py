@@ -188,14 +188,14 @@ class Recipe(models.Model):
         try:
             num_float =  float(old_num)
         except:
-            print("Exception getting number from pair: " + str(nutri[0]) + " " + str(nutri[1]))
+            #print("Exception getting number from pair: " + str(nutri[0]) + " " + str(nutri[1]))
             num_float = -1.0
 
         old_percent = percent.replace('%', '')
         try:
             percent_float = float(old_percent)
         except:
-            print("Exception getting number from pair: " + str(nutri[0]) + " " + str(nutri[1]))
+            #print("Exception getting number from pair: " + str(nutri[0]) + " " + str(nutri[1]))
             percent_float = -1.0
         return old_num, old_percent, num_float, percent_float
 
@@ -241,7 +241,7 @@ class Recipe(models.Model):
 
     @staticmethod
     def scale_num(num, serving_size, scale_up, make_int):
-        print("scale num " + str(make_int))
+        #print("scale num " + str(make_int))
         if num != -1:
             if(scale_up):
                 if(make_int):
@@ -298,7 +298,7 @@ class Recipe(models.Model):
         """
         link is a python string
         """
-        print("Inside get by recipe link: " + str(link))
+        #print("Inside get by recipe link: " + str(link))
         link_arr = link.split('/')
 
         serving_size = link_arr[-1]
