@@ -3,49 +3,19 @@ services:
     menu:
         build: ./menu_backend
         ports:
-            - "5000:8000"
+            - "5000:5000"
         restart: on-failure
         volumes:
             - ./menu_backend:/app/BruinBite/menu
         depends_on:
             - postgres
         env_file:
-            - menu.dev.env
+            - menu.env
         networks:
             - webnet
 
-#    users:
-#        build: ./user_backend
-#        ports:
-#            - "8000:8000"
-#        restart: on-failure
-#        volumes:
-#            - ./user_backend:/app/BruinBite/users
-#        depends_on:
-#            - postgres
-#            - redis
-#        env_file:
-#            - users.dev.env
-#        networks:
-#            - webnet
-
-    # messaging:
-    #     build: ./messaging_backend/DjangoChat
-    #     command: python manage.py runworker
-    #     restart: on-failure
-    #     volumes:
-    #         - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
-    #     depends_on:
-    #         - postgres
-    #         - redis
-    #     env_file:
-    #         - messaging.dev.env
-    #     networks:
-    #         - webnet
-
-    daphne:
+    users:
         build: ./user_backend
-        command: daphne -b 0.0.0.0 -p 8000 user_backend.asgi:channel_layer
         ports:
             - "8000:8000"
         restart: on-failure
@@ -53,14 +23,43 @@ services:
             - ./user_backend:/app/BruinBite/users
         depends_on:
             - postgres
+        env_file:
+            - users.env
+        networks:
+            - webnet
+
+    messaging:
+        build: ./messaging_backend/DjangoChat
+        command: python manage.py runworker
+        restart: on-failure
+        volumes:
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+        depends_on:
+            - postgres
             - redis
         env_file:
-            - users.dev.env
+            - messaging.env
+        networks:
+            - webnet
+
+    daphne:
+        build: ./messaging_backend/DjangoChat
+        command: daphne -b 0.0.0.0 -p 8888 chat.asgi:channel_layer
+        ports:
+            - "8888:8888"
+        restart: on-failure
+        volumes:
+            - ./messaging_backend/DjangoChat:/app/BruinBite/messaging
+        depends_on:
+            - postgres
+            - redis
+        env_file:
+            - messaging.env
         networks:
             - webnet
 
     cron:
-        build:
+        build: 
             context: ./menu_backend
             dockerfile: Dockerfile.cron
         restart: on-failure
@@ -68,7 +67,7 @@ services:
             - postgres
             - menu
         env_file:
-            menu.dev.env
+            menu.env
         networks:
             - webnet
 
@@ -78,9 +77,9 @@ services:
             - ./multiple-postgres-db.sh:/docker-entrypoint-initdb.d/multiple-postgres-db.sh
         ports:
             - "5432:5432"
-        restart: on-failure
+        restart: always
         env_file:
-            - postgres.dev.env
+            - postgres.env
         networks:
             - webnet
 
@@ -90,17 +89,17 @@ services:
             - "5433:5432"
         restart: on-failure
         env_file:
-            - postgres-messaging.dev.env
+            - postgres-messaging.env
         networks:
             - webnet
 
     redis:
         image: redis:3.2-alpine
-        ports:
+        ports: 
             - "6379:6379"
         restart: on-failure
-            # env_file:
-            # - redis.dev.env
+        # env_file:
+        #     - redis.env
         networks:
             - webnet
 
@@ -120,17 +119,6 @@ services:
             - ./.caddy:/root/.caddy
             - ./Caddyfile:/etc/Caddyfile
 
+
 networks:
     webnet:
-
-    # api:
-    #     build: ./menu_backend_js
-    #     ports:
-    #         - "5000:5000"
-    #     restart: always
-    #     depends_on:
-    #         - postgres
-    #     env_file:
-    #         - node.dev.env
-    #     networks:
-    #         - webnet

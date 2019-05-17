@@ -5,10 +5,10 @@ dev-build:
 	docker-compose -f ./docker-compose.dev.yml build
 
 dev-run:
-	docker-compose -f ./docker-compose.dev.yml up
+	docker-compose -f ./docker-compose.dev.yml up -d
 
 dev-down: # deletes all the docker local cached containers/volumes
-	docker-compose -f ./docker-compose.dev.yml down
+	docker-compose -f ./docker-compose.dev.yml stop
 
 
 # Prod commands

@@ -28,7 +28,7 @@ if os.getenv('DJANGO_ENV') == 'prod':
     ALLOWED_HOSTS = ['*']
 else:
     DEBUG = True
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'channels',
-
+    'user_backend',
     'rest_framework',
     'oauth2_provider',
     'chat.apps.ChatConfig',

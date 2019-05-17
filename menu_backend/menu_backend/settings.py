@@ -27,8 +27,8 @@ if os.getenv('DJANGO_ENV') == 'prod':
     DEBUG = False
     ALLOWED_HOSTS = ['*']
 else:
-    DEBUG = True
-    ALLOWED_HOSTS = []
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
