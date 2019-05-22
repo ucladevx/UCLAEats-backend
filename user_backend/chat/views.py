@@ -58,7 +58,7 @@ def new_chat_room(request):
     
     try:
         title = "Matched!"
-        message_body = "Go to your chat list! We don't do deep linking for you!"
+        message_body = "View your matches to see who you're eating with!"
         message = {'APNS_SANDBOX':json.dumps({'aps':{'alert': {'body': message_body, 'title': title} }})}
         message_structure = 'json'
         pc = PushClient()
@@ -67,7 +67,7 @@ def new_chat_room(request):
         if not len(str(user2_device_id)) == 0:
             message_id_2 = pc.send_apn(device_token=user2_device_id, MessageStructure=message_structure, message=message)
     except Exception as e:
-        return JsonResponse({'error': 'Something went wrong'}) 
+        return JsonResponse({'error': 'Something went wrong', 'label': label})
     response_data = {"label": label}
     return JsonResponse(response_data)
 
