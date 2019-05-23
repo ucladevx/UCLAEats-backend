@@ -111,7 +111,7 @@ def ws_receive(message):
             message_body = data["message"]
             sender = room.user1.first_name if str(room.user1.id) == str(data['handle']) else room.user2.first_name
             print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + sender)
-            message = {'APNS_SANDBOX':json.dumps({'aps':{'alert': {'body': message_body, 'title': sender} }})}
+            message = {'APNS':json.dumps({'aps':{'alert': {'body': message_body, 'title': sender} }})}
             #message =message_body
             message_structure = 'json'
             log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + str(json.dumps(message)))     

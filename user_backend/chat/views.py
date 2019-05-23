@@ -59,7 +59,7 @@ def new_chat_room(request):
     try:
         title = "Matched!"
         message_body = "View your matches to see who you're eating with!"
-        message = {'APNS_SANDBOX':json.dumps({'aps':{'alert': {'body': message_body, 'title': title} }})}
+        message = {'APNS':json.dumps({'aps':{'alert': {'body': message_body, 'title': title} }})}
         message_structure = 'json'
         pc = PushClient()
         if not len(str(user1_device_id)) == 0:
