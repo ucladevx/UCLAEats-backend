@@ -13,16 +13,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='announce_notify',
-            field=models.BooleanField(verbose_name='announce_notify'),
+            field=models.BooleanField(default=False, verbose_name='announce_notify'),
         ),
         migrations.AddField(
             model_name='user',
             name='chat_notify',
-            field=models.BooleanField(verbose_name='chat_notify'),
+            field=models.BooleanField(default=False, verbose_name='chat_notify'),
         ),
         migrations.AddField(
             model_name='user',
             name='match_notify',
-            field=models.BooleanField(verbose_name='match_notify'),
+            field=models.BooleanField(default=False, verbose_name='match_notify'),
         ),
     ]
