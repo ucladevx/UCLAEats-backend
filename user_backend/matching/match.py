@@ -5,6 +5,19 @@ import sys
 import requests
 import json
 from .model_constants import *
+from django.utils import timezone
+from datetime import timedelta
+
+def timeout_requests():
+    cur_time = timezone.now()
+    thirty_mins = timedelta(hours=0,minutes=30)
+
+    pending_matches = WaitingUser.objects.filter(status=PENDING)
+    for m in pending_matches:
+        latest_meal_time = max(m.meal_times)
+        if latest_meal_time - cur_time < thirty_mins:
+            m.status = TIMEOUT
+            m.save()
 
 def attempt_match(waiting_user):
     if waiting_user.status != PENDING:

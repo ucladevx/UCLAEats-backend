@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     'matching.apps.MatchingConfig',
 ]
 
+CRONJOBS = [
+    ('*/15 * * * *', 'matching.match.timeout_requests'),
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
