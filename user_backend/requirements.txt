@@ -47,7 +47,7 @@ requests==2.18.4
 s3transfer==0.1.13
 six==1.11.0
 stevedore==1.28.0
-Twisted==18.4.0
+Twisted==19.7.0
 txaio==2.10.0
 urllib3==1.22
 virtualenv==16.0.0
