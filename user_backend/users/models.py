@@ -25,6 +25,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_on_chat = models.BooleanField(_('is_on_chat'), default=False)
     device_id = models.CharField(_('device_id'), max_length=150, blank=True, 
             default="")
+    announce_notify = models.BooleanField(_('announce_notify'), default=False)
+    match_notify = models.BooleanField(_('match_notify'), default=False)
+    chat_notify = models.BooleanField(_('chat_notify'), default=False)
 
     # Metadata fields, automatically has primary key ID
     date_created = models.DateTimeField(_('date_created'), auto_now_add=True)
@@ -51,7 +54,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return (self.email, self.first_name, self.last_name, self.major,
                 self.minor, self.year, self.self_bio, self.date_created,
-                self.date_updated, self.is_active, self.is_admin, self.is_staff)
+                self.date_updated, self.is_active, self.is_admin, self.is_staff, 
+                self.announce_notify, self.match_notify, self.chat_notify)
 
     def get_full_name(self):
         """

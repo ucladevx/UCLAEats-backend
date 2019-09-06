@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'password', 'first_name', 'last_name', 'major', 
                 'minor', 'year', 'self_bio', 'is_on_chat', 'device_id', 
+                'announce_notify', 'match_notify', 'chat_notify', 
                 'date_created', 'date_updated',  'is_active', 'is_admin')
 
     def validate_password(self, data):
@@ -45,5 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
         user.self_bio = validated_data.get("self_bio", user.self_bio)
         user.is_on_chat = validated_data.get("is_on_chat", user.is_on_chat)
         user.device_id = validated_data.get("device_id", user.device_id)
+        user.announce_notify = validated_data.get("announce_notify", user.announce_notify)
+        user.match_notify = validated_data.get("match_notify", user.match_notify)
+        user.chat_notify = validated_data.get("chat_notify", user.chat_notify)
         user.save()
         return user
