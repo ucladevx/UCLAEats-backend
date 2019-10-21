@@ -276,12 +276,15 @@ def scraper_for_day_overview(menu_date, update_recipes):
     url = "http://menu.dining.ucla.edu/Menus/" + menu_date
     soup = BeautifulSoup(requests.get(url).text,"lxml")
 
+    # date.weekday() returns number from 0 - 6, 5 and 6 are sat/sunday
+    is_weekend = datetime.datetime.strptime(menu_date, '%Y-%m-%d').date().weekday() > 4
+
     # matches the itemcode to sentence description
     # ex: V: vegetarian menu option
     itemcode_dict = legend_to_sentence(soup)
 
     for meal_header in soup.find_all("h2",id="page-header"):
-        meal_name = parse_meal_header(meal_header)
+        meal_name = parse_meal_header(meal_header, is_weekend)
 
         if not meal_name:
             return menu_dict
