@@ -26,21 +26,27 @@ urlpatterns = [
     path('api/v1/messaging/', include('chat.urls')),
     path(
         'password_reset/',
-        auth_views.PasswordResetView.as_view(),
+        auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
         name='password_reset'
     ),
     path('password_reset/done/',
-        auth_views.PasswordResetDoneView.as_view(),
+        auth_views.PasswordResetDoneView.as_view(
+            template_name='users/password_reset_done.html'
+        ),
         name='password_reset_done'
     ),
     path(
         'password_reset/confirm/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(),
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name='users/password_reset_confirm.html'
+        ),
         name='password_reset_confirm'
     ),
     path(
         'password_reset/complete/',
-        auth_views.PasswordResetCompleteView.as_view(),
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name='users/password_reset_complete.html'
+        ),
         name='password_reset_complete'
     )
 ]
