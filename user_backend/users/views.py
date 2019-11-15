@@ -9,7 +9,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from users.models import User
+from users.models import User, DeletedUser
 from users.serializers import UserSerializer
 from users.S3Client import S3Client
 
@@ -102,6 +102,12 @@ class UserService(APIView):
         """
         email = get_email(request)
         user = get_user_by_email(email)
+        serializer = UserSerializer(user)
+        data = serializer.data
+        for key in ["id", "date_created", "date_updated"]:
+            del data[key]
+        deleted_user = DeletedUser(**data)
+        deleted_user.save()
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
