@@ -209,7 +209,11 @@ def parse_dining_hall_section(dining_hall_section_block, itemcode_dict, update_r
         if type(li_menu_item) == element.NavigableString:
             continue
 
-        item_name = li_menu_item.find("a").string.strip()
+        item_string = li_menu_item.find("a").string
+        if item_string is None:
+            continue
+
+        item_name = item_string.strip()
 
         itemcodes = {}
         for img_icon in li_menu_item.find_all("img"):
