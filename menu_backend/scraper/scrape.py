@@ -255,13 +255,15 @@ def parse_menu(menu_block_div, itemcode_dict, update_recipes):
 
     return dining_hall_menu
 
-def parse_meal_header(meal_header):
+def parse_meal_header(meal_header, is_weekend=False):
     meal_name_list = meal_header.string.lower().strip().split(" ")
     if len(meal_name_list) == 0:
         return None
     elif meal_name_list[0] != "breakfast" and meal_name_list[0] != "brunch" \
             and meal_name_list[0] != "lunch" and meal_name_list[0] != "dinner":
         return None
+    elif meal_name_list[0] == "lunch" and is_weekend:
+        return "brunch"
     else:
         #meal_name: breakfast, brunch, lunch, etc
         return meal_name_list[0]
@@ -278,12 +280,15 @@ def scraper_for_day_overview(menu_date, update_recipes):
     url = "http://menu.dining.ucla.edu/Menus/" + menu_date
     soup = BeautifulSoup(requests.get(url).text,"lxml")
 
+    # date.weekday() returns number from 0 - 6, 5 and 6 are sat/sunday
+    is_weekend = datetime.datetime.strptime(menu_date, '%Y-%m-%d').date().weekday() > 4
+
     # matches the itemcode to sentence description
     # ex: V: vegetarian menu option
     itemcode_dict = legend_to_sentence(soup)
 
     for meal_header in soup.find_all("h2",id="page-header"):
-        meal_name = parse_meal_header(meal_header)
+        meal_name = parse_meal_header(meal_header, is_weekend)
 
         if not meal_name:
             return menu_dict
@@ -310,6 +315,9 @@ def scraper_for_day_detail(menu_date, update_recipes):
         "detailedMenu": {}
     }
 
+    # date.weekday() returns number from 0 - 6, 5 and 6 are sat/sunday
+    is_weekend = datetime.datetime.strptime(menu_date, '%Y-%m-%d').date().weekday() > 4
+
     detailed_menu = {}
 
     meal_list = ["Breakfast","Lunch","Dinner"]
@@ -325,7 +333,7 @@ def scraper_for_day_detail(menu_date, update_recipes):
         #ex: BREAKFAST MENU FOR TODAY, NOVEMBER 15, 2018
         for meal_header in soup.find_all("h2",id="page-header"):
 
-            meal_name = parse_meal_header(meal_header)
+            meal_name = parse_meal_header(meal_header, is_weekend)
 
             if not meal_name:
                 return menu_dict
