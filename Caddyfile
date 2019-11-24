@@ -1,4 +1,4 @@
-api.bruin-bite.com {
+dev.bruin-bite.com {
     gzip
     log stdout
     errors stderr
