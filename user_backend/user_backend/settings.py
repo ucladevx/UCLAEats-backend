@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'chat.apps.ChatConfig',
     'users.apps.UsersConfig',
     'matching.apps.MatchingConfig',
+    'password_reset.apps.PasswordResetConfig',
 ]
 
 MIDDLEWARE = [
