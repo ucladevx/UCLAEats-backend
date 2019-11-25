@@ -7,8 +7,8 @@ dev.bruin-bite.com {
         transparent
     }
 
-    proxy /api/v1 daphne:8000 {
+    proxy / daphne:8000 {
         transparent
-	websocket
+        websocket
     }
 }
