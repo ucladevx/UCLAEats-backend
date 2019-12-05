@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/v1/users/matching/', include('matching.urls')),
     path('api/v1/users/', include('users.urls')),
     path('api/v1/messaging/', include('chat.urls')),
+    path('password_reset/', include('password_reset.urls'))
 ]
