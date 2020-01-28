@@ -45,13 +45,13 @@ INSTALLED_APPS = [
 ]
 
 CRONJOBS = [
-    ('*/5 * * * *', 'scraper.db_insertion.insert_activity_level'),
+    ('*/5 * * * *', 'scraper.db_insertion.insert_activity_level_wrapper'),
     # everything else runs three times a day: one at 0:01, one at 10:00, one at 15:30
-    ('1 0 * * *', 'scraper.db_insertion.insert_hours'),
-    ('0 10 * * *', 'scraper.db_insertion.insert_hours'),
-    ('30 15 * * *', 'scraper.db_insertion.insert_hours'),
-    ('0 3 * * *', 'scraper.db_insertion.insert_slow_scrape'),
-    ('1 * * * *', 'scraper.db_insertion.insert_hourly_scrape')
+    ('1 0 * * *', 'scraper.db_insertion.insert_hours_wrapper'),
+    ('0 10 * * *', 'scraper.db_insertion.insert_hours_wrapper'),
+    ('30 15 * * *', 'scraper.db_insertion.insert_hours_wrapper'),
+    ('0 3 * * *', 'scraper.db_insertion.insert_slow_scrape_wrapper'),
+    ('1 * * * *', 'scraper.db_insertion.insert_hourly_scrape_wrapper')
 ]
 
 MIDDLEWARE = [
@@ -146,3 +146,10 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
+
+
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT=587
+EMAIL_HOST_USER="errors.bruinbite@gmail.com"
+EMAIL_HOST_PASSWORD=os.getenv('ERRORS_EMAIL_PASSWORD')
+EMAIL_USE_TLS=True

@@ -2,8 +2,43 @@ from .scrape import *
 from .models import *
 from datetime import date
 from .scraper_thread import Scraper_thread
+from django.core.mail import send_mail
 
 days_to_scrape = 7
+
+def sendLogEmail(err, funcName):
+    print(funcName + "() threw an error: \n" + str(err))
+    send_mail(
+    'Error in menu scraper',
+    'Error in function ' + funcName + "() with the following message: \n" + str(err),
+    'errors.bruinbite@gmail.com',
+    ['errors.bruinbite@gmail.com'],
+    fail_silently=False)
+
+def insert_activity_level_wrapper():
+    try:
+        insert_activity_level()
+    except Exception as err:
+        sendLogEmail(err, "insert_activity_level")
+
+def insert_hours_wrapper():
+    try:
+        insert_hours()
+    except Exception as err:
+        sendLogEmail(err, "insert_hours")
+
+def insert_slow_scrape_wrapper():
+    try:
+        insert_slow_scrape()
+    except Exception as err:
+        sendLogEmail(err, "insert_slow_scrape")
+
+def insert_hourly_scrape_wrapper():
+    try:
+        insert_hourly_scrape()
+    except Exception as err:
+        sendLogEmail(err, "insert_hourly_scrape")
+
 
 def insert_activity_level():
     activity_level = scraper_for_activity_level()
