@@ -12,7 +12,7 @@ api.bruin-bite.com {
         websocket
     }
 
-    proxy /grafana grafana:3000 {
+    proxy / grafana:3000 {
         transparent
     }
 }
