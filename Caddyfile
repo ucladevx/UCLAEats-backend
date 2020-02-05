@@ -11,4 +11,8 @@ api.bruin-bite.com {
         transparent
         websocket
     }
+
+    proxy /grafana grafana:3000 {
+        transparent
+    }
 }

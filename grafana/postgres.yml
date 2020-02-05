@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+- name: Users
+  type: $DB_DIALECT
+  url: $DB_HOST:$DB_PORT
+  access: proxy
+  secureJsonData:
+    password: $DB_PASS
+  user: $DB_USER
+  database: $DB_NAME
+  basicAuth: false
+  isDefault: true
+  jsonData:
+     sslmode: $DB_SSL
