@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField, HStoreField
 from django.utils import timezone
 
 
@@ -22,6 +22,8 @@ class DiningTable(models.Model):
     datetime = models.DateTimeField()
 
     users = ArrayField(models.IntegerField())
+
+    unread_msg_count = HStoreField()
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)

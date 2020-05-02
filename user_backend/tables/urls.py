@@ -6,5 +6,6 @@ from . import views
 urlpatterns = [
     re_path(r'^tables/create_table', views.create_table),
     re_path(r'^tables/join_table', views.join_table),
-    re_path(r'^tables/leave_table', views.leave_table)
+    re_path(r'^tables/leave_table', views.leave_table),
+    re_path(r'^tables/get_table/(?P<table_id>\w{0,50})/$', views.get_table)
 ]
