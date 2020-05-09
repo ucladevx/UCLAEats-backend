@@ -42,10 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'channels',
-
     'rest_framework',
     'oauth2_provider',
-    'chat.apps.ChatConfig',
+    # 'chat.apps.ChatConfig',
     'tables.apps.TablesConfig',
     'users.apps.UsersConfig',
     'matching.apps.MatchingConfig',
@@ -92,9 +91,9 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': os.getenv('DB_HOST'),  
+        'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-    }     
+    }
 }
 # DATABASES = {
 #     'default': {
@@ -113,16 +112,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-            'OPTIONS': {
-                'min_length': 8,
-            }
+        'OPTIONS': {'min_length': 8,},
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
@@ -163,7 +156,11 @@ AUTH_USER_MODEL = 'users.User'
 
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+    'SCOPES': {
+        'read': 'Read scope',
+        'write': 'Write scope',
+        'groups': 'Access to your groups',
+    }
 }
 
 REST_FRAMEWORK = {
@@ -177,13 +174,19 @@ REST_FRAMEWORK = {
 
 
 # Channel settings
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "asgi_redis.RedisChannelLayer",
+#         "CONFIG": {"hosts": [os.environ.get("REDIS_URL", "redis://redis:6379")],},
+#         "ROUTING": "chat.routing.channel_routing",
+#     },
+# }
+ASGI_APPLICATION = 'user_backend.routing.application'
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://redis:6379')],
-        },
-        "ROUTING": "chat.routing.channel_routing",
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {'hosts': [os.environ.get('REDIS_URL', 'redis://redis:6379')],}
+        # 'ROUTING': 'chat.routing.channel_routing',
     },
 }
 
@@ -191,27 +194,10 @@ CHANNEL_LAYERS = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
+    'handlers': {'console': {'class': 'logging.StreamHandler',},},
     'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
-            'level': 'INFO'
-        },
-        'chat': {
-            'handlers': ['console'],
-            'propagate': False,
-            'level': 'DEBUG',
-        },
-        'tables': {
-            'handlers': ['console'],
-            'propagate': False,
-            'level': 'DEBUG',
-        }
+        'django': {'handlers': ['console'], 'propagate': True, 'level': 'INFO'},
+        'tables': {'handlers': ['console'], 'propagate': False, 'level': 'DEBUG',},
     },
 }
 

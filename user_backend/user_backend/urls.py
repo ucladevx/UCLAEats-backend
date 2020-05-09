@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import include, path, re_path
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -22,7 +22,7 @@ urlpatterns = [
     path('api/v1/users/o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api/v1/users/matching/', include('matching.urls')),
     path('api/v1/users/', include('users.urls')),
-    path('api/v1/messaging/', include('chat.urls')),
+    # path('api/v1/messaging/', include('chat.urls')),
     path('api/v1/tables/', include('tables.urls')),
     path('password_reset/', include('password_reset.urls'))
 ]
