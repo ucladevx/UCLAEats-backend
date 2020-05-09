@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'oauth2_provider',
-    # 'chat.apps.ChatConfig',
+    'chat.apps.ChatConfig',
     'tables.apps.TablesConfig',
     'users.apps.UsersConfig',
     'matching.apps.MatchingConfig',
