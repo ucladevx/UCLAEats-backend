@@ -15,15 +15,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_label = self.scope["url_route"]["kwargs"]["room_label"]
         self.room_group_name = f'chat-{self.room_label}'
 
-        log.debug('websocket connecting')
+        print('websocket connecting')
 
         try:
             room = Room.objects.get(label=self.room_label)
         except Room.DoesNotExist:
+            print("exiting")
             log.debug('room not found=%s', self.room_label)
             return
-
-        log.debug('chat connect room=%s client=%s:%s', room.label, event['client'][0], event['client'][1])
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
@@ -46,6 +45,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             log.debug("ws message isn't json text=%s", data)
             return
 
+        print("new message!", data)
+
         if set(data.keys()) != set(('handle', 'message')):
             log.debug("ws message unexpected format data=%s", data)
             return
@@ -55,7 +56,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             m = room.messages.create(**data)
 
-            await self.channel_layer.group_send(self.room_group_name, {'text': json.dumps(m.as_dict())})
+            await self.channel_layer.group_send(self.room_group_name, {'type': 'chat.message', 'text': json.dumps(m.as_dict())})
 
             log.debug("Chat received and added successfully.")
             user_device_id = room.user1.device_id if not str(room.user1.id) == str(data['handle']) else room.user2.device_id
@@ -80,3 +81,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+
+    async def chat_message(self, event):
+        # Handles the "chat.message" event when it's sent to us.
+        await self.send(text_data=event["text"])
