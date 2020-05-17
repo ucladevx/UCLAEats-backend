@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     'channels',
 
     'rest_framework',
     'oauth2_provider',
     'chat.apps.ChatConfig',
+    'tables.apps.TablesConfig',
     'users.apps.UsersConfig',
     'matching.apps.MatchingConfig',
     'password_reset.apps.PasswordResetConfig',
@@ -206,6 +208,11 @@ LOGGING = {
             'propagate': False,
             'level': 'DEBUG',
         },
+        'tables': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'DEBUG',
+        }
     },
 }
 
