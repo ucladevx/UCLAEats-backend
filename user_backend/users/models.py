@@ -9,9 +9,9 @@ from .managers import UserManager
 
 # Create your models here.
 
-class User(AbstractBaseUser, PermissionsMixin):
+class BaseUser(models.Model):
     # visible user data
-    email = models.EmailField(_('email'), max_length=255, unique=True)
+    email = models.EmailField(_('email'), max_length=255)
     first_name = models.CharField(_('first_name'), max_length=40, blank=True)
     last_name = models.CharField(_('last_name'), max_length=150, blank=True)
     major = models.CharField(_('major'), max_length=150, blank=True)
@@ -27,11 +27,17 @@ class User(AbstractBaseUser, PermissionsMixin):
             default="")
 
     # Metadata fields, automatically has primary key ID
-    date_created = models.DateTimeField(_('date_created'), auto_now_add=True)
-    date_updated = models.DateTimeField(_('date_updated'), auto_now=True)
     is_active = models.BooleanField(_('is_active'), default=True)
     is_admin = models.BooleanField(_('is_admin'), default=False)
     is_staff = models.BooleanField(_('staff status'),default=True)
+
+    class Meta:
+        abstract = True
+
+class User(BaseUser, AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(_('email'), max_length=255, unique=True)
+    date_created = models.DateTimeField(_('date_created'), auto_now_add=True)
+    date_updated = models.DateTimeField(_('date_updated'), auto_now=True)
 
     # Add email as the username field for auth purposes
     USERNAME_FIELD = 'email'
@@ -66,3 +72,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+
+class DeletedUser(BaseUser):
+    date_deleted = models.DateTimeField(_('date_deleted'), auto_now_add=True)
