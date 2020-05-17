@@ -1,19 +1,18 @@
 import json
-import sys
-import secrets
 import logging
+import secrets
+import sys
 
+from chat.push_notifications import PushClient
 from django.db import transaction
-from django.http import Http404
-from django.http import JsonResponse
-
+from django.http import Http404, JsonResponse
+from rest_framework.decorators import (action, api_view,
+                                       authentication_classes,
+                                       permission_classes)
 from rest_framework.views import APIView
-from rest_framework.decorators import action, api_view, authentication_classes, permission_classes
+from users.models import User
 
 from .models import Room
-from chat.push_notifications import PushClient
-
-from users.models import User
 
 log = logging.getLogger(__name__)
 
@@ -61,11 +60,12 @@ def new_chat_room(request):
         message_body = "View your matches to see who you're eating with!"
         message = {'APNS':json.dumps({'aps':{'alert': {'body': message_body, 'title': title} }})}
         message_structure = 'json'
-        pc = PushClient()
-        if not len(str(user1_device_id)) == 0:
-            message_id_1 = pc.send_apn(device_token=user1_device_id, MessageStructure=message_structure, message=message)
-        if not len(str(user2_device_id)) == 0:
-            message_id_2 = pc.send_apn(device_token=user2_device_id, MessageStructure=message_structure, message=message)
+        
+        # pc = PushClient()
+        # if not len(str(user1_device_id)) == 0:
+        #     message_id_1 = pc.send_apn(device_token=user1_device_id, MessageStructure=message_structure, message=message)
+        # if not len(str(user2_device_id)) == 0:
+        #     message_id_2 = pc.send_apn(device_token=user2_device_id, MessageStructure=message_structure, message=message)
     except Exception as e:
         return JsonResponse({'error': 'Something went wrong', 'label': label})
     response_data = {"label": label}
