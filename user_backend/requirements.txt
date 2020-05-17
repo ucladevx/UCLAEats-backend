@@ -16,7 +16,7 @@ constantly==15.1.0
 cryptography==2.2.2
 daphne==2.3
 dj-database-url==0.4.0
-Django==2.2
+Django==2.2.10
 django-oauth-toolkit==1.1.0
 django-push-notifications==1.6.0
 djangorestframework==3.8.2
