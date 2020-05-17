@@ -1,6 +1,5 @@
 apns2==0.4.1
-asgi-redis==1.4.3
-asgiref==1.1.2
+asgiref==3.2
 asn1crypto==0.24.0
 async-timeout==2.0.1
 attrs==18.1.0
@@ -10,13 +9,14 @@ boto3==1.7.28
 botocore==1.10.28
 certifi==2018.4.16
 cffi==1.11.5
-channels==1.1.8
+channels==2.4.0
+channels-redis==2.4.2
 chardet==3.0.4
 constantly==15.1.0
 cryptography==2.2.2
-daphne==1.4.2
+daphne==2.3
 dj-database-url==0.4.0
-Django==2.0.5
+Django==2.2
 django-oauth-toolkit==1.1.0
 django-push-notifications==1.6.0
 djangorestframework==3.8.2
@@ -47,7 +47,7 @@ requests==2.18.4
 s3transfer==0.1.13
 six==1.11.0
 stevedore==1.28.0
-Twisted==18.4.0
+Twisted==18.7
 txaio==2.10.0
 urllib3==1.22
 virtualenv==16.0.0
