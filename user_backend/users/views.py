@@ -77,10 +77,16 @@ class UserService(APIView):
     def get(self, request, format=None):
         """
         Get data of a user.
-        QUERY PARAMETER: email="email@address.com"
+        QUERY PARAMETER: email="email@address.com"* OR id=<UID>
         """
         email = request.GET.get('email')
-        user = get_user_by_email(email)
+        id = request.GET.get('id')
+        if email:
+            user = get_user_by_email(email)
+        elif id:
+            user = get_user_by_id(id)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
@@ -181,6 +187,15 @@ def get_user_by_email(email):
     """
     try:
         return User.objects.get(email=email)
+    except:
+        raise Http404
+
+def get_user_by_id(id):
+    """
+    Returns user based on public key
+    """
+    try:
+        return User.objects.get(id=id)
     except:
         raise Http404
 
